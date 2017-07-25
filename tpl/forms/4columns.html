@@ -1,0 +1,644 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>2 Columns grid forms</title>
+		<link rel="stylesheet" href="../../css/global.css">
+		<link rel="stylesheet" href="../../css/forms.css">
+		<script type="text/javascript" src="../../js/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="../../js/box-0.7.0.js"></script>
+		<script type="text/javascript" src="../../js/l10n.js"></script>
+		<script type="text/javascript" src="../../js/global-forms.js"></script>
+
+		<!--[if lte IE 7]>
+			<link rel="stylesheet" href="/css/forms-ie.css">
+		<![endif]-->
+	</head> 
+	<body>
+		<div class="header">
+			<div class="header-content">
+				<div class="header-nav">
+					<ul>
+						<li><a href="#">Vivre EDF On Line</a></li>
+						<li class="expand">
+							<a href="#">Portails métiers</a>
+							<ul class="sub-nav">
+								<li><a href="#">Lorem Ipsum dolor sit</a></li>
+								<li><a href="#">Consectetur</a></li>
+								<li><a href="">Pellentesque luctusm</a></li>
+								<li><a href="">Urid id vehiculaquis</a></li>
+								<li><a href="">Phasellus est tellus</a></li>
+								<li><a href="">Lacinia sed fermentum</a></li>
+							</ul>
+						</li>
+						<li class="expand">
+							<a href="#">Tous les sites EDF</a>
+							<ul class="sub-nav">
+								<li><a href="#">Lorem Ispsum dolor sit</a></li>
+								<li><a href="#">Consectetur</a></li>
+								<li><a href="">Pellentesque luctusm</a></li>
+								<li><a href="">Urid id vehiculaquis</a></li>
+								<li><a href="">Phasellus est tellus</a></li>
+								<li><a href="">Lacinia sed fermentum</a></li>
+							</ul>
+						</li>
+						<li><a href="#">Français</a></li>
+					</ul>
+				</div>
+				<div class="logo">
+					<a href="#"><img src="../../img/edf_header_logo.png" alt=""></a>
+				</div>
+				
+				<div class="header-infos">
+					<span class="page-title">Le photo <strong>Center</strong></span>
+					<a href="#">Marianne Leclerc</a>
+					<a href="#" class="disconnect">Deconnexion</a>
+				</div>
+			</div>
+		</div>
+		<div class="nav">
+			<div class="main-nav">
+				<ul>
+					<li class="selected"><a href="#">Accueil</a></li>
+					<li><a href="#">Rubrique 1</a></li>
+					<li><a href="#">Rubrique 2</a></li>
+					<li><a href="#">Rubrique 3</a></li>
+					<li>
+						<a href="#" class="expand">Rubrique 4</a>
+						<ul class="sub-nav">
+							<li><a href="#">Lorem Ipsum dolor sit</a></li>
+							<li><a href="">Consectetur</a></li>
+							<li><a href="">Pellentesque luctusm</a></li>
+							<li><a href="">Urid id vehiculaquis</a></li>
+							<li><a href="">Phasellus est tellus</a></li>
+							<li><a href="">Lacinia sed fermentum</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="four-columns forms">
+			<div class="main-content">
+				<div class="section">
+					<div class="span1">
+						<div class="form-standard-box">
+							<span class="box-title">
+								Boîte Formulaire x2
+							</span>
+							<div class="box-form-content">
+								<form action="" id="form-standard-box-span1">
+									<fieldset>
+										<div class="field-wrapper">
+											<div class="text">
+												<label for="span1-standard1">Lorem ipsum sit amet<em class="required">*</em></label>
+												<input type="text" id="span1-standard1" name="span1-standard1" placeholder="Champ standard"/>
+											</div>
+										</div>
+										<div class="field-wrapper">
+											<div class="select">
+												<label for="span1-country1">Lorem ipsum<em class="required">*</em></label>
+					                            <select name="span1-country1" id="span1-country1">
+					                                <option value="0">Combo Box</option>
+					                                <option value="fr">France</option>
+					                                <option value="be">Belgium</option>
+					                                <option value="de">Germany</option>
+					                                <option value="lu">Luxembourg</option>
+					                                <option value="ch">Switzerland</option>
+					                                <option value="nl">Netherlands</option>
+					                                <option value="it">Italy</option>
+					                                <option value="es">Spain</option>
+					                                <option value="pt">Portugal</option>
+					                                <option value="gb">United Kingdom</option>
+					                                <option value="fi">Finland</option>
+					                            </select>
+					                        </div>
+										</div>
+				                        <div class="actions">
+				                        	<span><em class="required">*</em> Champ obligatoire</span>
+				                            <input type="submit" value="Valider" />
+				                        </div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="span2">
+						<div class="form-standard-box">
+							<span class="box-title">
+								Boîte Formulaire x2
+							</span>
+							<div class="box-form-content">
+								<form action="" id="form-standard-box-span2">
+									<fieldset>
+										<div class="field-wrapper left">
+											<div class="text">
+												<label for="span2-standard1">Lorem ipsum sit amet<em class="required">*</em></label>
+												<input type="text" id="span2-standard1" name="span2-standard1" placeholder="Champ standard"/>
+											</div>
+										</div>
+										<div class="field-wrapper">
+											<div class="text">
+												<label for="span2-standard2">Lorem ipsum sit amet<em class="required">*</em></label>
+												<input type="text" id="span2-standard2" name="span2-standard2" placeholder="Champ standard"/>
+											</div>
+										</div>
+										<div class="field-wrapper left">
+											<div class="select">
+												<label for="span2-country1">Lorem ipsum<em class="required">*</em></label>
+					                            <select name="span2-country1" id="span2-country1">
+					                                <option value="0">Combo Box</option>
+					                                <option value="fr">France</option>
+					                                <option value="be">Belgium</option>
+					                                <option value="de">Germany</option>
+					                                <option value="lu">Luxembourg</option>
+					                                <option value="ch">Switzerland</option>
+					                                <option value="nl">Netherlands</option>
+					                                <option value="it">Italy</option>
+					                                <option value="es">Spain</option>
+					                                <option value="pt">Portugal</option>
+					                                <option value="gb">United Kingdom</option>
+					                                <option value="fi">Finland</option>
+					                            </select>
+					                        </div>
+										</div>
+										
+				                        <div class="field-wrapper">
+				                        	<div class="text">
+												<label for="span2-standard3">Lorem ipsum sit amet<em class="required">*</em></label>
+												<input type="text" id="span2-standard3" name="span2-standard3" placeholder="Champ standard"/>
+											</div>
+										</div>
+				                        <div class="actions">
+				                        	<span><em class="required">*</em> Champ obligatoire</span>
+				                            <input type="submit" value="Valider" />
+				                        </div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="four-columns forms">
+			<div class="main-content">
+				<div class="section">
+					<div class="span1">
+						<div class="form-standard-box">
+							<span class="box-title">
+								Boîte Formulaire Colonnes
+							</span>
+							<div class="box-form-content">
+								<form action="" id="form-standard-box-column1">
+									<fieldset>
+										<div class="field-wrapper">
+											<div class="text" data-mandatory="true">
+												<label for="standard1">Champ standard<em class="required">*</em></label>
+												<input type="text" id="standard1" name="standard1"/>
+											</div>
+										</div>
+										<div class="field-wrapper date-select">
+											<label for="day2">Combo box date<em class="required">*</em></label>
+											<div class="select date" data-mandatory="true">
+					                            <select name="day2" id="day2" data-mandatory="true">
+					                                <option value="1">01</option>
+					                                <option value="2">02</option>
+					                                <option value="3">03</option>
+					                                <option value="4">04</option>
+					                                <option value="5">05</option>
+					                                <option value="6">06</option>
+					                                <option value="7">07</option>
+					                                <option value="8">08</option>
+					                                <option value="9">09</option>
+					                                <option value="10">10</option>
+					                                <option value="11">11</option>
+					                                <option value="12">12</option>
+					                                <option value="13">13</option>
+					                                <option value="14">14</option>
+					                                <option value="15">15</option>
+					                                <option value="16">16</option>
+					                                <option value="17">17</option>
+					                                <option value="18">18</option>
+					                                <option value="19">19</option>
+					                                <option value="20">20</option>
+					                                <option value="21">21</option>
+					                                <option value="22">22</option>
+					                                <option value="23">23</option>
+					                                <option value="24">24</option>
+					                                <option value="25">25</option>
+					                                <option value="26">26</option>
+					                                <option value="27">27</option>
+					                                <option value="28">28</option>
+					                                <option value="29">29</option>
+					                                <option value="30">30</option>
+					                                <option value="31">31</option>
+					                            </select>
+					                        </div>
+					                        <div class="select date">
+					                            <select name="month2" id="month2">
+					                                <option value="01">01</option>
+					                                <option value="02">02</option>
+					                                <option value="03">03</option>
+					                                <option value="04">04</option>
+					                                <option value="05">05</option>
+					                                <option value="06">06</option>
+					                                <option value="07">07</option>
+					                                <option value="08">08</option>
+					                                <option value="09">09</option>
+					                                <option value="10">10</option>
+					                                <option value="11">11</option>
+					                                <option value="12">12</option>
+					                            </select>
+					                        </div>
+					                        <div class="select year">
+					                            <select name="year2" id="year2">
+					                                <option value="2013">2013</option>
+					                                <option value="2012">2012</option>
+					                                <option value="2011">2011</option>
+					                                <option value="2010">2010</option>
+					                                <option value="2009">2009</option>
+					                                <option value="2008">2008</option>
+					                                <option value="2007">2007</option>
+					                                <option value="2006">2006</option>
+					                                <option value="2005">2005</option>
+					                                <option value="2004">2004</option>
+					                            </select>
+					                        </div>
+										</div>
+										<div class="field-wrapper">
+											<div class="text" data-mandatory="true">
+												<label for="standard1">Champ standard<em class="required">*</em></label>
+												<input type="text" id="standard1" name="standard1"/>
+											</div>
+										</div>
+										<div class="field-wrapper">
+											<div class="radios" data-mandatory="true">
+					                            <span class="legend">Radio Buttons<em class="required">*</em></span>
+					                            <ul>
+					                                <li><input type="radio" name="radio-column1-" id="radio-column1-1" /><label for="radio-column1-1">Option 1</label></li>
+					                                <li><input type="radio" name="radio-column1-" id="radio-column1-2" /><label for="radio-column1-2">Option 2</label></li>
+					                            </ul>
+					                        </div>
+										</div>
+										<div class="field-wrapper">
+											<div class="checkbox">
+					                            <input type="checkbox" name="newsletter-column1" id="newsletter-column1" />
+					                            <label for="newsletter-column1">Checkbox lorem ipsum</label>
+					                        </div>
+										</div>
+				                        <div class="actions">
+				                        	<span><em class="required">*</em> Champ obligatoire</span>
+				                            <input type="submit" value="Valider"/>
+				                        </div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="four-columns forms">
+			<div class="main-content">
+				<div class="section">
+					<div class="span1">
+						<div class="form-standard">
+							<div class="box-form-content">
+								<form action="" id="form-standard-box-column1-standard">
+									<fieldset>
+										<div class="field-wrapper">
+											<div class="text" data-mandatory="true">
+												<label for="standard1">Champ standard<em class="required">*</em></label>
+												<input type="text" id="standard1" name="standard1"/>
+											</div>
+										</div>
+										<div class="field-wrapper date-select">
+											<label for="day2">Combo box date<em class="required">*</em></label>
+											<div class="select date" data-mandatory="true">
+					                            <select name="day2" id="day2" data-mandatory="true">
+					                                <option value="1">01</option>
+					                                <option value="2">02</option>
+					                                <option value="3">03</option>
+					                                <option value="4">04</option>
+					                                <option value="5">05</option>
+					                                <option value="6">06</option>
+					                                <option value="7">07</option>
+					                                <option value="8">08</option>
+					                                <option value="9">09</option>
+					                                <option value="10">10</option>
+					                                <option value="11">11</option>
+					                                <option value="12">12</option>
+					                                <option value="13">13</option>
+					                                <option value="14">14</option>
+					                                <option value="15">15</option>
+					                                <option value="16">16</option>
+					                                <option value="17">17</option>
+					                                <option value="18">18</option>
+					                                <option value="19">19</option>
+					                                <option value="20">20</option>
+					                                <option value="21">21</option>
+					                                <option value="22">22</option>
+					                                <option value="23">23</option>
+					                                <option value="24">24</option>
+					                                <option value="25">25</option>
+					                                <option value="26">26</option>
+					                                <option value="27">27</option>
+					                                <option value="28">28</option>
+					                                <option value="29">29</option>
+					                                <option value="30">30</option>
+					                                <option value="31">31</option>
+					                            </select>
+					                        </div>
+					                        <div class="select date">
+					                            <select name="month2" id="month2">
+					                                <option value="01">01</option>
+					                                <option value="02">02</option>
+					                                <option value="03">03</option>
+					                                <option value="04">04</option>
+					                                <option value="05">05</option>
+					                                <option value="06">06</option>
+					                                <option value="07">07</option>
+					                                <option value="08">08</option>
+					                                <option value="09">09</option>
+					                                <option value="10">10</option>
+					                                <option value="11">11</option>
+					                                <option value="12">12</option>
+					                            </select>
+					                        </div>
+					                        <div class="select year">
+					                            <select name="year2" id="year2">
+					                                <option value="2013">2013</option>
+					                                <option value="2012">2012</option>
+					                                <option value="2011">2011</option>
+					                                <option value="2010">2010</option>
+					                                <option value="2009">2009</option>
+					                                <option value="2008">2008</option>
+					                                <option value="2007">2007</option>
+					                                <option value="2006">2006</option>
+					                                <option value="2005">2005</option>
+					                                <option value="2004">2004</option>
+					                            </select>
+					                        </div>
+										</div>
+										<div class="field-wrapper">
+											<div class="text" >
+												<label for="standard1">Champ standard<em class="required">*</em></label>
+												<input type="text" data-mandatory="true" id="standard1" name="standard1"/>
+											</div>
+										</div>
+										<div class="field-wrapper">
+											<div class="radios" data-mandatory="true">
+					                            <span class="legend">Radio Buttons<em class="required">*</em></span>
+					                            <ul>
+					                                <li><input type="radio" name="radio-column1-" id="radio-column1-1-1" /><label for="radio-column1-1-1">Option 1</label></li>
+					                                <li><input type="radio" name="radio-column1-" id="radio-column1-2-1" /><label for="radio-column1-2-1">Option 2</label></li>
+					                                <li><input type="radio" name="radio-column1-" id="radio-column1-3-1" /><label for="radio-column1-3-1">Option 3</label></li>
+					                            </ul>
+					                        </div>
+										</div>
+										<div class="field-wrapper">
+											<div class="checkbox">
+					                            <input type="checkbox" name="newsletter-column1-1" id="newsletter-column1-1" />
+					                            <label for="newsletter-column1-1">Checkbox lorem ipsum</label>
+					                        </div>
+										</div>
+				                        <div class="actions">
+				                        	<span><em class="required">*</em> Champ obligatoire</span>
+				                            <input type="submit" value="Valider"/>
+				                        </div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="span2">
+						<div class="form-standard">
+							<div class="box-form-content">
+								<form action="" id="form-standard-box-column2-standard2">
+									<fieldset>
+										<div class="field-wrapper inline-label">
+											<div class="text" >
+												<label for="standard2-2">Champ standard<em class="required">*</em></label>
+												<input type="text" id="standard2-2" name="standard2-2" data-mandatory="true"/>
+											</div>
+										</div>
+										<div class="field-wrapper">
+											<div class="text" >
+												<label for="standard2-1">Champ standard<em class="required">*</em></label>
+												<input type="text" id="standard2-1" name="standard2-1" data-mandatory="true"/>
+											</div>
+										</div>
+										<div class="field-wrapper date-select">
+											<span class="legend">combo box date<em class="required">*</em></span>
+					                            <ul>
+											<div class="select date" data-mandatory="true">
+					                            <select name="day2" id="day2" data-mandatory="true">
+					                                <option value="1">01</option>
+					                                <option value="2">02</option>
+					                                <option value="3">03</option>
+					                                <option value="4">04</option>
+					                                <option value="5">05</option>
+					                                <option value="6">06</option>
+					                                <option value="7">07</option>
+					                                <option value="8">08</option>
+					                                <option value="9">09</option>
+					                                <option value="10">10</option>
+					                                <option value="11">11</option>
+					                                <option value="12">12</option>
+					                                <option value="13">13</option>
+					                                <option value="14">14</option>
+					                                <option value="15">15</option>
+					                                <option value="16">16</option>
+					                                <option value="17">17</option>
+					                                <option value="18">18</option>
+					                                <option value="19">19</option>
+					                                <option value="20">20</option>
+					                                <option value="21">21</option>
+					                                <option value="22">22</option>
+					                                <option value="23">23</option>
+					                                <option value="24">24</option>
+					                                <option value="25">25</option>
+					                                <option value="26">26</option>
+					                                <option value="27">27</option>
+					                                <option value="28">28</option>
+					                                <option value="29">29</option>
+					                                <option value="30">30</option>
+					                                <option value="31">31</option>
+					                            </select>
+					                        </div>
+					                        <div class="select date">
+					                            <select name="month2" id="month2">
+					                                <option value="01">01</option>
+					                                <option value="02">02</option>
+					                                <option value="03">03</option>
+					                                <option value="04">04</option>
+					                                <option value="05">05</option>
+					                                <option value="06">06</option>
+					                                <option value="07">07</option>
+					                                <option value="08">08</option>
+					                                <option value="09">09</option>
+					                                <option value="10">10</option>
+					                                <option value="11">11</option>
+					                                <option value="12">12</option>
+					                            </select>
+					                        </div>
+					                        <div class="select year">
+					                            <select name="year2" id="year2">
+					                                <option value="2013">2013</option>
+					                                <option value="2012">2012</option>
+					                                <option value="2011">2011</option>
+					                                <option value="2010">2010</option>
+					                                <option value="2009">2009</option>
+					                                <option value="2008">2008</option>
+					                                <option value="2007">2007</option>
+					                                <option value="2006">2006</option>
+					                                <option value="2005">2005</option>
+					                                <option value="2004">2004</option>
+					                            </select>
+					                        </div>
+										</div>
+										
+										<div class="field-wrapper">
+											<div class="radios" data-mandatory="true">
+					                            <span class="legend">Radio Buttons<em class="required">*</em></span>
+					                            <ul>
+					                                <li><input type="radio" name="radio-column1-" id="radio-column1-1-2" /><label for="radio-column1-1-2">Option 1</label></li>
+					                                <li><input type="radio" name="radio-column1-" id="radio-column1-2-2" /><label for="radio-column1-2-2">Option 2</label></li>
+					                            </ul>
+					                        </div>
+										</div>
+				                        <div class="actions">
+				                        	<span><em class="required">*</em> Champ obligatoire</span>
+				                            <input type="submit" value="Valider"/>
+				                        </div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="section">
+					<div class="span2">
+						<div class="form-standard">
+							<div class="box-form-content">
+								<form action="" id="form-standard-box-column3-standard">
+									<fieldset>
+										<div class="field-wrapper">
+											<div class="textarea" data-mandatory="true">
+					                            <textarea cols="20" rows="6" name="message" placeholder="Rédigez votre message..." id="message"></textarea>
+					                        </div>
+										</div>
+				                        <div class="actions no-border">
+				                        	<span><em class="required">*</em> Champ obligatoire</span>
+				                            <input type="submit" value="Poster votre message"/>
+				                        </div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="section">
+					<div class="span2">
+						<div class="form-standard file">
+							<div class="box-form-content">
+								<form action="" id="form-standard-box-column3-standard">
+									<fieldset>
+										<div class="field-wrapper inline-label">
+											<div class="text" data-mandatory="true">
+					                            <label for="file-1">INTITULÉS<em class="required">*</em></label>
+												<input type="text" id="file-1" name="file-1" data-mandatory="true"/>
+					                        </div>
+										</div>
+				                        <div class="actions no-border">
+				                            <a href="" class="btn"><span class="add-btn"></span>AJOUTER</a>
+				                            <a href="" class="btn"><span class="select-btn"></span>SELECTIONNER</a>
+				                        </div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="span2">
+						<div class="form-standard checkbox-list">
+							<div class="box-form-content">
+								<form action="" id="form-checkboxlist">
+									<fieldset>
+										<div class="field-wrapper inline-label">
+											<div class="checkbox">
+												<span class="legend">CHECK BOX</span>
+					                            <input type="checkbox" name="checkboxlist-master" id="checkboxlist-master" />
+					                            <label for="checkboxlist-master">Checkbox lorem ipsum</label>
+					                        </div>
+										</div>
+										<div class="field-wrapper">
+											<div class="checkbox-list-wrapper">
+												<div class="first-level">
+													<div class="checkbox">
+							                            <input type="checkbox" name="checkboxlist-level1" id="checkboxlist-level1" />
+							                            <label for="checkboxlist-level1">Checkbox lorem ipsum</label>
+							                        </div>
+							                        <div class="second-level">
+							                        	<div class="checkbox">
+								                            <input type="checkbox" name="checkboxlist-level2" id="checkboxlist-level2" />
+								                            <label for="checkboxlist-level2">Checkbox lorem ipsum</label>
+								                        </div>
+								                        <div class="checkbox">
+								                            <input type="checkbox" name="checkboxlist-level2-2" id="checkboxlist-level2-2" />
+								                            <label for="checkboxlist-level2-2">Checkbox lorem ipsum</label>
+								                        </div>
+							                        </div>
+												</div>
+												<div class="first-level hidden">
+													<div class="checkbox">
+							                            <input type="checkbox" name="checkboxlist-level1-1" id="checkboxlist-level1-1" />
+							                            <label for="checkboxlist-level1-1">Checkbox lorem ipsum</label>
+							                        </div>
+							                        <div class="second-level">
+							                        	<div class="checkbox">
+								                            <input type="checkbox" name="checkboxlist-level2-1" id="checkboxlist-level2-1" />
+								                            <label for="checkboxlist-level2-1">Checkbox lorem ipsum</label>
+								                        </div>
+								                        <div class="checkbox">
+								                            <input type="checkbox" name="checkboxlist-level2-4" id="checkboxlist-level2-4" />
+								                            <label for="checkboxlist-level2-4">Checkbox lorem ipsum</label>
+								                        </div>
+							                        </div>
+												</div>
+											</div>
+											
+											
+										</div>
+				                        <div class="actions no-border">
+				                        	<a href="" class="more-options">Plus d'options</a>
+				                        </div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="section">
+					<div class="span2">
+						<form action="" id="form-standard-box-column3-standard">
+							<div class="form-standard">
+								<div class="box-form-content">
+								</div>
+							</div>
+							<div class="form-buttons">
+								<div class="actions">
+									<a href="" class="btn">Prévisualisation</a>
+									<a href="" class="btn">Annuler</a>
+									<input type="submit" value="Valider">
+								</div>
+								<span><em class="required">*</em> Champ obligatoire</span>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

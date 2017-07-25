@@ -1,0 +1,28 @@
+/**
+ * Internet Explorer corrections
+ * Support targeted at IE6 & 7
+ */
+
+
+/**
+ * @workaround		Easy clearing method
+ * @affected		6, 7
+ */
+.push-edito,
+.push-edito a,
+#js .carousel .items,
+#js .carousel-pagination ul { zoom:1; }
+
+
+/**
+ * @workaround		Content not correctly displayed
+ * @affected		6, 7
+ */
+.push-edito .content { zoom:1; }
+
+
+/**
+ * @workaround		Cursor pointer
+ * @affected		6, 7
+ */
+.push-edito a * { cursor:pointer; }

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Création d'une mission</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<link rel="stylesheet" href="../css/chosen.min.css">
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="../js/box-0.7.0.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+		<script type="text/javascript" src="../js/chosen.jquery.min.js"></script>
+	</head>
+	<body>
+		<?php include 'menu_tpl.html'; ?>
+
+		 <!-- Page de création stagiaire -->
+
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					<div class="push-shadow bright-blue">
+						<div class="box-content">
+							<h2 class="title4">Création d'une mission (Informations basiques)</h2>
+							<div class="element">
+								<div class="form-standard">
+									
+										
+										 <!-- Champs à compléter -->
+										
+										<form action="creerMission.php?id=<?=$_GET['id']?>" id="form" method="post">
+									
+									<fieldset>
+										<div class="field-wrapper">
+											<div>
+												<div class="box-form-content">
+												<label for="titre">Intitulé de la mission : </label>
+												<input required="true" type="text" style="width:99%;" placeholder="" class="filtre" name="titre" /> <br/><br/>
+												
+												<label for="typeécart">Type d'écart : </label>
+												</div>
+														<select required="true" class="chosen-select-width" name="typeécart" id="typeécart" >
+															<option></option>
+															<?php foreach ($typeécarts as $typeécart) { ?>
+																
+																
+																<option value="<?=$typeécart->_id?>"> <?=$typeécart->_nom?> </option>
+															<?php }   ?>
+														</select>
+														<div class="box-form-content">
+														
+												<label for="responsable">Responsable : </label>
+												</div>
+														<select required="true" class="chosen-select-width" style="margin-left:10 px;" name="responsable" id="span1-country1" >
+															<option></option>
+															<?php foreach ($users as $user) { ?>
+																
+																
+																<option value="<?=$user->_id?>"> <?=$user->_nom?> <?=$user->_prenom?> </option>
+															<?php }   ?>
+														</select>
+														<div class="box-form-content">
+														
+												<label for="description">Description : </label>
+												</br>
+												
+											<textarea cols="20" required="true" rows="10" style="width:99%; " align="center" name="description" id="description" > </textarea>
+														
+											<br/>
+												
+												
+												<br/>
+												Date : <?php echo date_format(date_create($date),"d/m/Y"); ?>
+											
+											<br/>
+											</div>
+											<!-- Boutons-->
+											
+											<div class="form-buttons">
+												<div class="actions">
+													<!-- Hidden pour la vérification des champs-->
+													<input type="hidden" placeholder="" class="filtre" name="verification" id="verification"/>
+													<!-- Bouton de validation de la modification-->
+													<input type="submit" id="ajouter" value="Valider" style="width:250px"/>
+												</div>
+											</div>
+										</div>
+										</div>
+									</fieldset>
+									
+								</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Fonctions javascript -->
+		<script>
+			//Fonction de vérification des champs
+			$("#ajouter").click(function(e){
+				$("#verification").attr("value", "ok");
+				$("#form").formValidation();
+			});
+		</script>
+		<script type="text/javascript">
+     
+	$(window).load(function(){
+	var config = {
+      '.chosen-select'           : {},
+      '.chosen-select-deselect'  : {allow_single_deselect:true},
+      '.chosen-select-no-single' : {disable_search_threshold:10},
+      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chosen-select-width'     : {width:"80%"}
+    }
+    for (var selector in config) {
+      $(selector).chosen(config[selector]);
+    }
+	});
+  </script>
+	</body>
+</html>
+
+
+

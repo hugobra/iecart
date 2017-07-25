@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Création bilan faps</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<link rel="stylesheet" href="../css/chosen.min.css">
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="../js/box-0.7.0.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+		<script type="text/javascript" src="../js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="../js/chosen.jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/jquery-ui.css"/>
+	</head>
+	<body>	
+		<?php include 'menu_tpl.html'; ?>
+
+		 <!-- Page de création stagiaire -->
+
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					<div class="push-shadow bright-blue">
+						<div class="box-content">
+							<h2 class="title4">Bilan des faps</h2>
+							<div class="element">
+								<div class="form-standard">
+									<div class="box-form-content">
+										
+										<form action="resume_final.php" target="_blank" id="form" method="post">
+											<fieldset>
+												 <!-- Champs à compléter -->
+												
+												<div class="field-wrapper">
+													<b>Date de début : </b>
+													<?php if (isset($_COOKIE['dateDebutFilterResume'])){?>
+													<input required="true" type="text" name="dateDebut" id="dateD" value="<?=$_COOKIE['dateDebutFilterResume'] ? $_COOKIE['dateDebutFilterResume']: ''?>"/>
+													<?php } else { ?>
+													<input required="true" type="text" name="dateDebut" id="dateD" value=""/>
+													<?php } ?>
+													<div style="float:right;">
+														<b>Date de fin :</b>
+														<?php if (isset($_COOKIE['dateFinFilterResume'])){?>
+														<input required="true" type="text" name="dateFin" id="dateF" value="<?=$_COOKIE['dateFinFilterResume'] ? $_COOKIE['dateFinFilterResume']: ''?>"/>
+														<?php } else { ?>
+														<input required="true" type="text" name="dateFin" id="dateF" value=""/>
+														<?php } ?>
+													</div>
+
+													<br style="clear: both;"><br>
+													<b>Filtre par stage : </b>
+													</br>
+													<!--<select required="true" class="filtre" name="stageFiltre" id="span1-country3">-->
+													<input type="button" class="modifierStagiaire" id="stageselectall" value="Tout sélectionner" style="cursor: pointer; visibility:visible;"  onclick="selectAll(document.getElementById('stageFiltre'))"/>
+													<input type="button" class="modifierStagiaire" id="stagedeselectall" value="Vider la liste" style="cursor: pointer; visibility:visible;"  onclick="deselectAll(document.getElementById('stageFiltre'))"/>
+													<select required="true" multiple class="chosen-select-width" name="stageFiltre[]" id="stageFiltre" data-placeholder=" Cliquer ici pour sélectionner des stages">
+														<!--<?php if (isset($_COOKIE['stageFiltreFilterResume']) && $_COOKIE['stageFiltreFilterResume'] !=0){
+														$saveStage = new stage($_COOKIE['stageFiltreFilterResume']);
+														?>
+														<option value="<?=$_COOKIE['stageFiltreFilterResume']?>"><?=$saveStage->_titre ? $saveStage->_titre : 'Tous'?></option>
+														<?php } ?>-->
+														<!--<option value="0">Tous</option>-->
+														<?php foreach ($stages as $stage) {?>
+														<option value="<?=$stage->_id?>"><?=$stage->_titre?></option>
+														<?php } ?>
+													</select>
+													</br>
+													<br style="clear: both;">
+													<b>Filtre par fonction : </b>
+													</br>
+													<!--<select required="true" class="filtre" name="fonctionFiltre" id="span1-country4">-->
+													<input type="button" class="modifierStagiaire" id="fonctionselectall" value="Tout sélectionner" style="cursor: pointer; visibility:visible;"  onclick="selectAll(document.getElementById('fonctionFiltre'))"/>
+													<input type="button" class="modifierStagiaire" id="fonctiondeselectall" value="Vider la liste" style="cursor: pointer; visibility:visible;"  onclick="deselectAll(document.getElementById('fonctionFiltre'))"/>
+													<select required="true" multiple class="chosen-select-width" name="fonctionFiltre[]" id="fonctionFiltre" data-placeholder=" Cliquer ici pour sélectionner des fonctions">
+														<!--<?php if (isset($_COOKIE['fonctionFiltreFilterResume']) && $_COOKIE['fonctionFiltreFilterResume'] !=0){
+														$fonctionSave = new Fonction($_COOKIE['fonctionFiltreFilterResume']);
+														?>
+														<option value="<?=$fonctionSave->_id?>"><?=$fonctionSave->_nom?></option>
+														<?php } ?>-->
+														<!--<option value="0">Toutes</option>-->
+														<?php foreach ($fonctions as $fonction) {?>
+														<option value="<?=$fonction->_id?>"><?=$fonction->_nom?></option>
+														<?php } ?>
+													</select>
+													</br>
+													<br style="clear: both;">
+													<b>Filtre par équipe : </b>
+													</br>
+													<input type="button" class="modifierStagiaire" id="equipeselectall" value="Tout sélectionner" style="cursor: pointer; visibility:visible;"  onclick="selectAll(document.getElementById('equipeFiltre'))"/>
+													<input type="button" class="modifierStagiaire" id="equipedeselectall" value="Vider la liste" style="cursor: pointer; visibility:visible;"  onclick="deselectAll(document.getElementById('equipeFiltre'))"/>
+													<select required="true" multiple class="chosen-select-width" name="equipeFiltre[]" id="equipeFiltre" data-placeholder=" Cliquer ici pour sélectionner des equipes">
+														
+														<!--<option value="0">Toutes</option>-->
+														<?php foreach ($equipes as $equipe) {?>
+														<option value="<?=$equipe->_id?>"><?=$equipe->_nom?></option>
+														<?php } ?>
+													</select>
+													</br>
+													<br style="clear: both;">
+													<b>Filtre par service : </b>
+													</br>
+													<input type="button" class="modifierStagiaire" id="serviceselectall" value="Tout sélectionner" style="cursor: pointer; visibility:visible;"  onclick="selectAll(document.getElementById('serviceFiltre'))"/>
+													<input type="button" class="modifierStagiaire" id="servicedeselectall" value="Vider la liste" style="cursor: pointer; visibility:visible;"  onclick="deselectAll(document.getElementById('serviceFiltre'))"/>
+													<select required="true" multiple class="chosen-select-width" name="serviceFiltre[]" id="serviceFiltre" data-placeholder=" Cliquer ici pour sélectionner des services">
+														
+														<!--<option value="0">Toutes</option>-->
+														<?php foreach ($services as $service) {?>
+														<option value="<?=$service->_id?>"><?=$service->_nom?></option>
+														<?php } ?>
+													</select>
+													</br>
+													<br style="clear: both;">
+													<b>Filtre par tranche : </b>
+													</br>
+													<input type="button" class="modifierStagiaire" id="trancheselectall" value="Tout sélectionner" style="cursor: pointer; visibility:visible;"  onclick="selectAll(document.getElementById('trancheFiltre'))"/>
+													<input type="button" class="modifierStagiaire" id="tranchedeselectall" value="Vider la liste" style="cursor: pointer; visibility:visible;"  onclick="deselectAll(document.getElementById('trancheFiltre'))"/>
+													<select required="true" multiple class="chosen-select-width" name="trancheFiltre[]" id="trancheFiltre" data-placeholder=" Cliquer ici pour sélectionner des tranches">
+														
+														<!--<option value="0">Toutes</option>-->
+														<?php foreach ($tranches as $tranche) {?>
+														<option value="<?=$tranche->_id?>"><?=$tranche->_nom?></option>
+														<?php } ?>
+													</select>
+													
+													<!--<br style="clear: both;">
+													<b>Type de filtre : </b>
+													</br>
+													<select required="true" multiple class="chosen-select-deselect" name="typefiltre" id="typefiltre" data-placeholder=" Cliquer ici pour le type de filtre">
+													<option value="stage"> Par stage </option>
+													<option value="brut"> Données brutes </option>
+													</select>-->
+													</br>
+													<br style="clear: both;">
+													<b>Type de filtre : </b>
+													</br>
+													<input name="s1" id="s1On" value="brut" hidden="" type="radio" checked>
+													<label for="s1On" class="switch switch--on" style="display:inline-block;line-height:22px;">Données brutes</label>
+													<input name="s1" id="s1Off" value="parstage" hidden="" type="radio">
+													<label for="s1Off" class="switch switch--off" style="display:inline-block; line-height:22px;" >Par stage</label>
+													
+												</div>
+												<br/>
+
+												
+
+												<div class="form-buttons">
+													
+													<!-- Bouton hidden pour la vérification des champs-->
+													
+													<div class="actions">
+														<input type="hidden" placeholder="" class="filtre" name="verification" id="verification"/>			
+														<!-- Bouton pour envoyer les informations-->
+														<input type="submit" id="ajouter" value="Valider" style="width:250px; float:left;" onclick="setTimeout(function(){ window.location.reload() }, 3000);"/>
+														<!--<input type="submit" id="donneesbrutes" value="Données brutes" style="width:250px; float:right;" onclick="setTimeout(function(){ window.location.reload() }, 3000);"/>-->
+														
+														<!--<input type="button" id="tester" class="like-submit" value="Tester chosen" style="width:250px" onclick="trouvcheckselect()"/>-->
+													</div>
+												</div>
+											</fieldset>
+											
+											<script>
+												jQuery(document).ready(function($){
+													$.datepicker.regional['fr'] = {
+												    closeText: 'Fermer',
+												    prevText: 'Précédent',
+												    nextText: 'Suivant',
+												    currentText: 'Aujourd\'hui',
+												    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+												    monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
+												    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+												    dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+												    dayNamesMin: ['D','L','M','M','J','V','S'],
+												    weekHeader: 'Sem.',
+												    dateFormat: 'dd/mm/yy',
+												    firstDay: 1,
+												    isRTL: false,
+												    showMonthAfterYear: false,
+												    yearSuffix: ''
+												};
+												$.datepicker.setDefaults($.datepicker.regional['fr']);
+												    $("#dateD").datepicker({dateFormat : "dd/mm/yy"});
+													$("#dateF").datepicker({dateFormat : "dd/mm/yy"});
+												});
+												
+												$(window).load(function(){
+												var config = {
+												  '.chosen-select'           : {},
+												  '.chosen-select-deselect'  : {allow_single_deselect:true},
+												  '.chosen-select-no-single' : {disable_search_threshold:10},
+												  '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+												  '.chosen-select-width'     : {width:"60%"}
+												}
+												for (var selector in config) {
+												  $(selector).chosen(config[selector]);
+												}
+												});
+												
+												function selectAll(listederoul){
+												
+												for (var i = 0; i < listederoul.options.length; i++)
+												{
+												
+													listederoul.options[i].selected = true;
+												}
+												$("#"+listederoul.id).trigger('chosen:updated');
+												/*$("#stageFiltre").trigger('chosen:updated');
+												$("#serviceFiltre").trigger('chosen:updated');
+												$("#fonctionFiltre").trigger('chosen:updated');
+												$("#trancheFiltre").trigger('chosen:updated');*/
+												}
+												
+												function deselectAll(listederoul){
+												
+												$("#"+listederoul.id + " option").attr('selected', false).trigger('chosen:updated');
+												/*$("#stageFiltre").trigger('chosen:updated');
+												$("#serviceFiltre").trigger('chosen:updated');
+												$("#fonctionFiltre").trigger('chosen:updated');
+												$("#trancheFiltre").trigger('chosen:updated');*/
+												}
+											</script>
+											</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Création d'un stage</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="../js/box-0.7.0.js"></script> <!-- Conflits avec datatables, ne semble pas être utilisé dans cette page, donc désactivé -->
+		<script type="text/javascript" src="../js/dataTables.min.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+	</head>
+	<body>
+		<?php include 'menuadmin_tpl.html'; ?>
+
+		<?php 
+		if (isset($_GET['permission_denied'])){
+			echo "<script>alert('Vous n\'avez pas la permission de voir ce contenu');</script>";
+		}
+		?>
+
+		 <!-- Page de création stagiaire -->
+
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					<div class="push-shadow bright-blue">
+						<div class="box-content">
+							<h2 class="title4">Interface d'administration</h2>
+							<div class="element">
+								<div class="form-standard">
+									<div class="box-form-content">
+										<?php if ($_SESSION['rang'] >= Rangs::SUPERADMIN){ ?>
+											<h3 style="margin-top: 0;">Exporter la base de données</h3>
+											<form action="#" method="GET">
+												<input type="hidden" name="export" value="true">
+												<div class="form-buttons">
+													<div class="actions">
+														<input type="submit" id="ajouter" value="Exporter la base de données" style="width:250px"/>
+													</div>
+												</div>
+											</form>
+											<br>
+											<br>
+										<?php } ?>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+
+

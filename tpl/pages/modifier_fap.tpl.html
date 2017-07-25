@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Modification FAP</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<link rel="stylesheet" href="../css/chosen.min.css">
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="../js/box-0.7.0.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+		<script type="text/javascript" src="../js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/jquery-ui.css"/>
+		<script type="text/javascript" src="../js/chosen.jquery.min.js"></script>
+	</head>
+
+	<body onload='jourabsence(document.form.nbabsence)'>
+		<?php 
+
+		// Initialisation des variables d'objectifs
+		$obj1="Connaître l'état de l'installation";
+		$obj2="Conduire l'installation";
+		$obj3="Travailler en équipe";
+		$obj4="Assurer la continuité du service";
+		?>
+		
+		<?php include 'menu_tpl.html'; ?>
+		
+		<!-- Page de modification de FAP-->
+		
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+      
+				<?php
+				if($_SESSION['nom2']!=$fap->_formateur ){
+				?>
+				<!-- Vérification que le formateur de la FAP est identique-->
+				<SCRIPT language=javascript>
+					var r=confirm("Vous n'êtes pas le rédacteur de cette FAP. Voulez vous continuer ?");
+					if (r==false){
+					window.location='ficheStagiaire.php?id=<?php echo $fap->_stagiaire->_id; ?>';
+					} 
+				</SCRIPT>
+
+				<?php
+					}
+				?>
+					<div class="element">
+						<div class="push-shadow light-orange">
+							<div class="box-content">
+								
+								<!-- Récapitulatif des différentes informations liées à la FAP-->
+								
+								<h2 class="title4">Récapitulatif</h2>
+								<div class="content">
+									<ul class="news half">
+										<li><h3>Formateur</h3>  <?php echo $_SESSION['nom2']; ?> </li>
+										<li><h3>Date</h3> <?php echo $date; ?> </li>
+									</ul>
+									<ul class="news third">
+										<li><h3>Nom du stagiaire :</h3><?=$fap->_stagiaire->_nom?></li>
+										<li><h3>Prénom du stagiaire :</h3><?=$fap->_stagiaire->_prenom?></li>	
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Données à compléter -->
+
+					<div class="element">
+						<div class="push-shadow bright-blue">
+							<div class="box-content">
+								<h2 class="title4">Données à compléter</h2>
+									<div class="content">
+										
+										<b>Stage :</b>
+		
+										<div class="box-form-content">
+											<form action="modifFAP.php?id=<?=$fap->_id?>#titrestagefap<?=$fap->_id?>" id="form" method="post" name="form">
+												<fieldset>		      
+													<div class="field-wrapper">
+														
+															<!-- Affichage des différents stages disponibles-->
+														
+														<div class="select">
+							
+															<select required="true" name="stage" id="span1-country1">
+																<option value="<?=$fap->_stage->_id?>"><?=$fap->_stage->_titre?></option>
+																<?php $compteur=1;
+																foreach($stages as $stage) { 
+																if($stage->_titre == $fap->_stage->_titre && $stage->_id != $fap->_stage->_id){ $compteur=$compteur+1; ?>
+																<option value="<?=$stage->_id?>"><?=$stage->_titre?> (stage existant sur iFAP) </option>
+																<?php } else { if($stage->_id != $fap->_stage->_id){?>
+																<option value="<?=$stage->_id?>"><?=$stage->_titre?></option>
+																<?php }}}
+																if($compteur>1){ echo "<script> alert('Le stage objet de cette FAP n existe plus dans la liste des stages actifs, il a été supprimé'); </script>" ; }?>
+															</select>
+															
+															<!-- Informations à compléter-->
+															
+															<br/>
+															<b>Code Action :</b>
+															<input required="true" type="text" name="codeAction" id="codeAction" value="<?=$fap->_codeAction?>"/>
+															<div style="float:right;" >
+																<b>Code Session :</b>
+																<input required="true" type="text" name="codeSession" value="<?=$fap->_codeSession?>"/>
+															</div>
+															<br/>
+															<br/>
+															<br/>
+															<b>Date de début du stage :   </b>
+															<input required="true" type="text" id="dateD" name="dateDebut" value="<?=$fap->_dateDebut?>"/>
+															<div style="float:right;" >
+																<b>Date de fin du stage :</b>
+																<input required="true" type="text" id="dateF" name="dateFin" value="<?=$fap->_dateFin?>"/>
+															</div>
+															<br/>
+															<br/>
+															<br/>
+															<b>Nombre de 1/2 journée d'absence: </b>
+															<input required="true" type="text" name="nbabsence" id="nbabsence" placeholder="0" value="<?=$fap->_nbabsence?>" onchange='jourabsence(this)'  onkeyup='jourabsence(this)' onmouseup='jourabsence(this)'/>
+															<div style="float:right;">
+															<b>Absence du: </b>
+															<input type="text" Style="Text-ALIGN:center" name="absenceD" id="absenceD" value="<?=$fap->_absenceD?>" />
+															<b>Au :</b>
+															<input type="text" Style="Text-ALIGN:center" name="absenceF" id="absenceF" value="<?=$fap->_absenceF?>" />
+															</div>  
+														</div>
+													</div>
+												</fieldset>
+												<img src="/img/sauvegarder.png" id="exportFloat" width="100" height="100" style="position: fixed; bottom: 20px; right: 20px;">
+												<!-- Affichage des différents obj avec les points forts/points faibles-->
+												<div id="listObjectifs">
+												<?php
+												$idObjectif = 1;
+												foreach ($fap->_objectifs as $objectif) {
+												?>
+												
+													<h3>Objectif pédagogique n°<?=$idObjectif?>  : <?=$objectif->_nom?></h3>
+													
+													<div class="section">
+														<input type="hidden" value="<?=$objectif->_id?>" name="objectifId[]">
+														<b>Point(s) fort(s) :</b>
+														<div class="span2">
+															<div class="box-form-content">
+																<fieldset>
+																	<div class="field-wrapper">
+																		<div class="textarea" data-mandatory="true">
+																			<textarea cols="20" required="true" rows="6" style="width:825px;"  name="objectifPF[]" id="OP1PF<?=$objectif->_id?>" ><?=$objectif->_results['PF']?></textarea>
+																		</div>
+																	</div>  
+																</fieldset>
+															</div>
+														</div>
+															
+														<b>Point(s) à améliorer :</b>
+														<?php $opss=Stage::getAllFromStageObjectifAndFonctionpourcréerstage($objectif->_stage->_id,$objectif->_id, $objectif->_fonction->_id);
+																		if(count($opss)!=0){?>
+																		<div>
+																		
+																		<select id="OPS<?=$objectif->_id?>" data-placeholder=" Cliquer ici pour sélectionner des OPG à ajouter" multiple class="chosen-select-width" tabindex="16" >
+																		<?php foreach ($opss as $ops) {?>
+																		<option value="<?=$ops->_nom?>"><?=$ops->_nom?></option>
+																		<?php }?>
+																		</select>
+																		<input type="button" value="Ajouter OPG" style="float:right;display:inline; margin-top:12px;" id="ajouterOPS<?=$objectif->_id?>" onclick=ajouterOPS2(<?=$objectif->_id?>) class="modifierFAP" />
+																		</div>
+																		<?php ; } ?>
+														<div class="span2">
+															<div class="box-form-content">
+																<fieldset>
+																	<div class="field-wrapper">
+																		<div class="textarea" data-mandatory="true">
+																		
+																		
+																		<!--<div id="listOPS<?=$objectif->_id?>" style="overflow:scroll;height:100px;width:825px;display:none;">
+																		
+																		
+																		<?php foreach ($opss as $ops) {?>
+																		<input type="checkbox" style="float:left " id="<?=$ops->_id?>"/>
+																		<label for="<?=$ops->_id?>" id="titre_sup<?=$ops->_id?>" style="line-height:20px"><?=$ops->_nom?></label>
+																		<?php }?>
+																		<input type="hidden" id="repere<?=$objectif->_id?>" name="repere"/>
+																		</div>-->
+																		
+																		
+																		
+																		
+																		<div class="textarea" data-mandatory="true">
+																			<textarea cols="20" style="width:825px;" required="true" rows="6" name="objectifPA[]" id="OP1PA<?=$objectif->_id?>" ><?=$objectif->_results['PA']?></textarea>
+																		</div>
+																		</div>
+																	</div>	  
+																</fieldset>
+															</div>
+														</div>
+													</div>
+												
+
+												<?php $idObjectif = $idObjectif + 1;} ?>
+
+												</div>
+												
+												<!-- Boutons-->
+												
+													<div class="form-buttons">
+														<div class="actions">
+															<!-- Hidden pour la vérification des champs-->
+															<input type="hidden" placeholder="" class="filtre" name="verification" id="verification"/>
+															<!-- Hidden pour garder la fonction actuelle du stagiaire lors du post -->
+															<input type="hidden" placeholder="" class="filtre" name="fonction" id="idfonction" value="<?=$fap->_stagiaire->_fonction->_id?>"/>
+															<!-- Hidden pour envoyer également l'identifiant de la FAP-->
+															<input type="hidden" placeholder="" class="filtre" name="idFAP" value="<?=$fap->_id?>"/>
+															<!-- Hidden pour envoyer les quatre objectifs pédagogiques-->
+															<input type="hidden" placeholder="" class="filtre" name="obj1" value="<?php echo $obj1; ?>"/>
+															<input type="hidden" placeholder="" class="filtre" name="obj2" value="<?php echo $obj2; ?>"/>
+															<input type="hidden" placeholder="" class="filtre" name="obj3" value="<?php echo $obj3; ?>"/>
+															<input type="hidden" placeholder="" class="filtre" name="obj4" value="<?php echo $obj4; ?>"/>
+															<input type="hidden" placeholder="" class="filtre" name="modifie" value="oui"/>
+															<!-- Bouton pour l'envoi du formulaire-->
+															<!--<input type="submit" id="ajouter" value="Modifier la FAP" style="width:250px"/>-->
+															<input type="button" id="ajouter" class="like-submit" value="Modifier la FAP" style="width:250px"/>
+														</div>
+													</div>
+												</form>
+											</div>
+										</div>	
+									</div>		
+								</div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+					
+
+							<script>
+								
+								//fonction de vérification que tous les champs sont remplis
+								
+								$("#ajouter").click(function(e){
+																										
+									if($("[name=codeAction]").val()=="") {
+									alert("Merci de remplir le code action");
+									$("[name=codeAction]").focus();
+									}
+									else if($("[name=codeSession]").val()=="") {
+									alert("Merci de remplir le code session");
+									$("[name=codeSession]").focus();
+									}
+									else if($("[name=dateDebut]").val()=="") {
+									alert("Merci de remplir la date de début de session");
+									$("[name=dateDebut]").focus();
+									}
+									else if($("[name=dateFin]").val()=="") {
+									alert("Merci de remplir la date de fin de session");
+									$("[name=dateFin]").focus();
+									}
+									else if($("[name=nbabsence]").val()=="") {
+									alert("Merci de remplir le nombre de jours d'absence");
+									$("[name=nbabsence]").focus();
+									}
+									else{
+									$('textarea').each(function(){
+									if($(this).val()==""){
+									$(this).val("Pas de remarques particulières");
+									}});
+									$("#form").submit();
+									}
+								/*$("#verification").attr("value", "ok");
+								$("#form").formValidation();*/
+																	
+								});
+								
+								//fonction pour le bouton flottant
+								
+								$("#exportFloat").click( function(e){  
+  $("#type").attr("value", "0");
+   
+				if ($('#span1-country1').val() == 0){
+					$( document ).scrollTop( 300 );
+					$("#formspan1-country1REP").css("background", "red");
+					alert("Vous n'avez pas changé l'intitulé du stage.");
+					$("#formspan1-country1REP").css("background", "transparent url('../img/btn/combobox-expand.png') no-repeat scroll 100% 0px");
+				} else if($("[name=codeAction]").val()=="") {
+				alert("Merci de remplir le code action");
+				$("[name=codeAction]").focus();
+				}
+				else if($("[name=codeSession]").val()=="") {
+				alert("Merci de remplir le code session");
+				$("[name=codeSession]").focus();
+				}
+				else if($("[name=dateDebut]").val()=="") {
+				alert("Merci de remplir la date de début de session");
+				$("[name=dateDebut]").focus();
+				}
+				else if($("[name=dateFin]").val()=="") {
+				alert("Merci de remplir la date de fin de session");
+				$("[name=dateFin]").focus();
+				}
+				else if($("[name=nbabsence]").val()=="") {
+				alert("Merci de remplir le nombre de jours d'absence");
+				$("[name=nbabsence]").focus();
+				}
+				else{
+				$('textarea').each(function(){
+									if($(this).val()==""){
+									$(this).val("Pas de remarques particulières");
+									}});
+   $("#form").submit();
+   }
+  });
+								
+								
+								
+								//Mise en place du calendrier en jquery
+								jQuery(document).ready(function($){
+								$.datepicker.regional['fr'] = {
+								    closeText: 'Fermer',
+								    prevText: 'Précédent',
+								    nextText: 'Suivant',
+								    currentText: 'Aujourd\'hui',
+								    monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
+								    monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
+								    dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+								    dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+								    dayNamesMin: ['D','L','M','M','J','V','S'],
+								    weekHeader: 'Sem.',
+								    dateFormat: 'dd/mm/yy',
+								    firstDay: 1,
+								    isRTL: false,
+								    showMonthAfterYear: false,
+								    yearSuffix: ''
+								};
+								$.datepicker.setDefaults($.datepicker.regional['fr']);
+								    $("#dateD").datepicker({dateFormat : "dd/mm/yy"});
+								$("#dateF").datepicker({dateFormat : "dd/mm/yy"});
+								$("#absenceD").datepicker({dateFormat : "dd/mm/yy"});
+								$("#absenceF").datepicker({dateFormat : "dd/mm/yy"});
+								});
+								
+								var objectifs;
+								$("#form").ready(function(){
+									objectifs = JSON.parse('<?=$objectifsJSON?>');
+									
+								});
+
+								// Permet de détecter le changement de formation
+								$('#formspan1-country1REPInner').ready(function(){
+									$('#formspan1-country1REPInner').bind('DOMNodeInserted', function(e) {
+										$("#listObjectifs").html("");
+									    changeObjectifs($('#span1-country1 option:selected').val());
+									});
+								})
+								
+								var stageActuel = null
+								
+								//fonction qui va générer la page HTML à partir du stage choisi et générer également la liste des OPG associés à chaque objectif
+								function changeObjectifs(formation){
+									var countObj = 1
+									var idfonction = $("#idfonction").val();
+									
+									for (var i = objectifs.length - 1; i >= 0; i--) {
+										if (formation == objectifs[i]._stage._id){
+											
+											stageActuel = objectifs[i]._stage._id;
+											
+											$("#codeAction").val(objectifs[i]._stage._codeAction);
+
+											$("#listObjectifs").append('<h3>Objectif pédagogique n°' + countObj + ' : ' + objectifs[i]._nom.toUpperCase() + '</h3><div class="section"><input type="hidden" value="'+objectifs[i]._id+'" name="objectifId[]"><b>Point(s) fort(s) :</b><div class="span2"><div class="box-form-content"><fieldset><div class="field-wrapper"><div class="textarea" data-mandatory="true"><textarea onchange="saveValues()" cols="20" rows="6" name="objectifPF[]" placeholder="Pas de remarques particulières" style="width:825px;" id="OP1PF'+objectifs[i]._id+'"></textarea></div></div></fieldset></div></div><b>Point(s) à améliorer :</b><div><input type="button" value="Ajouter OPG" style="float:left;display:none; margin-top:12px;" id="ajouterOPS'+objectifs[i]._id+'" onclick=ajouterOPS2('+objectifs[i]._id+') class="modifierFAP" /><select id="OPS'+objectifs[i]._id+'" data-placeholder="Sélectionnez les OPG puis cliquez sur AJOUTER OPG" multiple class="chosen-select-width" tabindex="16" ></select></div><div class="span2"><div class="box-form-content"><fieldset><div class="field-wrapper"><div class="textarea" data-mandatory="true"><div><!--<input type="button" value="Afficher la liste des OPG" style="float: left"  id="menudéroulant'+objectifs[i]._id+'" onclick=afficherlistOPS('+objectifs[i]._id+') class="modifierFAP" />--><!--<input type="button" value="Cacher les OPG" style="float:left;display:none" id="annulerOPS'+objectifs[i]._id+'" onclick=annulerOPS('+objectifs[i]._id+') class="modifierFAP" /></div><div id="listOPS'+objectifs[i]._id+'" style="overflow:scroll;height:100px;width:618px;display:none;">--><input type="hidden" id="repere'+objectifs[i]._id+'" name="repere"/></div><textarea cols="20" rows="6" name="objectifPA[]" placeholder="Pas de remarques particulières" style="width:825px;" id="OP1PA'+objectifs[i]._id+'"></textarea></div></div></fieldset></div></div></div>');					
+											
+											(function(i){ setTimeout(function(){
+											$.ajax({
+											method: "GET",
+											url: "../post/recupOPS.php",
+											data: { stage: stageActuel, objectif: objectifs[i]._id, fonction: idfonction},
+											success: function(data){
+																						
+												if (data != "[]"){
+												var dataDecode = JSON.parse(data);	
+																								
+												for (var j = dataDecode.length - 1; j >= 0; j--) {
+												
+												document.getElementById("OPS"+dataDecode[j]._OPG).options[j] = new Option(dataDecode[j]._nom, dataDecode[j]._nom); 
+												/*var sup=document.createElement("input");
+												sup.id=dataDecode[j]._id;
+												sup.type="checkbox";
+												sup.setAttribute("style","float:left "); 
+												var titre=document.createElement("label");
+												titre.setAttribute("for", dataDecode[j]._id);
+												titre.id= "titre_sup"+dataDecode[j]._id;
+												titre.setAttribute("style","line-height:20px"); 
+												var titre_content = document.createTextNode(dataDecode[j]._nom);
+												titre.appendChild(titre_content);
+												var parentDiv=document.getElementById("repere"+dataDecode[j]._OPG).parentNode;	
+												parentDiv.insertBefore(sup, document.getElementById("repere"+dataDecode[j]._OPG));
+												parentDiv.insertBefore(titre, document.getElementById("repere"+dataDecode[j]._OPG));*/}
+												/*document.getElementById("menudéroulant" + objectifs[i]._id).style.display="";*/
+												document.getElementById("ajouterOPS" + objectifs[i]._id).style.display="inline";
+							
+												$("#OPS"+objectifs[i]._id).chosen({width: "80%"});
+												}/* else {
+												document.getElementById("menudéroulant" + objectifs[i]._id).style.display="none";
+												}*/
+											}
+											});},500);})(i)
+											
+											countObj++
+											
+										}
+									};
+
+									if (countObj <= 1 && $("#span1-country1").val() != 0){
+										alert("Ce stage ne comporte aucun objectif pour la fonction du stagiaire");
+									}
+
+									
+								}
+
+								
+								
+								function jourabsence(nbabsence){
+								
+								
+								if(nbabsence.value=="0"){
+								
+									document.form.absenceD.value="";
+									document.form.absenceD.disabled=true;
+									document.form.absenceF.value= "";
+									document.form.absenceF.disabled=true;
+									
+									}
+									else{
+									document.form.absenceD.disabled=false;
+									
+									document.form.absenceF.disabled=false;
+									
+									}
+								  
+								}
+								
+								//fonction pour afficher la liste des OPS
+								/*function afficherlistOPS(objectif){
+								
+								$("#listOPS" + objectif).show();
+								$("#ajouterOPS" + objectif).show();
+								$("#annulerOPS" + objectif).show();
+								$("#menudéroulant" + objectif).hide();
+								
+								}*/
+
+								
+								//fonction pour ajouter les OPS dans les textarea juste en dessous
+								/*function ajouterOPS(objectif){
+								var nbre= 0
+								$("input[type=checkbox]:checked").each( 
+								function() { 
+								var numops=$(this).attr("id");
+								if(this.parentNode.id=="listOPS"+objectif){
+								/*$("#OP1PA"+objectif).append("&lt;b&gt;&lt;u&gt;Ecart:&lt;/u&gt;&lt;/b&gt; "+ $("#titre_sup"+numops).html()+'\n&lt;b&gt;&lt;u&gt;Exemple:&lt;/u&gt;&lt;/b&gt; \n&lt;b&gt;&lt;u&gt;Conseil:&lt;/u&gt;&lt;/b&gt;\n\n');*/
+								/*if(document.getElementById("OP1PA"+objectif).value=='' || document.getElementById("OP1PA"+objectif).value=="Pas de remarques particulières" ){
+								$("#OP1PA"+objectif).val("Ecart: "+ $("#titre_sup"+numops).html()+'\nExemple: \nConseil:');
+								} else {
+								$("#OP1PA"+objectif).val($("#OP1PA"+objectif).val() + "\n\nEcart: "+ $("#titre_sup"+numops).html()+'\nExemple: \nConseil:');
+								}
+								
+								
+								$(this).attr('checked',false);
+								$("#listOPS" + objectif).hide();
+								$("#ajouterOPS" + objectif).hide();
+								$("#annulerOPS" + objectif).hide();
+								$("#menudéroulant" + objectif).show();
+								nbre= nbre +1; };
+								} 
+								);
+								if(nbre==0){
+								alert('Aucun OPS sélectionné');}
+								}*/
+								
+		function ajouterOPS2(objectif){
+				
+		var nbre=0
+		$('span').each(function(){
+		
+		if(this.parentNode.parentNode.parentNode.id=="OPS"+objectif+"_chosen"){
+		titreops=this.innerHTML
+		if(document.getElementById("OP1PA"+objectif).value=='' || document.getElementById("OP1PA"+objectif).value=="Pas de remarques particulières" ){
+		$("#OP1PA"+objectif).val("Ecart : "+ titreops+'\nExemple : \nConseil :');
+		} else {
+		$("#OP1PA"+objectif).val($("#OP1PA"+objectif).val() + "\n\nEcart : "+ titreops+'\nExemple : \nConseil :');
+		}
+		nbre=nbre+1;}
+		});
+		$("#OPS"+objectif + " option").attr('selected', false).trigger('chosen:updated');
+		if(nbre==0){
+		alert('Aucun OPG sélectionné');} }
+								
+								/*function annulerOPS(objectif){
+								$("input[type=checkbox]:checked").each( 
+								function(){
+								$(this).attr('checked',false);});
+								$("#listOPS" + objectif).hide();
+								$("#ajouterOPS" + objectif).hide();
+								$("#annulerOPS" + objectif).hide();
+								$("#menudéroulant" + objectif).show();
+								
+								
+								}*/
+								
+								
+								</script>
+								<script type="text/javascript">
+     
+	$(window).load(function(){
+	var config = {
+      '.chosen-select'           : {},
+      '.chosen-select-deselect'  : {allow_single_deselect:true},
+      '.chosen-select-no-single' : {disable_search_threshold:10},
+      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chosen-select-width'     : {width:"80%"}
+    }
+    for (var selector in config) {
+      $(selector).chosen(config[selector]);
+    }
+	});
+  </script>
+								
+	</body>
+</html>
+								
+
+

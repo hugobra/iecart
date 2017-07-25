@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Création d'une mission</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="../js/box-0.7.0.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+	</head>
+	<body>
+		<?php include 'menu_tpl.html'; ?>
+
+		 <!-- Page de création stagiaire -->
+
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					<div class="push-shadow bright-blue">
+						<div class="box-content">
+							<h2 class="title4">Création d'un type d'écart (Informations basiques)</h2>
+							<div class="element">
+								<div class="form-standard">
+									<div class="box-form-content">
+										
+										 <!-- Champs à compléter -->
+										
+										<form action="creerTypeEcart.php?id=<?=$_GET['id']?>" id="form" method="post">
+									<fieldset>
+										<div class="field-wrapper">
+											<div class="text">
+												<label for="nom">Intitulé du nouveau type d'écart : </label>
+												<input required="true" type="text" style="width:99%;" placeholder="" class="filtre" name="nom" /> <br/><br/>
+												</div>
+											<div class="form-buttons">
+												<div class="actions">
+													<!-- Hidden pour la vérification des champs-->
+													<input type="hidden" placeholder="" class="filtre" name="verification" id="verification"/>
+													<!-- Bouton de validation de la modification-->
+													<input type="submit" id="ajouter" value="Ajouter nouveau type d'écart" style="width:250px"/>
+												</div>
+											</div>
+											<br/></br>
+											<table class="tableau" id="tableauStages" border="1" cellspacing="0">
+											<thead>
+										<tr>
+											<th> N° du Type d'écart </th>
+											<th> Intitulé du Type d'Ecart </th>
+											
+											
+										</tr>
+									</thead>
+									<tbody>
+
+										<!-- Partie à remplir par la BD -->
+										
+										<?php foreach ($typeécarts as $typeécart) { ?>
+											
+											<tr>
+												<td><?=$typeécart->_id?></td>
+												<td><?=$typeécart->_nom?></td>
+																								
+											</tr>
+											
+										<?php
+										}
+										?>
+									</tbody>
+								</table>
+											
+											<!-- Boutons-->
+											
+											
+										</div>
+									</fieldset>
+								</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Fonctions javascript -->
+		<script>
+			//Fonction de vérification des champs
+			$("#ajouter").click(function(e){
+				$("#verification").attr("value", "ok");
+				$("#form").formValidation();
+			});
+		</script>
+	</body>
+</html>
+
+
+

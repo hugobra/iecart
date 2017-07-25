@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+	    <title>Page de connexion</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	    <link rel="stylesheet" href="../css/global.css"/>
+	    <link rel="stylesheet" href="../css/forms.css"/>
+	    <script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+	    <script type="text/javascript" src="../js/box-0.7.0.js"></script>
+	    <script type="text/javascript" src="../js/l10n.js"></script>
+	    <script type="text/javascript" src="../js/global-forms.js"></script>
+	</head>
+  	<body>
+	
+    	<!-- Elements du header -->
+    	<div class="header">
+     		<div class="header-content">
+				<div class="logo">
+	  			<a href="#"><img style="height:100px;" src="../img/iFAP.png" alt=""></a>
+				</div>
+				<div class="header-infos">
+		  			<span class="page-title">Page de Connexion<br/>Gestion des fiches d'aide à la progression</span>
+				</div>
+      		</div>
+    	</div>
+
+    	<!-- Gestion des onglets -->
+    	<div class="nav">
+
+      		<div class="main-nav">
+			<ul>
+					<li class=""><a href="https://www.myelectricnetwork.fr/web/ufpi-network/lire-detail/-/asset_publisher/AO6j/content/temps_fort_sequence_boost?_101_INSTANCE_AO6j_imageSrc=%0A%09%09%09%09%0A%09%09%09&_101_INSTANCE_AO6j_contentDisplayLanguageId=fr_FR&_101_INSTANCE_AO6j_backURL=https%3A%2F%2Fwww.myelectricnetwork.fr%2Fweb%2Fufpi-network%2Faccueil%3Fp_p_id%3D101_INSTANCE_9p5Q%26p_p_lifecycle%3D0%26p_p_state%3Dnormal%26p_p_mode%3Dview%26p_p_col_id%3Dcolumn-B%26p_p_col_pos%3D4%26p_p_col_count%3D5%26_101_INSTANCE_9p5Q_delta%3D10%26_101_INSTANCE_9p5Q_keywords%3D%26_101_INSTANCE_9p5Q_advancedSearch%3Dfalse%26_101_INSTANCE_9p5Q_andOperator%3Dtrue%26_101_INSTANCE_9p5Q_currentOnglet%3DCategory%26p_r_p_564233524_resetCur%3Dfalse%26cur%3D1"> iFAP a gagné le challenge BOOST! </a></li>
+					<li class=""><a href="https://www.myelectricnetwork.fr/documents/208363111/524585088/ACTU%27FIL+N%C2%B0+90+du+19+au+31+janvier+2017/f3371d53-cfff-4e06-80ba-7a5d1a4832ee?version=1.0"> iFAP récompensée aux Trophées Pratiques Performantes DAIP </a></li>
+			
+			</ul>
+			</div>
+    	</div>
+
+		<!-- Corps de la page -->
+    	<div class="two-columns forms">
+      		<!-- <div class="aside"> -->
+			<div class="element">
+	  			<div class="form-standard">
+	    			<div class="box-form-content">
+	      				<form action="ecarts.php" id="connexion" method="post" name="test">
+							<fieldset>
+		  						<div class="field-wrapper">
+		    						<div class="text">
+		      							<label for="login">NNI : </label><input required="true" type="text" placeholder="Saisissez votre identifiant NNI" id="nom" name="login"  onchange='detecterNNI(this)' onkeyup='detecterNNI(this)' onmouseup='detecterNNI(this)'  />  <br/><br/>
+		  						</div>
+								<div class="text">
+		    						<label for="nom">Mot de passe Sésame : </label><input type="password" id="mdp" name="mdp"  /> <br/>
+		  						</div>
+								</br>
+								<!--<label><input type="checkbox" name="souvenir" class="normal" />   Mémoriser mon NNI et mon mot de passe SESAME sur ce navigateur <br/><br/></label>-->
+		  						<div class="field-wrapper">
+		    						<div class="select">
+								    	<label for="site">Site : </label>
+								    	<select name="site" id="site">
+									    	<?php
+									    	foreach ($sites as $site) {
+									    	?>
+											<option value="<?=$site->_id?>"> <?=$site->_nom?> </option>
+											<?php } ?>
+		      							</select>
+		    						</div>
+		  						</div>
+		  						
+		  						<div class="actions no-border">
+		  							<?php if (!$production){ ?>
+		  							<input type="hidden" name="ldap" value="false"/>
+		  							<?php }else{ ?>
+		  							<input type="hidden" name="ldap" value="true"/>
+		  							<?php } ?>
+		    						<input type="submit" value="Se connecter" id="envoi"/>
+		  						</div>
+							</fieldset>
+	      				</form>
+	    			</div>
+	  			</div>
+			<!-- </div> -->
+      		</div>
+    	</div>
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					<div class="box-form-content">
+					<h2 class="title4">Version 2.1 </h2>
+					</br>
+					<strong> - "Imprimer des FAP" et "Bilan" disponibles pour les MPL et les Chefs de Service </strong></br>
+				<strong>	- Refonte du bilan de FAP : filtre multi-critères désormais possible </br></strong>
+					<strong>- Modifications mineures </br></strong>
+				
+					
+					N'hésitez pas à nous contacter pour nous faire part de vos idées (bouton Contact ci-dessous).
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- script permettant de selectionner automatiquement le site du stagiaire à partir de son NNI s'il existe en base de donnée -->
+		<script>
+             function detecterNNI(inputNNI) {
+              inputNNI.value=inputNNI.value.toUpperCase();
+                        
+              $.ajax({
+               method: "GET",
+               url: "../post/getSiteFromNNI.php",
+               data: { nni: inputNNI.value },
+               success: function(data){
+                if (data != ''){
+                 
+                 var dataDecode = JSON.parse(data);
+                 var siteString = "";
+                 for (var i = dataDecode.sites.length - 1; i >= 0; i--) {
+                  siteString += dataDecode.sites[i]._nom ;
+                  
+                 };
+                 
+                 for(var j=0; j<document.test.site.length; j++){
+                 
+                 if(document.test.site.options[j].text == siteString){
+                 //alert(document.test.site.selectedIndex + document.getElementById('connexionsiteREPInner').value + $('#connexionsiteREPInner').val());
+                 document.test.site.selectedIndex = j ;
+                 document.getElementById('connexionsiteREPInner').innerHTML = siteString ;
+                 //$('#connexionsiteREPInner').val(siteString);
+                 };}
+                }                
+               }
+              });
+             }
+             </script>
+	</body>
+</html>

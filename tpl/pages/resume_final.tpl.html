@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Résultat du bilan demandé</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="../js/box-0.7.0.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+		<script type="text/javascript" src="../js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/jquery-ui.css"/>
+
+		<style type="text/css">
+			table {
+			    border-collapse: collapse;
+			}
+
+			table, th, td {
+			    border: 1px solid black;
+			}
+		</style>
+	</head>
+	<body>	
+		 <!-- Page de création stagiaire -->
+
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					<div class="push-shadow bright-blue">
+						<div class="box-content">
+							<div class="element">
+								<div class="form-standard">
+									<div class="box-form-content">
+									<!--<input type="button" class="modifierFAP" id="ajouter" value="Exporter le bilan en Excel" style="width:250px; cursor: pointer; visibility:visible;"  onclick="exportexcel()"/>-->
+									<h1>Bilan effectué selon les critères suivants:</h1>
+									<table align="center" style="border-collapse:unset;">
+									<tr><td style="width:250px;" align="center"><h2> Dates </h2></td> <td align="center"> du <?=$_POST['dateDebut']?> au <?=$_POST['dateFin']?> </td><td style="width:250px;"  align="center" ><h2> Service(s) concerné(s) par ce bilan </h2></td><td>
+									<?php 
+									
+									foreach($_POST["serviceFiltre"] as $service){ 
+									$nomservice=New Service($service);
+									?>
+									<li style="margin-left:20px;"><u1><?=$nomservice->_nom?></u1> 
+									<?php } ?>
+									</td>
+									<tr style="width:100%;"><td style="width:25%;" align="center" ><h2> Nombre de FAPs consultées pour ce bilan </h2></td><td align="center"> <span id="nombrefap"></span></td><td  style="width:25%;" align="center"><h2> Equipe(s) concernée(s) par ce bilan </h2></td><td>
+									<?php 
+									
+									foreach($_POST["equipeFiltre"] as $equipe){ 
+									$nomequipe=New Equipe($equipe);
+									?>
+									<li style="margin-left:20px;"><u1><?=$nomequipe->_nom?></u1> 
+									<?php } ?>
+									<tr ><td align="center"><h2> Fonctions concernées par ce bilan </h2></td>
+									<td align="left">
+									<?php 
+									
+									foreach($_POST["fonctionFiltre"] as $fonction){
+									if($fonction<>0){
+									$nomfonction=New Fonction($fonction);
+									?>
+									<li style="margin-left:20px;"><u1><?=$nomfonction->_nom?></u1> 
+									<?php } else {
+									foreach($fonctions as $fonction2){
+									?>
+									<li style="margin-left:20px;"><u1><?=$fonction2->_nom?></u1></li>
+									<?php }}} ?>
+									</li></td><td  style="width:250px;" align="center"><h2> Tranche(s) concernée(s) par ce bilan </h2></td><td>
+									<?php 
+									
+									foreach($_POST["trancheFiltre"] as $tranche){ 
+									$nomtranche=New Tranche($tranche);
+									?>
+									<li style="margin-left:20px;"><u1><?=$nomtranche->_nom?></u1> 
+									<?php } ?>
+									
+									</tr>
+									</table>
+									<?php 
+									$idfapdustage=array();
+									$numtitre=0;
+									$idfapselect=array();
+									$titrestage=array();
+									$nbrefapstage=array();
+									$pourexcel=array();
+									foreach ($faps as $fap) {
+									
+									
+									if($numtitre==0){
+									 $titrestage[0]=$fap->titre;
+									 //$nbrefapstage[0]=0;
+									 }
+									 $veriftitre=1;
+									 for( $compteur =0 ; $compteur <= $numtitre-1  ; $compteur++){
+										if ($titrestage[$compteur] == $fap->titre && $numtitre!=0){
+											$veriftitre=$veriftitre+1;
+											$détectstage=$compteur;
+											/*echo "<script> alert('<?=$détectstage?>' + ' $titrestage[$détectstage] ' + ' $numtitre') </script>";*/
+										} ; }
+									if($veriftitre==1){
+										$nbrefapstage[$numtitre]=0;
+									
+									?>
+									
+									</br>
+									<div class="actions"></div>
+									<h1 style="margin-top: 0px;display:inline;" ><?=$fap->titre?></h1><span id="titre<?=$numtitre?>"> </span>
+									<table style="width: 100%;border-collapse:unset;" border="1" cellspacing="0">
+											<thead>
+												<th style="width: 20%;" >Objectifs de Formation concernés</th>
+												
+												<th >Point(s) fort(s) (en vert) ou à améliorer (en rouge)</th>
+												<th style="width:90px;" >Lien vers FAP</th>
+											</thead>
+
+											<tbody id="tableau<?=$numtitre?>">
+												
+											</tbody>
+										</table>
+										<input type="hidden" id="nombrefaptabl<?=$numtitre?>" value="<?=$nbrefapstage[$numtitre]?>"> 
+									<?php
+										if($numtitre==0){
+										$détectstage=0 ;
+										
+										
+										} else {
+										$détectstage=$numtitre ;
+										
+										$titrestage[$numtitre]=$fap->titre ;}
+										$numtitre++;
+										
+									} 
+									
+
+										
+									?>
+									
+
+									<?php
+									
+									$àremplacer=array('"',"\r","\n","Ã ", "Ã¨","Ã©"," < "," > ");
+									$remplacant=array("", "","<br/>","&agrave;","&egrave;","&eacute;"," &lt; "," &gt; ");
+									$pf = utf8_decode(str_replace($àremplacer,$remplacant,utf8_encode($fap->pointFort)));
+									$pa = utf8_decode(str_replace($àremplacer,$remplacant,utf8_encode($fap->pointAAmeliorer)));
+									$pa=preg_replace("#(Ecart.{0,6}:)#","<b><u>$0</u></b>",$pa);
+									$pa=preg_replace("#(Exemple.{0,6}:)#","<b><u>$0</u></b>",$pa);
+									$pa=preg_replace("#(Conseil.{0,6}:)#","<b><u>$0</u></b>",$pa);
+									
+										if ($pa != "Pas de remarques particuli&egrave;res" && $pa != "" ){
+										
+									?>
+									
+									<script>
+											var pa ="<?=$pa?>" ;
+											//alert("<?=$fap->codeAction?>" + " " + "<?=$détectstage?>" );
+											var objfap = "<?=$fap->nomObjectif?>" ;
+											
+											var liste =document.getElementById("tableau<?=$détectstage?>").rows;
+											var ligneinser = liste.length ;
+											
+											var occurence =0 ;
+											var cell,cell2 ;
+											
+											if(ligneinser>0){
+											for( var i=0;i<ligneinser;i++){
+											
+											if(liste[i].cells[0].innerHTML==objfap){
+											var nouvelleLigne = document.getElementById("tableau<?=$détectstage?>").insertRow(i+1);
+											liste[i].cells[0].rowSpan= liste[i].cells[0].rowSpan+1;
+											cell= nouvelleLigne.insertCell(0);
+											cell.innerHTML = pa ;
+											cell.style.backgroundColor='#FFAAAA' ;
+											cell2=nouvelleLigne.insertCell(1);
+											cell2.innerHTML='<a href="ficheStagiaire.php?id=<?=$fap->idStagiaire?>#titrestagefap<?=$fap->idFAP?>">Lien vers la FAP</a>';
+											cell2.style.backgroundColor='#FFAAAA' ;
+											occurence++;
+											
+											} 
+											}
+											if(occurence==0){
+											 var nouvelleLigne = document.getElementById("tableau<?=$détectstage?>").insertRow(-1);
+											 nouvelleLigne.insertCell(0).innerHTML = objfap ;
+											 cell=nouvelleLigne.insertCell(1)
+											 cell.innerHTML = pa ;
+											 cell.style.backgroundColor='#FFAAAA' ;
+											 cell2=nouvelleLigne.insertCell(2);
+											cell2.innerHTML='<a href="ficheStagiaire.php?id=<?=$fap->idStagiaire?>#titrestagefap<?=$fap->idFAP?>">Lien vers la FAP</a>';
+											cell2.style.backgroundColor='#FFAAAA' ;
+											 }
+																						
+											} else {
+											 var nouvelleLigne = document.getElementById("tableau<?=$détectstage?>").insertRow(-1);
+											 nouvelleLigne.insertCell(0).innerHTML = objfap ;
+											 cell=nouvelleLigne.insertCell(1);
+											 cell.innerHTML = pa ;
+											 cell.style.backgroundColor='#FFAAAA' ;
+											 cell2=nouvelleLigne.insertCell(2);
+											cell2.innerHTML='<a href="ficheStagiaire.php?id=<?=$fap->idStagiaire?>#titrestagefap<?=$fap->idFAP?>">Lien vers la FAP</a>';
+											cell2.style.backgroundColor='#FFAAAA' ;
+											 }
+											 
+											 
+											 
+											//alert(ligneinser);
+											/*if(ligneinser >1){
+											alert(cell.innerHTML);
+											//alert("liste[ligneinser-1-occurence].rowSpan=" + liste[ligneinser-1-occurence].cells[0].rowSpan + " " + "ligninser=" + ligneinser + "occurence=" + occurence);
+											//alert(liste[ligneinser-1-occurence].cells[0].innerHTML + "ligneinser=" + ligneinser + "occurence=" + occurence + " " + objfap);
+											//for( var i=2; i<liste.length; i++){
+											if (cell.innerHTML == objfap){
+											
+											alert(occurence);
+											//alert(ligneinser+ " " + pourtest + " " + liste[ligneinser].cells[0].rowSpan);
+											 //var cell= nouvelleLigne.insertCell(0) ;
+											cell.rowSpan=cell.rowSpan +1  ;
+											//cell.innerHTML = objfap ;
+											 nouvelleLigne.insertCell(0).innerHTML = pa +"1" ;
+											  } else {
+											  cell=nouvelleLigne.insertCell(0);
+											  cell.innerHTML = objfap ;
+											  
+											  nouvelleLigne.insertCell(1).innerHTML = pa +"2" ;
+											  }
+											  } else { //}
+											  if (ligneinser>0 && liste[ligneinser-1].cells[0].innerHTML == objfap){
+											 liste[ligneinser-1].cells[0].rowSpan=liste[ligneinser-1].cells[0].rowSpan +1  ;
+											 cell= liste[ligneinser-1].cells[0] ;
+											 nouvelleLigne.insertCell(0).innerHTML = pa +"1" ;
+											 occurence=objfap ;
+											  } else{
+											  nouvelleLigne.insertCell(0).innerHTML = objfap ;
+											  nouvelleLigne.insertCell(1).innerHTML = pa +"3" ;
+											  }
+											  }*/
+											 /*var nouvelleLigne = document.getElementById("tableau<?=$détectstage?>").insertRow(ligneinser);
+											 nouvelleLigne.insertCell(0).innerHTML = objfap +"2" ;
+											  nouvelleLigne.insertCell(1).innerHTML = pa +"2" ;*/
+											 
+											//$("#tableau<?=$détectstage?>").append("<tr><td>" +objfap +"</td><td bgcolor='#FFAAAA'>" + pa + "</td></tr>");
+											
+									</script>
+									
+									
+
+									<?php
+									}
+									
+									if ($pf != "Pas de remarques particuli&egrave;res" && $pf != "" && $pf != " "  ){
+										
+									?>
+									
+									<script>
+											var pf ="<?=$pf?>" ;
+											//alert("<?=$fap->codeAction?>" + " " + "<?=$détectstage?>" );
+											var objfap = "<?=$fap->nomObjectif?>" ;
+											
+											var liste =document.getElementById("tableau<?=$détectstage?>").rows;
+											var ligneinser = liste.length ;
+											
+											var occurence =0 ;
+											var cell,cell2 ;
+											
+											if(ligneinser>0){
+											for( var i=0;i<ligneinser;i++){
+											
+											if(liste[i].cells[0].innerHTML==objfap){
+											var nouvelleLigne = document.getElementById("tableau<?=$détectstage?>").insertRow(i+1);
+											liste[i].cells[0].rowSpan= liste[i].cells[0].rowSpan+1;
+											cell= nouvelleLigne.insertCell(0);
+											cell.innerHTML = pf ;
+											cell.style.backgroundColor='#AAFFAA' ;
+											cell2=nouvelleLigne.insertCell(1);
+											cell2.innerHTML='<a href="ficheStagiaire.php?id=<?=$fap->idStagiaire?>#titrestagefap<?=$fap->idFAP?>">Lien vers la FAP</a>';
+											cell2.style.backgroundColor='#AAFFAA' ;
+											occurence++;
+											
+											} 
+											}
+											if(occurence==0){
+											 var nouvelleLigne = document.getElementById("tableau<?=$détectstage?>").insertRow(-1);
+											 nouvelleLigne.insertCell(0).innerHTML = objfap ;
+											 cell=nouvelleLigne.insertCell(1)
+											 cell.innerHTML = pf ;
+											 cell.style.backgroundColor='#AAFFAA' ;
+											 cell2=nouvelleLigne.insertCell(2);
+											cell2.innerHTML='<a href="ficheStagiaire.php?id=<?=$fap->idStagiaire?>#titrestagefap<?=$fap->idFAP?>">Lien vers la FAP</a>';
+											cell2.style.backgroundColor='#AAFFAA' ;
+											 }
+																						
+											} else {
+											 var nouvelleLigne = document.getElementById("tableau<?=$détectstage?>").insertRow(-1);
+											 nouvelleLigne.insertCell(0).innerHTML = objfap ;
+											 cell=nouvelleLigne.insertCell(1);
+											 cell.innerHTML = pf ;
+											 cell.style.backgroundColor='#AAFFAA' ;
+											 cell2=nouvelleLigne.insertCell(2);
+											cell2.innerHTML='<a href="ficheStagiaire.php?id=<?=$fap->idStagiaire?>#titrestagefap<?=$fap->idFAP?>">Lien vers la FAP</a>';
+											cell2.style.backgroundColor='#AAFFAA' ;
+											 }
+											 
+											 
+											 
+									</script>
+									
+									<?php 
+									}
+									//pour compter nbre fap total
+									if(count($idfapselect)==0){
+									$idfapselect[0]=$fap->idFAP;
+									} else {
+									 $verifidfap=1;
+									 for( $compteur =0 ; $compteur < count($idfapselect)  ; $compteur++){
+										if ($idfapselect[$compteur] == $fap->idFAP ){
+											$verifidfap=$verifidfap+1;
+											
+										} ; }
+									if($verifidfap==1){
+									$idfapselect[count($idfapselect)]=$fap->idFAP;
+									}
+									}
+									//pour compter nbre fap du stage
+									if(!isset($idfapdustage[$détectstage])){
+									//if(count($idfapdustage[$détectstage])==0){
+									$idfapdustage[$détectstage][0]=$fap->idFAP;
+									} else {
+									 $verifidfap=1;
+									 for( $compteur =0 ; $compteur < count($idfapdustage[$détectstage])  ; $compteur++){
+										if ($idfapdustage[$détectstage][$compteur] == $fap->idFAP ){
+											$verifidfap=$verifidfap+1;
+											
+										} ; }
+									if($verifidfap==1){
+									$idfapdustage[$détectstage][count($idfapdustage[$détectstage])]=$fap->idFAP;
+									}
+									}
+									$nbrefapstage[$détectstage]=count($idfapdustage[$détectstage]);
+									
+									?>
+									<script>
+									var numdelatabl = <?=$détectstage?>;
+									$("#nombrefaptabl"+numdelatabl).val("<?=$nbrefapstage[$détectstage]?>"); 
+									</script>
+									<?php
+									}
+
+									
+
+												
+									
+									/*foreach ($faps as $fap) {
+										$stage = new Stage($fap->idStage);
+										$fonction = new Fonction($fap->idFonction);
+
+										if ($laststage != $stage->_id){
+										?>
+
+										<h1 style="margin-top: 0px;"><?=$stage->_titre?></h1>
+										<?php 
+											$laststage = $stage->_id;
+										} 
+
+										if ($lastfonction != $fonction->_id){
+										?>
+
+										<h3 style="padding-left: 20px;margin-top: 0px;"><?=$fonction->_nom?></h3>
+
+										
+
+										<table style="width: 100%;">
+											<thead>
+												<th width="33%">Objectif</th>
+												<th width="33%">Point Fort</th>
+												<th width="33%">Point a Améliorer</th>
+											</thead>
+
+											<tbody id="tableau<?=$stage->_id.'_'.$fonction->_id?>">
+												
+											</tbody>
+										</table>
+										<?php 
+										} 
+										$lastfonction = $fonction->_id;
+
+
+										$pf = utf8_decode(str_replace("Ã ", "&agrave;",utf8_encode($fap->pointFort)));
+										$pa = utf8_decode(str_replace("Ã ", "&agrave;",utf8_encode($fap->pointAAmeliorer)));
+
+										//if ($pf != "Pas de remarques particulières" && $pa != "Pas de remarques particulières"){
+										?>
+
+
+										<?php
+											if ($lastobj != $fap->nomObjectif){
+												$aInserer = "<tr><td><?=$fap->nomObjectif?></td><td><?=$pf?></td><td><?=$pa?></td></tr>";
+											}else{
+												$aInserer = "<tr><td></td><td><?=$pf?></td><td><?=$pa?></td></tr>";
+											}
+											$lastobj = $fap->nomObjectif;
+										?>
+
+										<script>
+											$("#tableau<?=$stage->_id.'_'.$fonction->_id?>").append("<?=$aInserer?>");
+										</script>
+									<?php 
+										//}
+									} */?>
+									<script> $("#nombrefap").html($("#nombrefap").html()+" <?=count($idfapselect)?>"); 
+									
+									var nbretableau=<?=$numtitre?> ;
+									for( var i=0; i<nbretableau; i++){
+									nbrefapdecetableau=$("#nombrefaptabl"+i).val();
+									$("#titre" + i).html($("#titre" + i).html()+" ( Nombre de FAP pour ce stage: " + nbrefapdecetableau +")"); 
+									}
+									$('tbody').each(function(){
+									if(this.rows.length==0){
+									var nouvelleLigne=this.insertRow(-1);
+									var cell=nouvelleLigne.insertCell(0);
+									cell.colSpan=3;
+									cell.innerHTML= "Aucune donnée à afficher";
+									cell.style="text-align:center;";
+									//cell.style.backgroundColor='#FFAAAA' ;
+									
+									} else{
+									for(var i=0; i<this.rows.length;i++){
+										for(var j=0 ; j<=1;j++){
+									//alert(this.rows[i].cells[j].innerHTML);
+										}
+									}
+									/*for(var i=0, i<=this.cells.length, i++){
+									alert(i);
+									}*/
+									}																
+									});
+									function exportexcel(){
+									var donnees = [];
+									$('td').each(function(){
+									donnees.push(this.innerText);
+									});
+									
+									alert(donnees.length);
+									$.ajax({
+									method: "POST",
+									url: "../librairie/01simple-download-xlsx.php",
+									data: { donnees:donnees },
+									success: function(data){
+									
+									window.location.href= data;
+									}
+									});
+									/*var lineArray = [];
+									donnees.forEach(function (infoArray, index) {
+										var line = infoArray.join(",");
+										lineArray.push(index == 0 ? "data:application/vnd.ms-excel;charset=utf-8," + line : line);
+									});
+									var csvContent = lineArray.join("\n");
+									window.open(encodeURI(csvContent));
+									*/
+									}
+									</script>
+									<!--<a href="../librairie/01simple-download-xlsx.php?nbtable=<?=$numtitre-1?>" class="modifierStagiaire">Exporter EXCEL</a>-->
+									
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+

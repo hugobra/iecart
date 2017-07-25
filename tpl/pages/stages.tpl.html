@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+	<title>Liste des stages</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<link rel="stylesheet" href="../css/global.css"/>
+	<link rel="stylesheet" href="../css/forms.css"/>
+	<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+	<link rel="stylesheet" href="../css/content-boxes.css"/>
+	<link rel="stylesheet" href="../css/dataTables.min.css"/>
+
+	<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="../js/dataTables.min.js"></script>
+	<!--<script type="text/javascript" src="../js/box-0.7.0.js"></script>--> <!-- Conflits avec datatables, ne semble pas être utilisé dans cette page, donc désactivé -->
+	<script type="text/javascript" src="../js/l10n.js"></script>
+	<script type="text/javascript" src="../js/global-forms.js"></script>
+	<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+
+    </head>
+
+    <body>
+
+	<?php include 'menu_tpl.html'; ?>
+
+	<!-- Tableau contenant les stages -->
+
+	<div class="three-columns forms">
+	    <div class="element">
+	      <div class="push-shadow bright-blue">
+			<div class="box-content">
+				<h2 class="title4">Stages</h2>
+				<div class="content">
+					<?php if ($_SESSION['rang'] >= Rangs::ADMINSITE){ ?>
+					<a href="../route/creerStage.php" class="boutonAjoutStage">Ajouter un stage</a><!--<br/><br style="clear: both;"/>-->
+
+        	<?php } ?>
+
+        	<img src="../img/btn/modifier.png" height="25" width="25"> Pour consulter / Modifier la fiche d'un stage.<br>
+          
+
+        		<?php if ($_SESSION['rang'] >= Rangs::ADMINSITE){ ?>
+				<img src="../img/btn/copy-icon.png" height="25" width="25"> Pour copier un stage existant (avec les OBJECTIFS)<br>
+		    			<img src="../img/btn/delete.png" height="25" width="25"> Pour rendre un stage inactif, il n'apparaitra plus dans cette liste.
+		    			<?php } ?>
+					<center>
+					<fieldset>
+						<div class="field-wrapper">
+							<form action="stages.php" method="post" id="form">
+								<br/>
+								<br/>
+								<table class="tableau" id="tableauStages" border="1" cellspacing="0">
+									<thead>
+										<tr>
+											<th> Intitulé </th>
+											<th> Date de création </th>
+											<?php if ($_SESSION['rang'] >= Rangs::FORMATEUR){ ?>
+											<th> Actions </th>
+											<?php } ?>
+										</tr>
+									</thead>
+									<tbody>
+
+										<!-- Partie à remplir par la BD -->
+										
+										<?php foreach ($stages as $stage) { ?>
+											
+											<tr>
+												<td><?=$stage->_titre?></td>
+												<td><?php echo date_format(date_create($stage->_date),"Y-m-d"); ?></td>
+
+												<!-- Insertion des images correspondant aux boutons modifier et supprimer pour chaque stage-->
+
+												<?php if ($_SESSION['rang'] >= Rangs::FORMATEUR){ ?>
+											
+											<td width="15%"><a href="ficheStage.php?id=<?=$stage->_id?>" style="display:inline;"><img src="../img/btn/modifier.png" width="25" height="25"/> </a>
+											
+											
+											
+											<?php }
+												
+												if ($_SESSION['rang'] >= Rangs::ADMINSITE){ ?>
+											<a href="copierStage.php?id=<?=$stage->_id?>" style="display:inline;"><img src="../img/btn/copy-icon.png" width="25" height="25"/> </a>
+											
+											<a class="suppr" href="stages.php?idSuppr=<?=$stage->_id?>" style="display:inline;" title="Rendre ce stage inactif (Il ne sera plus visible)"><img src="../img/btn/delete.png" width="20" height="20"/></a></td>
+												
+												<?php } ?>
+												
+											</tr>
+											
+										<?php
+										}
+										?>
+									</tbody>
+								</table>
+								<script type="text/javascript">
+							    	$(document).ready(function() {
+									    $('#tableauStages').DataTable({
+									    	"language": {
+									    		"url": "/js/dataTables.french.json"
+									    	}<?php if ($_SESSION['rang'] >= Rangs::FORMATEUR){ ?>,
+									    	"order": [ 1, 'desc' ],
+									    	"columnDefs": [
+											    { "orderable": false, "targets": 2 },
+											    { "searchable": false, "targets": 2 }
+											  ]
+											  <?php } ?>
+									    });
+									} );
+							    </script>
+							</form>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+						</div>
+					</fieldset>
+					</center>
+					<?php if ($_SESSION['rang'] >= Rangs::ADMINSITE){ ?>
+					<a href="../route/creerStage.php" class="boutonAjoutStage">Ajouter un stage</a><br/>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+
+		 <!-- Mise en place du footer-->
+
+	    <div class="footer-wrapper">
+			<div class="footer-nav">
+				<ul>
+					<li><a href="mailto:fabien.leray@edf.fr; hugo.branly@edf.fr">Contact</a></li>
+					<li><a href="">Navigateur</a></li>
+					<li><a href="">Mentions légales</a></li>
+					<li><a href="">Conditions générales d'utilisation</a></li>
+					<li><a href="">Aide</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+  </div>
+
+
+	<!-- Fonctions javascript-->
+
+	<script type="text/javascript">
+
+		// Fonction tri aphabétique
+
+	  $(".tri").click( function(e){
+	  $("#form").submit();
+	  });
+
+	//Fonction filtre (complétion automatique)
+
+	  $(".filtre").change( function(e){
+	  $("#form").submit();
+	  });
+
+	  //Fonction suppression
+
+	    $(".suppr").click( function(e){
+		  var suppression=prompt('Voulez-vous confirmer la suppression (oui/non) ?');
+		 if(suppression=="oui"){
+			return true;
+		 }
+		 else{
+			 return false;}
+	  });
+	</script>
+
+	</body>
+</html>

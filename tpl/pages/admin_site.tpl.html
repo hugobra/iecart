@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Création d'un stage</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="../js/box-0.7.0.js"></script> <!-- Conflits avec datatables, ne semble pas être utilisé dans cette page, donc désactivé -->
+		<script type="text/javascript" src="../js/dataTables.min.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+	</head>
+	<body>
+		<?php include 'menuadmin_tpl.html'; ?>
+
+		<?php 
+		if (isset($_GET['permission_denied'])){
+			echo "<script>alert('Vous n\'avez pas la permission de voir ce contenu');</script>";
+		}
+		?>
+
+		 <!-- Page de création stagiaire -->
+
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					<div class="push-shadow bright-blue">
+						<div class="box-content">
+							<h2 class="title4">Interface d'administration</h2>
+							<div class="element">
+								<div class="form-standard">
+									<div class="box-form-content">
+										
+										<?php if ($_SESSION['rang'] >= Rangs::SUPERADMIN){ ?>
+
+										 <!-- Champs à compléter -->
+										<h3 style="">Ajouter un site</h3>
+
+										<form action="admin_site.php" id="form1" method="post">
+											<fieldset>
+												<div class="field-wrapper">
+													<div class="text">
+														<label for="nomSite">Nom du site : </label>
+														<input required="true" type="text" placeholder="" class="filtre" name="nomSite" id="nomSite"/>
+													</div>
+												</div>
+												
+												 <!-- Boutons -->
+												
+												<div class="form-buttons">
+													<div class="actions">
+														<!-- Hidden pour la vérification des champs-->
+														<input type="hidden" placeholder="" class="filtre" name="verification" id="verification"/>
+														<!-- Submit pour la validation et l'envoi du formulaire-->
+														<input type="submit" id="ajouter" value="Ajouter" style="width:250px"/>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+
+										<h3 style="">Gérer les sites</h3>
+
+										<p>Attention, la suppression d'un site entraine la disparition de toutes ses données, référez vous à un développeur si besoin est de faire une sauvegarde du site supprimé.</p>
+
+										<table class="tableau" border="1" cellspacing="0">
+											<thead>
+												<tr>
+													<th>ID du site</th>
+													<th>Nom du site</th>
+													<th>Supprimer</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php foreach ($sites as $site) { ?>
+													<tr>
+														<td><?=$site->_id?></td>
+														<td><?=$site->_nom?></td>
+														<td><a class="suppr" href="admin_site.php?idSuppr=<?=$site->_id?>"><img src="../img/btn/delete.png" height="20" width="20"></a></td>
+													</tr>
+												<?php } ?>
+											</tbody>
+										</table>
+										<?php } ?>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			//Fonction suppression
+			$(".suppr").click( function(e){
+				var suppression=prompt('Voulez-vous confirmer la suppression (oui/non) ?');
+				if(suppression=="oui"){
+					return true;
+	 			}else{
+		 			return false;
+		 		}
+  			});
+    	</script>
+	</body>
+</html>
+
+
+

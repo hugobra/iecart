@@ -1,0 +1,468 @@
+/* Boites de formulaire standards */
+fieldset {
+	border:none;
+	padding:0;
+	margin: 0; 
+}
+select:not(.search-table) {
+	position: absolute;
+	left: -10000px;
+}
+ul {
+	padding: 0;
+	margin: 0;
+}
+.form-standard-box {
+	width: 100%;
+	border: 1px solid #dddddd;
+	border-radius: 4px 0 0 0;
+	box-shadow: 0 3px 5px 0 #cccccc;
+	min-height: 180px;
+	background-color: #fff;
+	behavior: url(../pie/PIE.htc);
+}
+.form-standard {
+	width: 100%;
+	background: #f3f3f3;
+	border-radius: 4px 0 0 0;
+	min-height: 90px;
+	behavior: url(../pie/PIE.htc);
+}
+.form-standard-box .box-title {
+	display: block;
+	height: 14px;
+	margin: 0;
+	padding : 10px 0 8px 15px;
+	color: #4c4c4c;
+	font-size: 14px;
+	background: #f3f3f3;
+	font-weight: bold;
+}
+.field-wrapper{
+	margin-bottom: 10px;
+	width: 100%;
+}
+.box-form-content{
+	padding: 15px 15px 15px 15px;
+	zoom: 1;
+}
+.box-form-content label {
+	font-size: 12px;
+	line-height: 12px;
+	display: block;
+	padding-bottom: 3px;
+}
+.box-form-content .required {
+	font-style: normal;
+	color: #005bbb;
+}
+.box-form-content input[type=text],
+ .box-form-content .faux-select {
+	font-size: 11px;
+	color: #4c4c4c;
+	padding: 6px;
+	height: 11px;
+}
+.box-form-content .faux-select {
+	border: 1px solid #cccccc;
+	background: url(../img/btn/combobox-expand.png) no-repeat 100% 0;
+}
+.box-form-content .faux-select.focus {
+	background-position: 100% -23px;
+}
+.faux-options-inner {
+	border: 1px solid #cccccc;
+	border-top-width : 0;
+	background: #fff;
+}
+.faux-options .scrollable {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+}
+.faux-options .scrollbar {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: 1px solid #fff;
+	width: 15px;
+	background: #eee;
+}
+.faux-options .scrollbar-gutter {
+	position: relative;
+	width: 15px;
+}
+.faux-options .scrollbar-face {
+	position: absolute;
+	left: 0;
+	overflow: hidden;
+	width: 15px;
+	background: #999;
+}
+.faux-options .scrollable-content {
+	position: absolute;
+	top:0;
+	right: 0;
+	left: 0;
+	z-index: 58;
+}
+.faux-options ul {
+	margin: 0;
+	padding: 0;
+}
+.faux-options li {
+	padding: 1px 16px 1px 2px;
+	background: none;
+	color: #666;
+	cursor: default;
+}
+.faux-options li:hover {
+	background: #fe5815;
+	color: #fff;
+}
+.faux-options .selected {
+	background-color: #ccc;
+}
+.box-form-content input[type=submit]{
+	background: #ffffff; /* Old browsers */
+	background: -moz-linear-gradient(top,  #ffffff 1%, #eeeeee 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#ffffff), color-stop(100%,#eeeeee)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #ffffff 1%,#eeeeee 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #ffffff 1%,#eeeeee 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ffffff 1%,#eeeeee 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #ffffff 1%,#eeeeee 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+	padding: 0 10px;
+	overflow: hidden;
+	height: 20px;
+	float: right;
+	margin-top: 3px;
+	border : 1px solid #cccccc;
+	border-radius: 5px;
+	behavior: url(../pie/PIE.htc);
+	text-transform: uppercase;
+	color: #005bbb;
+	text-decoration: none;
+	font-size: 11px;
+}
+.box-form-content input[type=submit]:active{
+	background: #fe5815;
+	border: none;
+	color: #fff;
+}
+.box-form-content input[type=submit]:hover{
+	background: #fe5815;
+	border: none;
+	color: #fff;
+}
+.aside .box-form-content input[type=text],
+.aside .box-form-content .faux-select {
+	width: 208px;
+}
+.field-wrapper {
+	float: left;
+}
+.span2 .field-wrapper {
+	float: left;
+	width: 295px;
+}
+.four-columns .span2 .form-standard  .field-wrapper {
+	float: none;
+	width: 100%;
+}
+.four-columns .span2 .form-standard label {
+	width: 200px;
+}
+.span2 .field-wrapper.left{
+	margin-right: 30px;
+}
+.span2 .box-form-content input[type=text],
+.span2 .box-form-content .faux-select {
+	width: 283px;
+}
+.span1 .box-form-content input[type=text],
+.span1 .box-form-content .faux-select {
+	width: 274px;
+}
+
+.three-columns .span2 .field-wrapper {
+	width: 290px;
+}
+.three-columns .span2  input[type=text],
+.three-columns .span2  .faux-select {
+	width: 276px;
+}
+
+.four-columns .span1  input[type=text],
+.four-columns .span1  .faux-select {
+	width: 189px;
+}
+
+.four-columns .span2 .field-wrapper {
+	width: 209px;
+}
+.four-columns .span2 .box-form-content input[type=text],
+.four-columns .span2 .box-form-content .faux-select {
+	width: 194px;
+}
+
+.actions {
+	width: 100%;
+	border-top: 1px solid #cccccc;
+	float: left;
+	padding-top: 10px;
+}
+.actions.no-border {
+	border: none;
+}
+.actions span {
+	float: left;
+	font-size: 11px;
+	font-style: italic;
+	color: #999999;
+	padding-top: 10px;
+}
+.date-select .select {
+	float: left;
+	margin-right: 10px;
+}
+.three-columns .date-select .select {
+	margin-right: 8px;
+}
+.box-form-content .date .faux-select {
+	width: 40px;
+}
+.box-form-content .year .faux-select {
+	width: 55px;
+}
+.four-columns .date-select .select {
+	margin-right: 6px;
+}
+.four-columns .box-form-content .date .faux-select {
+	width: 35px;
+}
+.four-columns .box-form-content .year .faux-select {
+	width: 45px;
+}
+.box-form-content .radios {
+	overflow: hidden;
+}
+.box-form-content .radios li {
+	float: left;
+	margin: 10px 10px 0 0;
+	list-style: none;
+}
+.box-form-content .radios input {
+	position: absolute;
+	left: -10000px;
+}
+.box-form-content .radios label {
+	background: url(../img/btn/radio-14x14.png) no-repeat 0 0;
+	padding-left: 18px;
+}
+.box-form-content .radios .checked {
+	background-position: 0 -114px;
+}
+.box-form-content .checkbox {
+	overflow: hidden;
+	border-top: 1px solid #cccccc;
+	padding-top: 11px;
+	width: 100%;
+}
+.box-form-content .checkbox input {
+	position: absolute;
+	left: -10000px;
+}
+.box-form-content .checkbox label {
+	padding-left: 18px;
+	background: url(../img/btn/checkbox-13x13.png) no-repeat 0 0;
+}
+.box-form-content .checkbox .checked {
+	background-position: 0 -100px;
+}
+.span2 .form-standard .box-form-content .field-wrapper {
+	margin-bottom: 20px;
+}
+.span2 .form-standard {
+	min-height: 100px;
+}
+.span2 .form-standard .box-form-content input[type=text],
+.form-standard .box-form-content .inline-label input[type=text]
+ {
+	float: right;
+	width: 165px;
+}
+.three-columns .span2 .form-standard .box-form-content input[type=text],
+.three-columns .form-standard .box-form-content .inline-label input[type=text]
+ {
+	float: right;
+	width: 160px;
+}
+.four-columns .span2 .form-standard.file input[type=text],
+.four-columns .form-standard.file .inline-label input[type=text]
+ {
+	float: right;
+	width: 315px;
+}
+.span2 .form-standard .box-form-content label,
+ .span2 .form-standard .box-form-content .legend,
+ .form-standard .box-form-content .inline-label label{
+	display: inline;
+	padding-right: 12px;
+}
+.span2 .form-standard .box-form-content .radios ul,
+.span2 .form-standard .box-form-content .date-select ul {
+	margin-top: -8px;
+	float: right;
+}
+.four-columns .span2 .form-standard .box-form-content .date-select ul {
+	margin-top: 0;
+}
+.span2 .form-standard .box-form-content .date-select .select:last-child {
+	margin-right: 0;
+}
+.span2 .form-standard .box-form-content .date .faux-select {
+	width: 34px;
+}
+.span2 .form-standard .box-form-content .year .faux-select {
+	width: 50px;
+}
+.span1 textarea {
+	width: 284px;
+	margin: 0;
+}
+.span2 textarea {
+	width: 618px;
+	margin: 0;
+}
+.three-columns .span2 textarea {
+	width: 602px;
+	margin: 0;
+}
+.four-columns .span2 textarea {
+	width: 445px;
+	margin: 0;
+}
+.error label {
+	color: #fe5815;
+	background: url(../img/picto/error.png) no-repeat 100% 0;
+}
+.error input[type=text] {
+	color: #fe5815;
+	border: 1px solid #fe5815;
+}
+.actions .btn {
+	text-decoration: none;
+	background: #ffffff; /* Old browsers */
+	background: -moz-linear-gradient(top,  #ffffff 1%, #eeeeee 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#ffffff), color-stop(100%,#eeeeee)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #ffffff 1%,#eeeeee 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #ffffff 1%,#eeeeee 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ffffff 1%,#eeeeee 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #ffffff 1%,#eeeeee 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+	behavior: url(../pie/PIE.htc);
+	margin-left: 10px;
+	float: right;
+}
+.actions .btn:active,
+ .actions .btn:hover{
+	background: #fe5815;
+	border-color: #fe5815;
+	color: #fff;
+}
+.actions .add-btn {
+	background: url(../img/btn/add-plus.png) no-repeat 0 0;
+	width: 12px;
+	height:12px;
+	margin-top: 5px;
+	padding: 0 5px 0 0;
+}
+.actions .select-btn {
+	background: url(../img/btn/search.png) no-repeat 0 0;
+	width: 12px;
+	height:12px;
+	margin-top: 3px;
+	padding: 0 5px 0 0;
+}
+.actions .btn:active .add-btn,
+.actions .btn:hover .add-btn {
+	background-position: 0 -7px;
+	border: none;
+}
+.actions .btn:active .select-btn {
+	background-position: 0 -12px;
+}
+.checkbox-list .legend {
+	padding-right: 20px;
+}
+.checkbox-list-wrapper {
+	width: 189px;
+	background: #fff;
+	padding: 10px 0 10px 100px;
+}
+.four-columns .checkbox-list-wrapper {
+	width: 348px;
+}
+.checkbox-list-wrapper .checkbox {
+	border: none;
+}
+.checkbox-list .actions a{
+	background: url(../img/picto/blue-plus.png) no-repeat 100% 50%;
+	float: right;
+	padding-right: 15px;
+	text-decoration: none;
+}
+.checkbox-list .actions a:hover{
+	background: url(../img/picto/orange-plus.png) no-repeat 100% 50%;
+	color: #fe5815;
+}
+.checkbox-list-wrapper .second-level{
+	padding-left: 15px;
+}
+.checkbox-list-wrapper .hidden{
+	display: none;
+}
+.checkbox-list-wrapper .hidden.visible{
+	display: block;
+}
+.form-buttons .actions {
+	border-top: none;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 10px;
+}
+.form-buttons .actions input[type=submit]{
+	width: 82px;
+	height: 28px; 
+	float: right;
+	font-size: 14px;
+	color: #fff;
+	padding: 5px 8px;
+	background: #005bbb;
+	border: none;
+	border-radius: 4px;
+	behavior: url(../pie/PIE.htc);
+	text-transform: uppercase;
+}
+.form-buttons .actions input[type=submit]:hover{ background:#fe5815; }
+.form-buttons .actions a {
+	float: left;
+	margin-top: 5px;
+}
+
+/* Implementation personnalisée pour besoins spécifiques */
+.form-buttons .actions .like-submit{
+	width: 82px;
+	height: 28px; 
+	float: right;
+	font-size: 14px;
+	color: #fff;
+	padding: 5px 8px;
+	background: #005bbb;
+	border: none;
+	border-radius: 4px;
+	behavior: url(../pie/PIE.htc);
+	text-transform: uppercase;
+}
+.form-buttons .actions .like-submit:hover{ background:#fe5815; }
+

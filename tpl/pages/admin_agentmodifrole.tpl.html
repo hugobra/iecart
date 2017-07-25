@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Changement profil agent</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<link rel="stylesheet" href="../css/dataTables.min.css"/>
+		<link rel="stylesheet" href="../css/chosen.min.css">
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<!--<script type="text/javascript" src="../js/box-0.7.0.js"></script>--> <!-- Conflits avec datatables, ne semble pas être utilisé dans cette page, donc désactivé -->
+		<script type="text/javascript" src="../js/dataTables.min.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+		<script type="text/javascript" src="../js/chosen.jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/jquery-ui.css"/>
+	</head>
+	<body>
+		<?php include 'menu_tpl.html'; ?>
+
+		<?php 
+		if (isset($_GET['permission_denied'])){
+			echo "<script>alert('Vous n\'avez pas la permission de voir ce contenu');</script>";
+		}
+		?>
+
+		 <!-- Page de création stagiaire -->
+
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					<div class="push-shadow bright-blue">
+						<div class="box-content">
+							<h2 class="title4">Interface d'administration</h2>
+							<div class="element">
+								<div class="form-standard">
+									<div class="box-form-content">
+										
+										<h3 style="margin-top: 0;">Changer le rôle d'un agent</h3>
+
+										<form action="admin_agentmodifrole.php" id="form" method="post">
+											<fieldset>
+												<div class="field-wrapper">
+													<div class="text">
+														<label for="nom">NNI : </label>
+														<input readonly value="<?=$agent->_nni?>" type="text" placeholder="" class="filtre" name="nniRole" id="nni" />
+														<span id="nomUser"> <?=$agent->_nom?> <?=$agent->_prenom?> </span><br/><br/>
+														<label for="nom">Adresse mail : </label>
+														<input required="true" type="text" placeholder="" class="filtre" style="width:94%; height:12px;" name="mail" id="mail" value="<?=$agent->_mail?>" />
+														<br/><br/>
+														<label for="rang">Rang : </label>
+														<?php if ($_SESSION['rang'] < Rangs::SUPERADMIN){ ?>
+														<!--onchange="changeinterface(this,<?=$siteActuel->_id?>)" -->
+														<select required="true" id="rang" name="rang" data-placeholder="Cliquer ici pour choisir une fonction" class="chosen-select-deselect" tabindex="16">
+															<?php foreach ($rangs as $rang) { ?>
+																<?php if ($rang->_id <= Rangs::ADMIN && $rang->_id > Rangs::AGENT && $rang->_id==$agent->_rang){ ?>
+																<option value="<?=$rang->_id?>"><?=$rang->_nom?> (Actuel)</option>
+																<?php } ?>
+															<?php } ?>
+															<?php foreach ($rangs as $rang) { ?>
+																<?php if ($rang->_id <= Rangs::ADMIN && $rang->_id > Rangs::AGENT && $rang->_id!=$agent->_rang){ ?>
+																<option value="<?=$rang->_id?>"><?=$rang->_nom?></option>
+																<?php } ?>
+															<?php } ?>
+															
+														</select><br><br>
+														<label for="site">Site : </label>
+														<select required="site" id="site" name="site" data-placeholder="Cliquer ici pour choisir un site" class="chosen-select-width" tabindex="16">
+															<option value="<?=$siteActuel->_id?>"><?=$siteActuel->_nom?> (Actuel)</option>
+														</select>
+														</br></br>
+														<?php }else{ ?>
+														<select required="true"  id="rang" name="rang" data-placeholder="Cliquer ici pour choisir une fonction" class="chosen-select-deselect" tabindex="16">
+															
+															<?php foreach ($rangs as $rang) { ?>
+																<?php if ($rang->_id > Rangs::AGENT  && $rang->_id==$agent->_rang){ ?>
+																<option value="<?=$rang->_id?>"><?=$rang->_nom?> (Actuel)</option>
+																<?php } ?>
+															<?php } ?>
+															<?php foreach ($rangs as $rang) { ?>
+																<?php if ($rang->_id > Rangs::AGENT && $rang->_id!=$agent->_rang){ ?>
+																<option value="<?=$rang->_id?>"><?=$rang->_nom?></option>
+																<?php } ?>
+															<?php } ?>
+														</select><br><br>
+														<label for="site">Site : </label>
+														<select required="true" id="site" name="site" data-placeholder="Cliquer ici pour choisir un site" class="chosen-select-deselect" tabindex="16">
+															<option value="<?=$siteActuel->_id?>"><?=$siteActuel->_nom?> (Actuel)</option>
+															<?php foreach ($sites as $site) { 
+															if($site->_id!=$siteActuel->_id){?>
+																<option value="<?=$site->_id?>"><?=$site->_nom?></option>
+															<?php } } ?>
+														</select>
+														</br></br>
+														<?php } ?>
+													</div>
+													
+												</div>
+												<br/>
+
+												<script>
+																						
+												$("#nni").keyup(function(){
+													getName();
+												})
+
+												$("#nni").change(function(){
+													getName();
+												})
+
+												function getName() {
+													$("#nni").val($("#nni").val().toUpperCase());
+
+													var nniVal = $("#nni").val();
+
+													if(nniVal == ""){
+														$("#nomUser").html("");
+														return false;
+													}
+
+													$.ajax({
+														method: "GET",
+														url: "../post/getUserFromNNI.php",
+														data: { nni: nniVal },
+														success: function(data){
+															if (data != "L'utilisateur ou le mot de passe saisi est incorrect"){
+																$("#nomUser").html(data);
+															}
+														}
+													});
+												}
+												
+												$(document).ready(function() {
+												$("#rang").on("change",function(){
+												
+												var rang = $("#rang").val();													
+												var site = $("#site").val();
+												
+												changeinterface(rang,site);																					
+												});
+												});
+												
+												$(document).ready(function() {
+												$("#site").on("change",function(){												
+												var rang = $("#rang").val();													
+												var site = $("#site").val();
+												
+												changeinterface(rang,site);																					
+												});
+												});
+												
+												function changeinterface(idrang,site){
+												
+												$("#elementsuppl").html("");
+												
+												if(idrang == 4){
+												$("#elementsuppl").append('<label id="serviceLbl" for="service">Service : </label><select required="true" name="service" id="service" data-placeholder="Cliquer ici pour choisir un service" class="chosen-select-deselect" tabindex="16" ><option> </option></select><br/></br><label id="equipeLbl" for="equipe">Equipe : </label><select required="true" name="equipe" id="equipe"  data-placeholder="Cliquer ici pour choisir une équipe" class="chosen-select-deselect" tabindex="16"><option> </option></select><br/></br><label id="trancheLbl" for="tranche">Tranche : </label><select required="true" name="tranche" id="tranche" data-placeholder="Cliquer ici pour choisir la(les) tranche(s)" class="chosen-select-deselect" tabindex="16"><option> </option></select><br/>');
+												/*Recupérer les services du site*/
+												/*setTimeout(function(){*/
+												$.ajax({
+														method: "GET",
+														url: "../post/recupservicessite.php",
+														data: { site: site },
+														success: function(data){
+															if (data != "[]"){
+															
+												var dataDecode = JSON.parse(data);	
+												document.getElementById("service").options[0] = new Option("","");												
+												for (var j = 0; j <= dataDecode.length-1 ; j++) {
+												
+												document.getElementById("service").options[j+1] = new Option(dataDecode[j]._nom, dataDecode[j]._id); 
+												
+															}
+															$("#service").chosen({width:"95%"});
+														
+														}
+													} })
+													
+													/*Recupérer les équipes du site*/
+													$.ajax({
+														method: "GET",
+														url: "../post/recupequipesite.php",
+														data: { site: site },
+														success: function(data){
+															if (data != "[]"){
+															
+												var dataDecode = JSON.parse(data);	
+												document.getElementById("equipe").options[0] = new Option("","");												
+												for (var j = 0; j <= dataDecode.length-1 ; j++) {
+												
+												document.getElementById("equipe").options[j+1] = new Option(dataDecode[j]._nom, dataDecode[j]._id); 
+												
+															}
+															$("#equipe").chosen({width:"95%"});
+														
+														}
+													} })
+													
+													/*Recupérer les tranches du site*/
+													$.ajax({
+														method: "GET",
+														url: "../post/recuptranchesite.php",
+														data: { site: site },
+														success: function(data){
+															if (data != "[]"){
+															
+												var dataDecode = JSON.parse(data);	
+												document.getElementById("tranche").options[0] = new Option("","");												
+												for (var j = 0; j <= dataDecode.length-1 ; j++) {
+												
+												document.getElementById("tranche").options[j+1] = new Option(dataDecode[j]._nom, dataDecode[j]._id); 
+												
+															}
+															$("#tranche").chosen({width:"95%"});
+														
+														}
+													} })
+												/*;},500)*/
+												}
+												if(idrang == 5){
+												$("#elementsuppl").append('<label id="serviceLbl" for="service">Service : </label><select required="true" name="service" id="service" data-placeholder="Cliquer ici pour choisir un service" class="chosen-select-deselect" tabindex="16" ><option> </option></select><br/>');
+												$.ajax({
+														method: "GET",
+														url: "../post/recupservicessite.php",
+														data: { site: site },
+														success: function(data){
+															if (data != "[]"){
+															
+												var dataDecode = JSON.parse(data);	
+												document.getElementById("service").options[0] = new Option("","");												
+												for (var j = 0; j <= dataDecode.length-1 ; j++) {
+												
+												document.getElementById("service").options[j+1] = new Option(dataDecode[j]._nom, dataDecode[j]._id); 
+												
+															}
+															$("#service").chosen({width:"95%"});
+														
+														}
+													} })
+												
+												}
+												
+												}
+		
+												</script>
+												
+												<script type="text/javascript">
+     
+	$(window).load(function(){
+	var config = {
+      '.chosen-select'           : {},
+      '.chosen-select-deselect'  : {allow_single_deselect:true, width:"95%"},
+      '.chosen-select-no-single' : {disable_search_threshold:10},
+      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chosen-select-width'     : {width:"95%"}
+    }
+    for (var selector in config) {
+      $(selector).chosen(config[selector]);
+    }
+	});
+	
+	
+												
+  </script>
+												
+												 <!-- Boutons -->
+												
+												<div class="form-buttons">
+													<div class="actions">
+														<!-- Submit pour la validation et l'envoi du formulaire-->
+														<input type="hidden" id="siteactuel" name="siteactuel" value="<?=$siteActuel->_id?>" />
+														<input type="submit" id="ajouter" value="Valider" class="modifierFAP" style="width:250px"/>
+														<a href="../route/admin_agents.php" class="modifierFAP" id="Annuler" style="text-align:center; margin-top:3px; visibility:visible; width:250px; height:18px; display:inline; float:right ;">Annuler</a>
+														
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+
+

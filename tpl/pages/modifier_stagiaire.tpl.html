@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Modification d'un stagiaire</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="../css/global.css"/>
+<link rel="stylesheet" href="../css/forms.css"/>
+<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+<link rel="stylesheet" href="../css/content-boxes.css"/>
+<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="../js/box-0.7.0.js"></script>
+<script type="text/javascript" src="../js/l10n.js"></script>
+<script type="text/javascript" src="../js/global-forms.js"></script>
+<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+</head>
+<body>
+<?php include 'menu_tpl.html'; ?>
+
+<!-- Modification du stagiaire-->
+
+<div class="two-columns forms">
+	<div class="element">
+		<div class="form-standard">
+			<div class="push-shadow bright-blue">
+				<div class="box-content">
+					<h2 class="title4">Création/Modification d'un stagiaire</h2>
+					<div class="element">
+						<div class="form-standard">
+							<div class="box-form-content">
+								
+							<!-- Champs à compléter (pré-remplis)-->
+
+								<form action="modifStagiaire.php?id=<?=$_GET['id']?>" id="form" method="post">
+									<fieldset>
+										<div class="field-wrapper">
+											<label for="nom">NNI : </label>
+											<input required="true" type="text" placeholder="" class="filtre" name="nni" value="<?=$stagiaire->_nni?>"/> <br/><br/>
+											<label for="nom">Nom : </label>
+											<input required="true" type="text" placeholder="" class="filtre" name="nom" value="<?=$stagiaire->_nom?>"/> <br/><br/>
+											<label for="nom">Prénom : </label>
+											<input required="true" type="text" placeholder="" class="filtre" name="prenom" value="<?=$stagiaire->_prenom?>"/> <br/><br/>
+											<label for="nom">DUA (correspond au numéro dans la colonne UE de la liste des stagiaires extraite de Planète Formation): </label>
+											<input required="true" type="text" placeholder="" class="filtre" name="DUA" id="DUA" value="<?=$stagiaire->_dua?>"/><br/><br/>
+											<label for="nom">Service : </label>
+											<select required="true" class="filtre" name="service" id="span1-country1">
+												<option value="<?=$stagiaire->_service->_id?>"><?=$stagiaire->_service->_nom?> (Service actuel)</option>
+												<?php foreach ($services as $service) {?>
+												<option value="<?=$service->_id?>"><?=$service->_nom?></option>
+												<?php } ?>
+											</select><br/>
+											<label for="nom">Equipe : </label>
+											<select required="true" class="filtre" name="equipe" id="span1-country2">
+												<option value="<?=$stagiaire->_equipe->_id?>"><?=$stagiaire->_equipe->_nom?> (Equipe actuelle)</option>
+												<?php foreach ($equipes as $equipe) {?>
+												<option value="<?=$equipe->_id?>"><?=$equipe->_nom?></option>
+												<?php } ?>
+											</select><br/>
+											<label for="nom">Tranche : </label>
+											<select required="true" class="filtre" name="tranche" id="span1-country3">
+												<option value="<?=$stagiaire->_tranche->_id?>"><?=$stagiaire->_tranche->_nom?> (Tranche actuelle)</option>
+												<?php foreach ($tranches as $tranche) {?>
+												<option value="<?=$tranche->_id?>"><?=$tranche->_nom?></option>
+												<?php } ?>
+											</select><br/>
+											<label for="nom">Fonction actuelle: </label>
+											<select required="true" class="filtre" name="fonctionActuelle" id="span1-country4">
+												<option value="<?=$stagiaire->_fonction->_id?>"><?=$stagiaire->_fonction->_nom?> (Fonction actuelle)</option>
+												<?php foreach ($fonctions as $fonction) {?>
+												<option value="<?=$fonction->_id?>"><?=$fonction->_nom?></option>
+												<?php } ?>
+											</select><br/>
+											<!-- Boutons hidden permettant de conserver l'ID du stagiaire et la fonction actuelle du stagiaire lors de l'envoi-->
+											<input type="hidden" placeholder="" class="filtre" name="idStagiaire" value="<?=$stagiaire->_fonction->_id?>"/> 
+											<input type="hidden" placeholder="" class="filtre" name="fonction" value="<?=$stagiaire->_fonction->_nom?>"/>
+										</div>
+										<br/>
+										<div class="form-buttons">
+											<div class="actions">
+												<!-- Bouton hidden permettant vérification des champs lors de l'envoi-->
+												<input type="hidden" placeholder="" class="filtre" name="verification" id="verification"/>
+												<!-- Bouton permettant l'envoi-->
+												<input type="submit" id="ajouter" value="Valider" style="width:250px"/>
+											</div>
+										</div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Fonctions javascript -->
+<script>
+	$("#ajouter").click(function(e){
+		//Fonction de vérification
+		$("#verification").attr("value", "ok");
+		$("#form").formValidation();
+	});
+</script>
+
+
+
+
+  </body>
+
+</html>
+
+

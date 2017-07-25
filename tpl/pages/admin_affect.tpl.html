@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Stagiaires affectés à un manager</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<link rel="stylesheet" href="../css/dataTables.min.css"/>
+		<link rel="stylesheet" href="../css/chosen.min.css">
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<!--<script type="text/javascript" src="../js/box-0.7.0.js"></script>--> <!-- Conflits avec datatables, ne semble pas être utilisé dans cette page, donc désactivé -->
+		<script type="text/javascript" src="../js/dataTables.min.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+		<script type="text/javascript" src="../js/chosen.jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/jquery-ui.css"/>
+	</head>
+	<body>
+		<?php include 'menuadmin_tpl.html'; ?>
+
+		<?php 
+		if (isset($_GET['permission_denied'])){
+			echo "<script>alert('Vous n\'avez pas la permission de voir ce contenu');</script>";
+		}
+		?>
+
+		 <!-- Page de création stagiaire -->
+		<div class="two-columns forms">
+	    <div class="section">
+		<div class="span2">
+		    <div class="push-shadow light-orange">
+			<div class="box-content">
+			    <h2 class="title4">Informations manager</h2>
+			    <div class="content">
+				<ul class="news half">
+				    
+				    <!-- Appels à la BD avec $donnee['attribut'] (provient de ficheStagiaire.php)-->
+				    
+				    <li><h3><b>Nom</b></h3><?=$manager->_nom?></li>
+				    <li><h3><b>Prénom</b></h3><?=$manager->_prenom?></li>
+				    <li><h3><b>NNI</b></h3><?=$manager->_nni?></li>
+				    <li><h3><b>Rang</b></h3><?=$manager->_rang->_nom?></li>
+				</ul>
+				<ul class="news half">
+				    <li><h3 id="<?=$manager->_service->_id?>"><b>Service</b></h3>
+					<?php if($manager->_service->_id != 0){ ?>
+					<?=$manager->_service->_nom?>
+					<?php }else { ?>
+					PAS DE SERVICE ATTRIBUE
+					<?php } ?>
+					</li>
+					<?php if($manager->_rang->_id==4){ ?>
+				    <li><h3><b>Equipe</b></h3>
+					<?php if($manager->_équipe->_id != 0){ ?>
+					<?=$manager->_équipe->_nom?>
+					<?php }else { ?>
+					PAS D'EQUIPE ATTRIBUEE
+					<?php } ?>
+					</li>
+				    <li><h3><b>Tranche</b></h3>
+					<?php if($manager->_tranche->_id != 0){ ?>
+					<?=$manager->_tranche->_nom?>
+					<?php }else { ?>
+					PAS DE TRANCHE ATTRIBUEE
+					<?php } ?>
+					</li>
+					
+					<?php } ?>
+					<a href="../route/admin_modifrole.php?id=<?=$manager->_id?>" class="modifierFAP" id="modifierrole<?=$manager->_id?>" style="visibility:visible;">Modifier les informations</a>
+				</ul>
+				</div>
+			</div>
+			</div>
+		</div>
+		</div>
+		</div>
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					<div class="push-shadow bright-blue">
+						<div class="box-content">
+							<h2 class="title4">Liste des agents affectés au manager</h2>
+							<div class="element">
+								<div class="form-standard">
+									<div class="box-form-content">
+
+
+										<?php if ($_SESSION['rang'] >= Rangs::ADMINSITE){ ?>
+											
+
+											<form action="#" id="form" method="post">
+											<!--<h3 style="margin-top: 0;">Ajouter un agent à ce manager</h3>
+											<fieldset>
+												<div class="field-wrapper">
+													<div class="text">
+														<label for="nom">NNI : </label>
+														<input type="text" placeholder="" class="filtre" name="nniRole" id="nni" />
+														<span id="nomUser"></span><br/><br/>
+													</div>
+												</div>
+												
+												<div class="form-buttons">
+													<div class="actions">
+														<!-- Submit pour la validation et l'envoi du formulaire-->
+											<!--			<input type="submit" id="ajouter" value="Valider" style="width:250px"/>
+													</div>
+												</div>
+												
+												<h3 style="margin-top:130px;">Ajouter une équipe à ce manager</h3>
+
+											
+											<fieldset>
+												<div class="field-wrapper">
+													<label id="serviceLbl" for="service">Service : </label>
+													<select name="service" id="service" data-placeholder="Cliquer ici pour choisir un service" class="chosen-select-deselect" tabindex="16"  >
+														<option> </option>
+													<?php foreach ($services as $service) {?>
+														<option value="<?=$service->_id?>"><?=$service->_nom?></option>
+													<?php } ?>
+													</select><br/></br>
+													<label id="equipeLbl" for="equipe">Equipe : </label>
+													<select name="equipe" id="equipe"  class="chosen-select-deselect" tabindex="16" data-placeholder="Cliquer ici pour choisir une équipe">
+													<option> </option>
+													<?php foreach ($equipes as $equipe) {?>
+														<option value="<?=$equipe->_id?>"><?=$equipe->_nom?></option>
+													<?php } ?>
+													</select><br/></br>
+													<label id="trancheLbl" for="tranche">Tranche : </label>
+													<select name="tranche" id="tranche"  class="chosen-select-deselect" tabindex="16" data-placeholder="Cliquer ici pour choisir la(les) tranche(s)">
+													<option> </option>
+													<?php foreach ($tranches as $tranche) {?>
+														<option value="<?=$tranche->_id?>"><?=$tranche->_nom?></option>
+													<?php } ?>
+													</select><br/>
+												</div>
+												<div class="form-buttons">
+													<div class="actions">
+														<input type="hidden" value="<?=$manager->_nni?>" id="idmanager" />
+														<!-- Submit pour la validation et l'envoi du formulaire-->
+										<!--				<input type="button" id="ajouteréq" onclick="ajouteréquipe()" value="Valider" class="modifierFAP" style="width:250px"/>
+													</div>
+												</div>
+												</fieldset>-->
+											
+												<script>
+												$("#nni").keyup(function(){
+													getName();
+												})
+
+												$("#nni").change(function(){
+													getName();
+												})
+
+												function getName() {
+													$("#nni").val($("#nni").val().toUpperCase());
+
+													var nniVal = $("#nni").val();
+
+													if(nniVal == ""){
+														$("#nomUser").html("");
+														return false;
+													}
+
+													$.ajax({
+														method: "GET",
+														url: "../post/getUserFromNNI.php",
+														data: { nni: nniVal },
+														success: function(data){
+															$("#nomUser").html(data);
+														}
+													});
+												}
+												
+												function ajouteréquipe(){
+												var manager= document.getElementById("idmanager").value;
+												var service=document.getElementById("service").value;
+												var équipe=document.getElementById("equipe").value;
+												var tranche=document.getElementById("tranche").value;
+												
+												$.ajax({
+												method: "POST",
+												url: "../post/ajoutequipe.php",
+												data: { service: service, équipe: équipe, tranche: tranche, manager:manager },
+												success: function(data){
+													alert("Vous avez ajouté au manager " + document.getElementById("nomUser2").innerHTML + " les agents remplissant les conditions suivantes: \nservice " + document.getElementById("service").options[document.getElementById("service").selectedIndex].innerHTML.toUpperCase() + " ,\nnuméro d'équipe " + document.getElementById("equipe").options[document.getElementById("equipe").selectedIndex].innerHTML.toUpperCase() + ",\ntranche " + document.getElementById("tranche").options[document.getElementById("tranche").selectedIndex].innerHTML.toUpperCase() );
+													window.location.reload(false);
+												}
+												});
+												
+												}
+												</script>
+
+												
+											<!--<h3 id="titretableau">Agents affectés au manager </h3>-->
+											<table id="tableauAgents" class="tableau" border="1" cellspacing="0">
+												<thead>
+													<tr>
+														<th>Nom du stagiaire</th>
+														<th>NNI</th>
+														<th>Service</th>
+														<th>Nom de l'équipe</th>
+														<th>Tranche(s)</th>
+														<!--<th>Supprimer</th>-->
+													</tr>
+												</thead>
+												<tbody>
+													<?php 
+														foreach ($stagiaires as $stagiaire) { 
+													?>
+														<tr>
+															<td><?=$stagiaire->_nom . " " . $stagiaire->_prenom?></td>
+															<td><?=$stagiaire->_nni?></td>
+															<td><?=$stagiaire->_service->_nom?></td>
+															<td><?=$stagiaire->_equipe->_nom?></td>
+															<td><?=$stagiaire->_tranche->_nom?></td>
+															<!--<td><a class="suppr" href="admin_affect.php?manager=<?=$_GET['manager']?>&idSuppr=<?=$stagiaire->_nni?>"><img src="../img/btn/delete.png" height="20" width="20"></a></td>-->
+														</tr>
+													<?php } ?>
+												</tbody>
+											</table>
+
+											<!--<h3>Changer de manager</h3>
+
+											<form action="#" id="form2" method="post">
+											<fieldset>
+												<div class="field-wrapper">
+													<div class="text">
+														<label for="nom">NNI : </label>
+														<input required="true" type="text" placeholder="" class="filtre" name="nniManager" id="nni2" value="<?=$manager->_nni?>" />
+														<span id="nomUser2"></span><br/><br/>
+													</div>
+												</div>
+
+												<div class="form-buttons">
+													<div class="actions">
+														<!-- Submit pour la validation et l'envoi du formulaire-->
+													<!--	<input type="submit" id="ajouter" value="Valider" style="width:250px"/>
+													</div>
+												</div>
+											</fieldset>
+											</form>-->
+											<script>
+												getName2()
+
+												$("#nni2").keyup(function(){
+													getName2();
+												})
+
+												$("#nni2").change(function(){
+													getName2();
+												})
+
+												function getName2() {
+													$("#nni2").val($("#nni2").val().toUpperCase());
+
+													var nniVal = $("#nni2").val();
+
+													if(nniVal == ""){
+														$("#nomUser2").html("");
+														return false;
+													}
+
+													$.ajax({
+														method: "GET",
+														url: "../post/getUserFromNNI.php",
+														data: { nni: nniVal },
+														success: function(data){
+															$("#nomUser2").html(data);
+														}
+													});
+												}
+												</script>
+											<br>
+											<br>
+										<?php } ?>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		<script type="text/javascript">
+			$(document).ready(function() {
+			    $('#tableauAgents').DataTable({
+			    	"language": {
+				   		"url": "/js/dataTables.french.json"
+				   	},
+				   	"columnDefs": [
+					    { "orderable": false, "targets": 3 },
+					    { "searchable": false, "targets": 3 }
+					]
+				});
+			});
+		</script>
+		<script type="text/javascript">
+     
+	$(window).load(function(){
+	var config = {
+      '.chosen-select'           : {},
+      '.chosen-select-deselect'  : {allow_single_deselect:true, width:"95%"},
+      '.chosen-select-no-single' : {disable_search_threshold:10},
+      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chosen-select-width'     : {width:"95%"}
+    }
+    for (var selector in config) {
+      $(selector).chosen(config[selector]);
+    }
+	});
+  </script>
+
+
+		<?php 
+			if (isset($_GET['error_same_manager_nni'])){
+				echo "<script>alert('Cette personne ne peut pas etre son propre manager');</script>";
+			}
+			if (isset($_GET['no_agent'])){
+				echo "<script>alert('Aucun stagiaire ne correspond à ce NNI sur ce site');</script>";
+			}
+			if (isset($_GET['alreadyAgent'])){
+				echo "<script>alert('Cet agent est déjà affecté à ce manager');</script>";
+			}
+		?>
+	</body>
+</html>
+
+
+

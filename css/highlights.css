@@ -1,0 +1,138 @@
+/* Mises en avant visuel */
+.push-edito {
+	margin-bottom:15px;
+	background:#eee;
+}
+.push-edito a {
+	display:block;
+	text-decoration:none;
+}
+.push-edito .actions a:hover {
+	text-decoration:none;
+	color: #000000;
+}
+.push-edito .right { float:right; }
+.push-edito .left { float:left; }
+.push-edito img { display:block; }
+.push-edito img.special-item { margin:10px; }
+.push-edito .right img.special-item { margin-left:0; }
+.push-edito .left img.special-item { margin-right:0; }
+.push-edito .content {
+	overflow:hidden;
+	padding:10px 15px;
+}
+.span1 .push-edito .title3 {text-transform: uppercase;} 
+.push-edito .title2 {color: #005bbb;}
+.push-edito .title2:hover a, 
+.push-edito .title3:hover a {color: #fe5815;}
+.push-edito p,
+.push-edito .carousel-title,
+.push-edito .title2,
+.push-edito .title3 { margin:0; padding:0; }
+.push-edito a:hover p,
+.push-edito a:focus p,
+.push-edito a:hover .title2,
+.push-edito a:focus .title2,
+.push-edito a:hover .title3,
+.push-edito a:focus .title3 {  color: #FE5815; text-transform: none;}
+.push-edito p.important { font-size:14px; }
+.push-edito span.more {
+	position:absolute;
+	padding:5px 0 0 8px;
+	width:5px; height:9px;
+	background:url(../img/picto/arrow-r-5x9-005bbb.png) no-repeat 100% 100%;
+}
+.push-edito a:hover span.more {
+	background:url(../img/picto/arrow-r-5x9-FE5815.png) no-repeat 100% 100%;
+}
+.push-edito p.important a span.more { padding-top:6px; }
+.push-edito .carousel-title {
+	font-size:14px;
+	text-transform:uppercase;
+}
+.push-edito .actions { margin-top:15px; }
+
+.carousel .push-edito {
+	background:#005bbb; color:#fff;
+	font-size:14px;
+	height:175px;
+}
+.carousel .push-edito .content { padding:40px 55px 0; }
+#js .carousel { position:relative; }
+#js .carousel-window {
+	position:relative;
+	overflow:hidden;
+	height:175px;
+}
+#js .carousel-window .items {
+	position:absolute; top:0; left:0;
+	height:175px;
+}
+#js .carousel-window .item { float:left; }
+#js .carousel-btn-prev,
+#js .carousel-btn-next {
+	position:absolute; top:70px; z-index:1;
+	overflow:hidden;
+	padding-top:40px;
+	width:40px; height:0;
+	background:url(../img/btn/common-carousel-prevnext-40x40.png) no-repeat;
+}
+#js .carousel-btn-prev {
+	left:0;
+	background-position:0 0;
+}
+#js .carousel-btn-prev:hover,
+#js .carousel-btn-prev:focus { background-position:0 -40px; }
+#js .carousel-btn-next {
+	right:0;
+	background-position:-40px 0;
+}
+#js .carousel-btn-next:hover,
+#js .carousel-btn-next:focus { background-position:-40px -40px; }
+#js .carousel-btn-disabled { display:none; }
+#js .carousel-pagination { position:absolute; right:10px; bottom:5px; }
+#js .carousel-pagination ul {
+	margin:0; padding:0;
+	list-style:none;
+}
+#js .carousel-pagination li {
+	position:relative;
+	float:left;
+	width:16px; height:24px;
+}
+#js .carousel-pagination a {
+	position:absolute; top:0; left:0;
+	overflow:hidden;
+	padding-top:24px;
+	width:24px; height:0;
+	background:url(../img/btn/common-carousel-pagination-24x24.png) no-repeat;
+
+}
+#js .carousel-page-on a {
+	background-position:0 -24px;
+	cursor:default;
+}
+
+.two-columns .carousel .push-edito,
+#js .two-columns .carousel,
+#js .two-columns .carousel-window { width:655px; }
+
+.four-columns .carousel .push-edito,
+#js .four-columns .carousel,
+#js .four-columns .carousel-window { width:724px; }
+
+
+
+/**
+ * Easy clearing method (do not work in IE)
+ * @section		clearing
+ */
+.push-edito:after,
+.push-edito a:after,
+#js .carousel .items:after,
+#js .carousel-pagination ul:after {
+	display:block; clear:both;
+	visibility:hidden;
+	height:0;
+	content:".";
+}

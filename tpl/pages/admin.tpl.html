@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Panel d'administration</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<link rel="stylesheet" href="../css/dataTables.min.css"/>
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<!--<script type="text/javascript" src="../js/box-0.7.0.js"></script>--> <!-- Conflits avec datatables, ne semble pas être utilisé dans cette page, donc désactivé -->
+		<script type="text/javascript" src="../js/dataTables.min.js"></script>
+		<!--<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>-->
+	</head>
+	<body>
+		<?php include 'menuadmin_tpl.html'; ?>
+		
+
+		<?php 
+		if (isset($_GET['permission_denied'])){
+			echo "<script>alert('Vous n\'avez pas la permission de voir ce contenu');</script>";
+		}
+		?>
+
+		 <!-- Page de création stagiaire -->
+
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					<div class="push-shadow bright-blue">
+						<div class="box-content">
+							<h2 class="title4">Interface d'administration</h2>
+							<div class="element">
+								<div class="form-standard">
+									<div class="box-form-content">
+
+									<a href="../route/admin_role.php" class="boutonAjoutStagiaire" style="width:500px;" title="Ajouter un formateur, MPL, CDS ou ADMIN SITE">Ajout appui formation/formateur/manager/admin</a><br/><br/>
+
+										 <!-- Champs à compléter -->
+										<h3 style="margin-top: 0;">Gestion des agents</h3>
+
+										<table id="tableauAgents" class="tableau" border="1" cellspacing="0">
+											<thead>
+					    						<tr>
+		    										<th>Nom</th>
+		    										<th>NNI</th>
+		    										<th>Rang</th>
+		    										
+		    										<th>Modifier rang</th>
+		    										<th>Supprimer</th>
+													
+		    										<th>Site</th>
+		    										
+		  										</tr>
+		  									</thead>
+		  									<tbody>
+							    				<!-- Partie à remplir par la BD -->
+							    				<?php if($_SESSION['rang'] >= Rangs::SUPERADMIN){
+												foreach ($agents as $agent) {
+												?>
+							    				<tr>
+							    					<td><?=$agent->prenom . " " . $agent->nom?></td>
+							    					<td><?=$agent->nni?></td>
+							    					<?php 
+							    					foreach ($rangs as $rang) {
+							    						if ($agent->idRang == $rang->_id){ 
+							    					?>
+							    					<td><?=$rang->_nom?></td>
+							    					<?php	
+							    						}
+							    					} ?>
+							    					
+							    					<td>
+							    						<a href="../route/admin_modifrole.php?id=<?=$agent->idUser?>" class="modifierFAP" id="modifierrole<?=$agent->_id?>" style="visibility:visible;">Modifier rang</a>
+							    					</td>
+							    					<td>													
+													<a href="/route/admin.php?suppr=<?=$agent->nni?>&site=<?=$agent->idSite?>"><img src="../img/btn/delete.png" height="20" width="20" title="Supprimer les droits de l'agent sur le site"></a></td>
+													<?php /*if ($_SESSION['rang'] >= Rangs::SUPERADMIN){*/
+							    					$siteAgent = new Site($agent->idSite);
+							    					?>
+							    					<td><input type="hidden" value="<?=$siteAgent->_id?>"><?=$siteAgent->_nom?></td>
+							    					<?php /*}*/ ?>
+												</tr>
+							    				<?php }} else{
+												foreach ($agents as $agent) {
+												if($agent->idRang < Rangs::SUPERADMIN){ ?>
+												<tr>
+							    					<td><?=$agent->prenom . " " . $agent->nom?></td>
+							    					<td><?=$agent->nni?></td>
+							    					<?php 
+							    					foreach ($rangs as $rang) {
+							    						if ($agent->idRang == $rang->_id){ 
+							    					?>
+							    					<td><?=$rang->_nom?></td>
+							    					<?php	
+							    						}
+							    					} ?>
+							    					
+							    					<td>
+							    						<a href="../route/admin_modifrole.php?id=<?=$agent->idUser?>" class="modifierFAP" id="modifierrole<?=$agent->_id?>" style="visibility:visible;">Modifier fonction</a>
+							    					</td>
+							    					<td>													
+													<a href="/route/admin.php?suppr=<?=$agent->nni?>&site=<?=$agent->idSite?>"><img src="../img/btn/delete.png" height="20" width="20" title="Supprimer les droits de l'agent sur le site"></a></td>
+													<?php /*if ($_SESSION['rang'] >= Rangs::SUPERADMIN){*/
+							    					$siteAgent = new Site($agent->idSite);
+							    					?>
+							    					<td><input type="hidden" value="<?=$siteAgent->_id?>"><?=$siteAgent->_nom?></td>
+							    					<?php /*}*/ ?>
+												</tr>
+												<?php } } } ?>
+							    			</tbody>
+							    		</table>
+							    		<script type="text/javascript">
+									    	$(document).ready(function() {
+											    $('#tableauAgents').DataTable({
+											    	"language": {
+											    		"url": "/js/dataTables.french.json"
+											    	},
+											    	"columnDefs": [
+													    { "orderable": false, "targets": 4 },
+													    { "searchable": false, "targets": 4 }
+													  ]
+											    });
+
+											    $(".modifierDroits").click(function() {
+											    	var tds = $(this).closest('tr').find('td')
+													
+											    	var rangActuel = $(tds[2]).html()
+
+											    	$(tds[2]).html(getRangInput($(tds[2]).html()))
+													
+											    	$(tds[3]).find("button.modifierDroits").hide()
+											    	$(tds[3]).find("button.validerDroits").show()
+											    	$(tds[3]).find("button.annulerDroits").show()
+
+											    	$(".annulerDroits").click(function() {
+											    		$(tds[2]).html(rangActuel)
+
+												    	$(tds[3]).find("button.modifierDroits").show()
+												    	$(tds[3]).find("button.validerDroits").hide()
+												    	$(tds[3]).find("button.annulerDroits").hide()
+												    })
+											    })
+
+											    $(".validerDroits").click(function() {
+											    	var tds = $(this).closest('tr').find('td')
+
+											    	var newRang = $(tds[2]).find("select").val()
+													$(tds[2]).html(getRangName(newRang))
+
+													var nniAChanger = $(tds[1]).html()
+													
+													var siteAEntrer = $(tds[5]).find("input").val()
+													
+											    	$(tds[3]).find("button.modifierDroits").show()
+												    $(tds[3]).find("button.validerDroits").hide()
+												    $(tds[3]).find("button.annulerDroits").hide()
+													
+												    $.ajax({
+														type: "POST",
+														url: "/post/changeRangFromNNI.php",
+														data: {adminNni: '<?=$_SESSION['nni']?>', nni: nniAChanger, rang: newRang, site: siteAEntrer},
+														success: function(data){
+															
+														},
+														error: function(err) {
+															alert("Erreur :" + err);
+														}
+													});
+											    });
+											} );
+
+											function getRangInput(valeur) {
+												var returnedSelect = "<select class=\"search-table\" name=\"select\">";
+
+												<?php
+													foreach ($rangs as $rang) {
+														if ($_SESSION['rang'] >= Rangs::SUPERADMIN){
+															if ($rang->_id > Rangs::STAGIAIRE){
+												?>
+													returnedSelect += "<option value=\"<?=$rang->_id?>\"><?=$rang->_nom?></option>";
+												<?php
+															}
+														}else{
+															if ($rang->_id > Rangs::STAGIAIRE && $rang->_id <= Rangs::ADMINSITE){
+												?>
+													returnedSelect += "<option value=\"<?=$rang->_id?>\"><?=$rang->_nom?></option>";
+												<?php
+															}
+														}
+													}
+												?>
+
+												returnedSelect += "</select>";
+
+												return(returnedSelect);
+											}
+
+											function getRangName(rang) {
+												switch (rang) {
+													<?php
+													foreach ($rangs as $rang) {
+													?>
+
+													case "<?=$rang->_id?>":
+														return "<?=$rang->_nom?>";
+														break;
+
+													<?php 
+													}
+													?>
+
+													default:
+														return "RANG NON RECONNU";
+														break;
+												}
+											}
+									    </script>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+
+

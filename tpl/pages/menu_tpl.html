@@ -1,0 +1,36 @@
+
+
+<div>
+<!-- Elements du header -->
+<div class="header" >
+	<div class="header-content">
+		<div class="logo">
+   			<!--<a href="/route/ecarts.php"><img style="height:60px;" src="../img/iFAP.png" alt=""></a>-->
+		</div>
+		<div class="header-infos">
+   			<span class="page-title">Gestion des écarts</span>
+		    <a href="#"><?php echo $_SESSION["nom2"]; ?> (<?=$_SESSION["nomRang"]?>)</a>
+		   
+		    <a href="connexion.php" class="disconnect">Deconnexion</a>
+		</div>
+	</div>
+</div>
+<!-- Gestion des onglets -->
+<div class="nav">
+   	<div class="main-nav">
+		<ul>
+			<li class="<?php echo ($_SERVER['PHP_SELF'] == '/route/ecarts.php') ? 'selected' : ''; ?>"><a href="ecarts.php">Mon tableau de bord</a></li>
+			<li class="<?php echo ($_SERVER['PHP_SELF'] == '/route/missions.php') ? 'selected' : ''; ?>"><a href="missions.php">Qui Fait Quoi</a></li>
+			<?php if($_SESSION["rang"]>=Rangs::ADMIN){ ?>
+			<li class="<?php echo ($_SERVER['PHP_SELF'] == '/route/admin_agents.php') ? 'selected' : ''; ?>"><a href="admin_agents.php">Administration agents</a></li>
+			<?php } ?>
+		</ul>
+    </div>
+</div>
+
+<?php 
+if (isset($_GET['permission_denied'])){
+	echo "<script>alert('Vous n\'avez pas la permission de voir ce contenu');</script>";
+}
+?>
+</div>

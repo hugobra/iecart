@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Liste des FAP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="../css/global.css"/>
+<link rel="stylesheet" href="../css/forms.css"/>
+<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+<link rel="stylesheet" href="../css/content-boxes.css"/>
+<link rel="stylesheet" href="../css/dataTables.min.css"/>
+
+<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="../js/dataTables.min.js"></script>
+<!--<script type="text/javascript" src="../js/box-0.7.0.js"></script>-->
+<script type="text/javascript" src="../js/l10n.js"></script>
+<script type="text/javascript" src="../js/global-forms.js"></script>
+<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+</head>
+<body>
+	
+<?php include 'menu_tpl.html'; ?>
+
+<!-- Tableau contenant les FAP -->
+<div class="three-columns forms">
+	<div class="element">
+		<div class="push-shadow bright-blue">
+			<div class="box-content">
+				<h2 class="title4">Selectionner les FAP à imprimer (cocher) puis imprimer avec le bouton en bas de page. Ceci crée un fichier PDF imprimable.</h2>
+				<div class="content">
+					
+					<br style="clear: both;">
+					<center>
+					<fieldset>
+						<div class="field-wrapper">
+							<form method="get" id="form" TARGET="_BLANK">
+								
+								<table class="tableau" id="tableauFap" border="1" cellspacing="0">
+									<thead>
+										<tr>
+											<th>Stagiaire</th>
+											<th>Stage</th>
+											<th>Date de dernière modification</th>
+											<th>Formateur</th>
+											<th>Statut</th>
+											<th>Sélection</th>
+											<th>Editer</th>
+										</tr>
+									</thead>
+									<tbody>
+									<!-- Partie remplie par la BD -->
+									<?php foreach ($faps as $fap) {?>
+										<tr>
+											<td>
+												<a href="ficheStagiaire.php?id=<?=$fap->idStagiaire?>"><?=$fap->nom. " " . $fap->prenom?></a>
+											</td>
+											<td>
+											<?=$fap->titre?>
+											</td>
+											<td>
+											<?=$fap->dateModif?>
+											</td>
+											<td>
+											<?=$fap->Formateur?>
+											</td>
+											<td>
+											<?php if($fap->statut==1){ ?>
+											Terminée
+											<?php } else{ ?>
+											En cours
+											<?php } ?>
+											</td>
+											<td>
+												<input type="checkbox" class="selectionMultiple" value="<?=$fap->idFAP?>" name="idFaps[]"/>
+											</td>
+											<td>
+												<a href="ficheStagiaire.php?id=<?=$fap->idStagiaire?>#titrestagefap<?=$fap->idFAP?>">Lien vers la FAP</a>
+												
+											</td>
+										</tr>
+									<?php } ?>
+									</tbody>
+								</table>
+								<!-- Bouton caché pour la génération de pdf-->
+								<input type="hidden" id="type" name="type"/>
+								<br/>
+								<br/>
+								<!-- Bouton pour la création d'un pdf-->
+								<input type="submit" id="export" class="boutonFAP" style="width:265px; height:35px; font-size:15.5px;" value="imprimer"/>
+
+								<img src="/img/print.png" id="exportFloat" width="64" height="64" style="position: fixed; bottom: 20px; right: 20px;">
+								<br/>
+								<br/>
+								<br/>
+								<!-- Bouton pour la suppression de FAP-->
+								<!--<?php if ($_SESSION['rang'] >= Rangs::FORMATEUR){ ?>
+								<input type="submit" id="suppr" class="boutonFAP" style="width:265px; height:35px; font-size:15.5px;" value="Supprimer la sélection"/>
+								<?php } ?>-->
+							</form>
+						</div>
+					</fieldset>
+					</center>
+					<br/>
+					<div style="float:right;">
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Mise en place du footer-->
+		<div class="footer-wrapper">
+			<div class="footer-nav">
+				<ul>
+					<li><a href="mailto:fabien.leray@edf.fr; hugo.branly@edf.fr">Contact</a></li>
+					<li><a href="">Navigateur</a></li>
+					<li><a href="">Mentions légales</a></li>
+					<li><a href="">Conditions générales d'utilisation</a></li>
+					<li><a href="">Aide</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Fonctions javascript-->
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#tableauFap').DataTable({
+    	"language": {
+	   		"url": "/js/dataTables.french.json"
+    	},
+    	"order": [ 2, 'desc' ],
+	   	"columnDefs": [
+		    { "orderable": false, "targets": [5, 6] },
+		    { "searchable": false, "targets": [5,6] }
+		]
+	});
+} );
+</script>
+
+    <script type="text/javascript">
+		//Fonction de tri
+    $(".tri").click( function(e){
+  $("#form").submit();
+  });
+
+  $(".filtre").change( function(e){
+	  //Fonction de filtre intuitif
+  $("#form").submit();
+  });
+  
+  // Fonction d'export PDF
+  $("#export").click( function(e){  
+  $("#type").attr("value", "0");
+   $("#form").attr("action","../librairie/html2pdf_v4.03/fap/exportPDF.php");
+  });
+
+  $("#exportFloat").click( function(e){  
+  $("#type").attr("value", "0");
+   $("#form").attr("action","../librairie/html2pdf_v4.03/fap/exportPDF.php");
+   $("#form").submit();
+  });
+  // Fonction de suppression (avec confirmation)
+    $("#suppr").click( function(e){
+   $("#form").attr("action","fap.php");
+	 var suppression=prompt('Voulez-vous confirmer la suppression (oui/non) ?');
+	 if(suppression=="oui"){
+		 $("#type").attr("value", "1");
+	 } 
+	 else{return false;}
+  });
+  
+  
+  
+  
+  
+</script>
+
+  </body>
+
+</html>

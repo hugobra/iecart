@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Gestion des managers</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<link rel="stylesheet" href="../css/dataTables.min.css"/>
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<!--<script type="text/javascript" src="../js/box-0.7.0.js"></script>--> <!-- Conflits avec datatables, ne semble pas être utilisé dans cette page, donc désactivé -->
+		<script type="text/javascript" src="../js/dataTables.min.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+	</head>
+	<body>
+		<?php include 'menuadmin_tpl.html'; ?>
+
+		<?php 
+		if (isset($_GET['permission_denied'])){
+			echo "<script>alert('Vous n\'avez pas la permission de voir ce contenu');</script>";
+		}
+		?>
+
+		 <!-- Page de création stagiaire -->
+
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					<div class="push-shadow bright-blue">
+						<div class="box-content">
+							<h2 class="title4">Interface d'administration</h2>
+							<div class="element">
+								<div class="form-standard">
+									<div class="box-form-content">
+
+									<!--<a href="../route/admin_role.php" class="boutonAjoutStagiaire">Ajouter un manager</a><br/><br/>-->
+
+										<?php if ($_SESSION['rang'] >= Rangs::ADMINSITE){ ?>
+											<h3 style="margin-top: 0;">Gestion des managers</h3>
+											<table id="tableauAgents" class="tableau" border="1" cellspacing="0">
+												<thead>
+													<tr>
+														<th>Nom du manager</th>
+														<th>NNI</th>
+														<th>Fonction</th>
+														<th>Service</th>
+														<th>Equipe </th>
+														<th>Tranche</th> 
+														<th>Agents affectés</th>
+														<th>Supprimer</th>
+													</tr>
+												</thead>
+												<tbody>
+													<?php 
+														foreach ($managers as $manager) { 
+														if($manager->_rang->_id==4){
+													?>
+														<tr>
+															<td><?=$manager->_nom . " " . $manager->_prenom?></td>
+															<td><?=$manager->_nni?></td>
+															<?php 
+															foreach ($rangs as $rang) {
+															if ($manager->_rang->_id == $rang->_id){ 
+																?>
+															<td><?=$rang->_nom?></td>
+															<?php } } ?>
+															<?php  $countservice=0 ;
+															foreach ($services as $service) {
+															if ($manager->_service->_id == $service->_id){ 
+																?>
+															<td><?=$service->_nom?></td>
+															<?php $countservice=$countservice+1;} } 
+															if($countservice==0){?>
+															<td>PAS DE SERVICE ATTRIBUE</td>
+															<?php } ?>
+															<?php  $countéquipe=0 ;
+															foreach ($equipes as $équipe) {
+															if ($manager->_équipe->_id == $équipe->_id){ 
+																?>
+															<td><?=$équipe->_nom?></td>
+															<?php $countéquipe=$countéquipe+1;} } 
+															if($countéquipe==0){?>
+															<td>PAS D'EQUIPE ATTRIBUEE</td>
+															<?php } ?>
+															<?php  $counttranche=0 ;
+															foreach ($tranches as $tranche) {
+															if ($manager->_tranche->_id == $tranche->_id){ 
+																?>
+															<td><?=$tranche->_nom?></td>
+															<?php $counttranche=$counttranche+1;} } 
+															if($counttranche==0){?>
+															<td>PAS DE TRANCHE ATTRIBUEE</td>
+															<?php } ?>
+															
+															<td><a class="suppr" href="admin_affect.php?manager=<?=$manager->_nni?>"><img src="../img/btn/modifier.png" height="20" width="20"></a></td>
+															<td><a class="suppr" href="admin_manager.php?idSuppr=<?=$manager->_nni?>"><img src="../img/btn/delete.png" height="20" width="20"></a></td>
+														</tr>
+													<?php } else{ ?>
+													<tr>
+															<td><?=$manager->_nom . " " . $manager->_prenom?></td>
+															<td><?=$manager->_nni?></td>
+															<?php 
+															foreach ($rangs as $rang) {
+															if ($manager->_rang->_id == $rang->_id){ 
+																?>
+															<td><?=$rang->_nom?></td>
+															<?php } } ?>
+															<?php  $countservice=0 ;
+															foreach ($services as $service) {
+															if ($manager->_service->_id == $service->_id){ 
+																?>
+															<td><?=$service->_nom?></td>
+															<?php $countservice=$countservice+1;} } 
+															if($countservice==0){?>
+															<td>PAS DE SERVICE ATTRIBUE</td>
+															<?php } ?>
+															
+															<td> </td>
+															<td> </td>
+															
+															<td><a class="suppr" href="admin_affect.php?manager=<?=$manager->_nni?>"><img src="../img/btn/modifier.png" height="20" width="20"></a></td>
+															<td><a class="suppr" href="admin_manager.php?idSuppr=<?=$manager->_nni?>"><img src="../img/btn/delete.png" height="20" width="20"></a></td>
+														</tr>
+													<?php }} ?>
+												</tbody>
+											</table>
+											<br>
+											<br>
+										<?php } ?>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		<script type="text/javascript">
+			$(document).ready(function() {
+			    $('#tableauAgents').DataTable({
+			    	"language": {
+				   		"url": "/js/dataTables.french.json"
+				   	},
+				   	"columnDefs": [
+					    { "orderable": false, "targets": 4 },
+					    { "searchable": false, "targets": 4 }
+					]
+				});
+			});
+		</script>
+	</body>
+</html>
+
+
+

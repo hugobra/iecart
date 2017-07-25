@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Liste des écarts</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="../css/global.css"/>
+<link rel="stylesheet" href="../css/forms.css"/>
+<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+<link rel="stylesheet" href="../css/content-boxes.css"/>
+<link rel="stylesheet" href="../css/dataTables.min.css"/>
+
+<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="../js/dataTables.min.js"></script>
+<!--<script type="text/javascript" src="../js/box-0.7.0.js"></script>-->
+<script type="text/javascript" src="../js/l10n.js"></script>
+<script type="text/javascript" src="../js/global-forms.js"></script>
+<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+</head>
+<body>
+
+<?php include 'menu_tpl.html'; ?>
+
+
+
+<!-- Tableau contenant les FAP -->
+<div class="three-columns forms">
+	<div class="element">
+		<div class="push-shadow bright-blue">
+			<div class="box-content">
+				<h2 class="title4">Ecarts que je dois traiter </h2>
+				<div class="content">
+					<!--<a href="creerEcart.php?id=<?=$_SESSION['idUser']->_id?>" class="boutonFAP">Créer un écart</a>-->
+					<br style="clear: both;">
+					</br>
+					<center>
+					<fieldset>
+						<div class="field-wrapper">
+						
+								
+							<form method="get" action="creerEcart.php?id=<?=$_SESSION['idUser']->_id?>" id="form" TARGET="_BLANK">
+								<a href="creerEcart.php?id=<?=$_SESSION['idUser']->_id?>" ><img src="/img/btn/boutonplus.png" id="exportFloat" width="100" height="100" style="position: fixed; bottom: 20px; right: 20px;" ></a>
+								<table class="tableau" id="tableauFap" border="1" cellspacing="0">
+									<thead>
+										<tr>
+											<th>Emetteur</th>
+											<th>Récepteur</th>
+											<th>Titre</th>
+											<th>Type d'écart</th>
+											<th>Statut</th>
+											<th>Date Création</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+									<!-- Partie remplie par la BD -->
+									<?php foreach ($listecarts as $ecart) {
+									if($ecart->_récepteur->_id==$_SESSION['idUser']->_id && $ecart->_statut->_id==1){?>
+										<tr>
+											<td>
+												<?=$ecart->_émetteur->_nom?> <?=$ecart->_émetteur->_prenom?>
+											</td>
+											<td>
+											<?=$ecart->_récepteur->_nom?> <?=$ecart->_récepteur->_prenom?>
+											</td>
+											<td>
+											<?=$ecart->_titre?>
+											</td>
+											<td>
+											<?=$ecart->_mission->_titre?>
+											</td>
+											<td>
+											<?=$ecart->_statut->_nom?>
+											</td>
+											<td>
+											<?=$ecart->_dateCréation?>
+											</td>
+											<td>
+											<a href="modifEcart.php?id=<?=$ecart->_id?>">Traiter l'écart</a>
+											</td>
+											<!--<td>
+												<input type="checkbox" class="selectionMultiple" value="<?=$fap->idFAP?>" name="idFaps[]"/>
+											</td>
+											<td>
+												<a href="ficheStagiaire.php?id=<?=$fap->idStagiaire?>#titrestagefap<?=$fap->idFAP?>">Lien vers la FAP</a>
+												
+											</td>-->
+										</tr>
+									<?php } } ?>
+									</tbody>
+								</table>
+								<!-- Bouton caché pour la génération de pdf-->
+								<input type="hidden" id="type" name="type"/>
+								
+								<!-- Bouton pour la création d'un pdf-->
+								<!--<input type="submit" id="export" class="boutonFAP" style="width:265px; height:35px; font-size:15.5px;" value="imprimer"/>
+
+								<img src="/img/print.png" id="exportFloat" width="64" height="64" style="position: fixed; bottom: 20px; right: 20px;">-->
+							
+								
+								<!-- Bouton pour la suppression de FAP-->
+								<!--<?php if ($_SESSION['rang'] >= Rangs::ADMIN){ ?>
+								<input type="submit" id="suppr" class="boutonFAP" style="width:265px; height:35px; font-size:15.5px;" value="Supprimer la sélection"/>
+								<?php } ?>-->
+							</form>
+						</div>
+					</fieldset>
+					</center>
+					
+					<div style="float:right;">
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="three-columns forms">
+	<div class="element">
+		<div class="push-shadow bright-blue">
+			<div class="box-content">
+				<h2 class="title4">Les écarts que j'ai créé</h2>
+				<div class="content">
+					
+					<br style="clear: both;">
+					</br>
+					<center>
+					<fieldset>
+						<div class="field-wrapper">
+						
+								
+							<form method="get" id="form2" TARGET="_BLANK">
+								
+								<table class="tableau" id="tableaumesécarts" border="1" cellspacing="0">
+									<thead>
+										<tr>
+											<th>Emetteur</th>
+											<th>Récepteur</th>
+											<th>Titre</th>
+											<th>Type d'écart</th>
+											<th>Statut</th>
+											<th>Date Création</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+									<!-- Partie remplie par la BD -->
+									<?php foreach ($listecarts as $ecart) {
+									if($ecart->_émetteur->_id==$_SESSION['idUser']->_id &&  $ecart->_statut->_id>0 ){?>
+										<tr>
+											<td>
+												<?=$ecart->_émetteur->_nom?> <?=$ecart->_émetteur->_prenom?>
+											</td>
+											<td>
+											<?=$ecart->_récepteur->_nom?> <?=$ecart->_récepteur->_prenom?>
+											</td>
+											<td>
+											<?=$ecart->_titre?>
+											</td>
+											<td>
+											<?=$ecart->_mission->_titre?>
+											</td>
+											<td>
+											<?=$ecart->_statut->_nom?>
+											</td>
+											<td>
+											<?=$ecart->_dateCréation?>
+											</td>
+											<td>
+											<a href="ficheEcart.php?id=<?=$ecart->_id?>">Lien vers l'écart</a>
+											</td>
+											<!--<td>
+												<input type="checkbox" class="selectionMultiple" value="<?=$fap->idFAP?>" name="idFaps[]"/>
+											</td>
+											<td>
+												<a href="ficheStagiaire.php?id=<?=$fap->idStagiaire?>#titrestagefap<?=$fap->idFAP?>">Lien vers la FAP</a>
+												
+											</td>-->
+										</tr>
+									<?php } } ?>
+									</tbody>
+								</table>
+								<!-- Bouton caché pour la génération de pdf-->
+								<input type="hidden" id="type" name="type"/>
+								
+								<!-- Bouton pour la suppression de FAP-->
+								<!--<?php if ($_SESSION['rang'] >= Rangs::ADMIN){ ?>
+								<input type="submit" id="suppr" class="boutonFAP" style="width:265px; height:35px; font-size:15.5px;" value="Supprimer la sélection"/>
+								<?php } ?>-->
+							</form>
+						</div>
+					</fieldset>
+					</center>
+					<br/>
+					<div style="float:right;">
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Mise en place du footer-->
+		<div class="footer-wrapper">
+			<div class="footer-nav">
+				<ul>
+					<li><a href="mailto:fabien.leray@edf.fr; hugo.branly@edf.fr">Contact</a></li>
+					<li><a href="">Navigateur</a></li>
+					<li><a href="">Mentions légales</a></li>
+					<li><a href="">Conditions générales d'utilisation</a></li>
+					<li><a href="">Aide</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Fonctions javascript-->
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#tableauFap').DataTable({
+    	"language": {
+	   		"url": "/js/dataTables.french.json"
+    	},
+    	"order": [ 2, 'desc' ],
+	   	"columnDefs": [
+		    { "orderable": false, "targets": [5, 5] },
+		    { "searchable": false, "targets": [5,5] }
+		]
+	});
+	$('#tableaumesécarts').DataTable({
+    	"language": {
+	   		"url": "/js/dataTables.french.json"
+    	},
+    	"order": [ 2, 'desc' ],
+	   	"columnDefs": [
+		    { "orderable": false, "targets": [5, 5] },
+		    { "searchable": false, "targets": [5,5] }
+		]
+	});
+} );
+</script>
+
+    <script type="text/javascript">
+		//Fonction de tri
+    $(".tri").click( function(e){
+  $("#form").submit();
+  });
+
+  $(".filtre").change( function(e){
+	  //Fonction de filtre intuitif
+  $("#form").submit();
+  });
+  
+  // Fonction d'export PDF
+  $("#export").click( function(e){  
+  $("#type").attr("value", "0");
+   $("#form").attr("action","../librairie/html2pdf_v4.03/fap/exportPDF.php");
+  });
+
+  /*$("#exportFloat").click( function(e){  
+  $("#type").attr("value", "0");
+  var destination= "creerEcart.php?id=<?=$_SESSION['idUser']->_id?>" ;
+  alert(destination);
+   //$("#form").attr("action",destination);
+    $("#form").submit();
+  });*/
+  // Fonction de suppression (avec confirmation)
+    $("#suppr").click( function(e){
+   $("#form").attr("action","fap.php");
+	 var suppression=prompt('Voulez-vous confirmer la suppression (oui/non) ?');
+	 if(suppression=="oui"){
+		 $("#type").attr("value", "1");
+	 } 
+	 else{return false;}
+  });
+  
+  
+  
+  
+  
+</script>
+
+  </body>
+
+</html>

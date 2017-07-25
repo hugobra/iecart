@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Création d'un stagiaire</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="../js/box-0.7.0.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+	</head>
+	<body>	
+		<?php include 'menu_tpl.html'; ?>
+
+		 <!-- Page de création stagiaire -->
+
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					<div class="push-shadow bright-blue">
+						<div class="box-content">
+							<h2 class="title4">Création/Modification d'un stagiaire</h2>
+							<div class="element">
+								<div class="form-standard">
+									<div class="box-form-content">
+										<form action="creerStagiaire.php" id="form" method="post">
+											<fieldset>
+												
+												 <!-- Champs à compléter -->
+												
+												<div class="field-wrapper">
+													<label for="nom">NNI du stagiaire (<span id="etatNni">Entrez un NNI pour le tester</span>) : </label>
+													<input required="true" type="text" placeholder="" class="filtre" name="nni" id="nni" style="width: 98%;" onchange='detectNNI2(this)' onkeyup='detectNNI(this)' onmouseup='detectNNI(this)'/><br/><br/>
+													<label for="nom">Nom : </label>
+													<input required="true" type="text" placeholder="" onkeyup='this.value=this.value.toUpperCase();' onmouseup='this.value=this.value.toUpperCase();' class="filtre" name="nom" style="width: 98%;" id="nom"/><br/><br/>
+													<label for="nom">Prénom : </label>
+													<input required="true" type="text" placeholder="" class="filtre" name="prenom" style="width: 98%;" id="prenom"/><br/><br/>
+													<label for="nom">DUA (correspond au numéro dans la colonne UE de la liste des stagiaires extraite de Planète Formation): </label>
+													<input required="true" type="text" placeholder="" class="filtre" name="DUA" style="width: 98%;" id="DUA"/><br/><br/>
+													<label id="serviceLbl" for="service">Service : </label>
+													<select required="true" class="filtre" name="service" id="service" id="span1-country1">
+													
+													<?php foreach ($services as $service) {?>
+														<option value="<?=$service->_id?>"><?=$service->_nom?></option>
+													<?php } ?>
+													</select><br/>
+													<label id="equipeLbl" for="equipe">Equipe : </label>
+													<select required="true" class="filtre" name="equipe" id="span1-country2">
+													<?php foreach ($equipes as $equipe) {?>
+														<option value="<?=$equipe->_id?>"><?=$equipe->_nom?></option>
+													<?php } ?>
+													</select><br/>
+													<label id="trancheLbl" for="tranche">Tranche : </label>
+													<select required="true" class="filtre" name="tranche" id="span1-country3">
+													<?php foreach ($tranches as $tranche) {?>
+														<option value="<?=$tranche->_id?>"><?=$tranche->_nom?></option>
+													<?php } ?>
+													</select><br/>
+													<label id="fonctionLbl" for="fonctionActuelle">Fonction actuelle: </label>
+													<select required="true" class="filtre" name="fonctionActuelle" id="span1-country4">
+													<?php foreach ($fonctions as $fonction) {?>
+														<option value="<?=$fonction->_id?>"><?=$fonction->_nom?></option>
+													<?php } ?>
+													</select><br/>
+													<input type="hidden" value="<?=$site->_id?>" id="idsite" />
+													<span id="averto" style="display: none;"><strong>Cet agent a déjà un profil sur le(s) site(s) de {{site}} .En validant, vous engagerez une demande à l'admin de ce(s) site(s) pour obtenir la visibilité sur son profil.</strong></span>
+
+													<span id="avertoProfile" style="display: none;"><strong>Cet agent a déjà un profil sur le site {{site}} .En validant, vous engagerez une demande à l'admin de ce site pour obtenir la visibilité sur son profil.</strong></span>
+												</div>
+												<br/>
+
+												<script>
+													function detectNNI(inputNNI) {
+														inputNNI.value=inputNNI.value.toUpperCase();
+
+														var regexNNI = /[a-zA-Z]\d{5}/
+														var oknni = inputNNI.value.match(regexNNI);
+
+														if(oknni == null){
+															$("#etatNni").html("Le NNI doit être constitué d'une lettre et de 5 chiffres");
+														}else{
+															$("#etatNni").html("NNI valide");
+														}
+													}
+													
+													function detectNNI2(inputNNI) {
+													inputNNI.value=inputNNI.value.toUpperCase();
+														$.ajax({
+															method: "GET",
+															url: "../post/getInfosUserFromNNI.php",
+															data: { nni: inputNNI.value },
+															success: function(data){
+																if (data != ''){
+																	var dataDecode = JSON.parse(data);
+
+																	$("#nom").val(dataDecode.nom);
+																	$("#prenom").val(dataDecode.prenom);
+																	
+																	$("#serviceLbl").html("Service: " + dataDecode.serviceNom);
+																	$("#formserviceREP").hide();
+																	$("#formserviceREP").prop("required", false);
+
+																	$("#equipeLbl").html("Equipe: " + dataDecode.equipeNom);
+																	$("#formspan1-country2REP").hide();
+																	$("#formspan1-country2REP").prop("required", false);
+
+																	$("#trancheLbl").html("Tranche: " + dataDecode.trancheNom);
+																	$("#formspan1-country3REP").hide();
+																	$("#formspan1-country3REP").prop("required", false);
+
+																	$("#fonctionLbl").html("Fonction actuelle: " + dataDecode.fonctionNom);
+																	$("#formspan1-country4REP").hide();
+																	$("#formspan1-country4REP").prop("required", false);
+
+																	var siteString = "";
+																	for (var i = dataDecode.sites.length - 1; i >= 0; i--) {
+																		if(dataDecode.sites[i]._id == $("#idsite").val()){
+																		if (confirm(dataDecode.nom + " " + dataDecode.prenom +' a déjà un profil sur votre site. Vous allez être redirigé vers la liste des stagiaires.')){
+																		window.location='stagiaires.php';}
+																		else{
+																		window.location='creerStagiaire.php' ;}
+																		} else{
+																		siteString += dataDecode.sites[i]._nom + " / ";
+																		}
+																	};
+																	siteString=siteString.substring(0,siteString.length-2);
+																	$("#averto").html($("#averto").html().replace("{{site}}", siteString.toUpperCase()));
+																	$("#averto").show();
+																}else{
+
+																	$("#nom").val("");
+																	$("#prenom").val("");
+
+																	$("#serviceLbl").html("Service: ");
+																	$("#formserviceREP").show();
+
+																	$("#equipeLbl").html("Equipe: ");
+																	$("#formspan1-country2REP").show();
+
+																	$("#trancheLbl").html("Tranche: ");
+																	$("#formspan1-country3REP").show();
+
+																	$("#fonctionLbl").html("Fonction actuelle: ");
+																	$("#formspan1-country4REP").show();
+
+																	$("#averto").hide();
+																}
+																//$("#").html(data);
+															}
+														});
+													}
+												</script>
+
+												<div class="form-buttons">
+													
+													<!-- Bouton hidden pour la vérification des champs-->
+													
+													<div class="actions">
+														<input type="hidden" placeholder="" class="filtre" name="verification" id="verification"/>	
+														
+														<!-- Bouton pour envoyer les informations-->
+														<input type="submit" id="ajouter" value="Valider" style="width:250px"/>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			$("#ajouter").click(function(e){
+				
+				//fonction de vérification que tous les champs sont remplis
+				
+				$("#verification").attr("value", "ok");
+				$("#form").formValidation();
+			});
+		</script>
+
+		<?php
+		if (isset($_GET['request_already_pending'])){
+			echo"<script>alert('Un requête est déja en attente pour ce stagiaire, patientez ou contactez l\'administrateur site en question.');</script>";
+		}
+		?>
+	</body>
+</html>
+
+

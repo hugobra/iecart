@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Fiche stage</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<link rel="stylesheet" href="../css/chosen.min.css">
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="../js/box-0.7.0.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+		<script type="text/javascript" src="../js/chosen.jquery.min.js"></script>
+	</head>
+	
+	<body>
+
+		<?php include 'menu_tpl.html'; ?>
+		
+		
+		<!-- Récapitulatif des informations liées à un stage-->
+
+		<div class="two-columns">
+			<div class="push-shadow light-orange">
+				<div class="box-content">
+					<h2 class="title4">Fiche stage</h2>
+					<div class="content">
+						<ul class="news half">
+							<li><h3><b>Intitulé</b></h3><?=$stage->_titre?></li>
+							<li><h3><b>Durée</b></h3><?=$stage->_duree?></li>
+						</ul>
+						<ul class="news half">
+							<!-- Parcours des différents thèmes associés à un stage -->
+							<!--<li><h3><b>Thèmes génériques</b></h3></li>
+							<?php foreach ($themes as $theme) { ?>
+							<li><?=$theme->_nom?></li>
+							<?php }?>-->
+							<?php if (empty($stage->_codeAction)){ $stage->_codeAction = "Non défini"; } ?>
+							<li><h3><b>Code action</b></h3><?=$stage->_codeAction?></li>
+						</ul>
+						
+						<!-- Lien vers la modification du stagiaire -->
+						<?php if ($_SESSION['rang'] >= Rangs::ADMINSITE){ ?>
+						<a href="../route/modifStage.php?id=<?=$stage->_id?>" class="modifierStagiaire">Modifier</a>
+						<?php } ?>
+	  
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+<div class="two-columns forms">
+	<div class="element">
+		<div class="form-standard">
+			<div class="push-shadow bright-blue">
+				<div class="box-content">
+					<h2 id="titreob" class="title4">Objectifs du stage</h2>
+					<div class="element">
+						<div class="form-standard">
+							<div class="box-form-content">
+								
+								<!-- Champs à compléter-->
+								
+								<form action="modifStage.php?id=<?=$_GET['id']?>" id="form" method="post" name="form">
+									<fieldset>
+										<div class="field-wrapper">
+										<!-- Partie rajout d'OF -->
+											<div class="text">
+											
+											<?php if ($_SESSION['rang'] >= Rangs::ADMINSITE){ ?>
+											<img src="../img/btn/delete.png" height="25" width="25"> Pour supprimer l'OF ou l'OPG de la ligne correspondante<br>
+											<?php } ?>	
+											<img src="../img/btn/modifier.png" height="25" width="25"> Pour modifier la la ligne correspondante (OF ou OPG).<br><br>
+												<label for="nom">OF à rajouter: </label>
+												<input type="text" placeholder="" class="filtre" name="objectif" value="" style="width: 98%;"/><br><br>
+												
+												<select name="fonctionselect[]" required="true" id="fonctionselect" data-placeholder=" Cliquer ici pour sélectionner une(des) fonction(s) à qui ajouter l'Objectif de Formation" multiple class="chosen-select-width" tabindex="16">
+													
+													<?php foreach ($fonctions as $fonction) { ?>
+														<option value="<?=$fonction->_id?>"><?=$fonction->_nom?></option>
+													<?php } ?>
+												</select>
+												<br/><input type="submit" value="Ajouter l'OF"/><br/><br/>
+												<div class="actions" style="margin-top: 5px;">
+													<br/><br/>
+													<input type="hidden" placeholder="" class="filtre" name="idStageObj" value="<?=$stage->_id?>"/>
+												</div>
+												<!-- Partie de mise en page des tableaux OF/OPG -->
+												<?php 
+												foreach($fonctionstage as $fonction){
+												$incrementObj=1;?>
+												<table id="tableauObj<?=$fonction->_id?>" class="tableau" border="1" cellspacing="0">
+													<caption style="font-weight: bold;font-size: 15px;"> <?=$fonction->_nom?> </caption>
+												<?php foreach ($objectifs as $objectif) {
+												
+												if( $objectif->_fonction->_id == $fonction->_id){?>
+												
+																								
+													<thead>
+														<tr> 
+															<th>OF n° <?=$incrementObj?></th>
+															<th id="obj<?=$objectif->_id?>"><?=$objectif->_nom?> </th>
+															<th><img src="../img/btn/modifier.png" height="25" width="25" id="modifierObjectif<?=$objectif->_id?>" onclick="modifierObj(<?=$objectif->_id?>)" class="supprimerTheme" value="Modifier l'OF" style="margin-bottom: -5px;margin-right:5px;display:inline;float:none;"/>
+															<th>
+															<?php if ($_SESSION['rang'] >= Rangs::ADMINSITE){ ?>
+															<img src="../img/btn/delete.png" height="22" width="22" id="supprimerObjectif<?=$objectif->_id?>" value="Supprimer l'OF" onclick="suppressionObj(<?=$objectif->_id?>)" style="margin-bottom: -5px;margin-right:5px;display:inline;float:none;"/>
+															<?php } ?>
+															<img src="../img/btn/tick.png" height="25" width="25" id="validerObjectif<?=$objectif->_id?>" onclick="validerObj(<?=$objectif->_id?>)" value="Valider l'OF" style="display: none;margin-bottom: -5px;margin-right:5px;float:none;"/>
+															</th>
+															
+														</tr>
+													</thead>
+													<tbody>
+												<?php $incrementObj2=1;
+												$opss=Stage::getAllFromStageObjectifAndFonction($stage,$objectif->_id, $objectif->_fonction->_id);
+												foreach ($opss as $ops) {?>
+
+													<tr>
+													<td>OPG n°<?=$incrementObj2?></td>
+													<td id="nomOPS<?=$ops->_id?>"><?=str_replace("\n","<br/>",$ops->_nom)?></td>
+													<td><img src="../img/btn/tick.png" height="25" width="25" id="validerOPS<?=$ops->_id?>" onclick="validerOps(<?=$ops->_id?>)" value="Valider l'OPG" style="display: none;margin-bottom: -5px;margin-right:5px;float:none;" ><img src="../img/btn/modifier.png" height="25" width="25" id="modifierOPS<?=$ops->_id?>" onclick="modifierOps(<?=$ops->_id?>)" value="Modifier l'OPG" style="margin-bottom: -5px;margin-right:5px;display:inline;float:none;" ></td>
+													<td>
+													<?php if ($_SESSION['rang'] >= Rangs::ADMINSITE){ ?>
+													<img src="../img/btn/delete.png" height="22" width="22" id="supprimerOPS<?=$ops->_id?>" value="Supprimer l'OPG" onclick="suppressionOps(<?=$ops->_id?>)" style="margin-bottom: -5px;margin-right:5px;display:inline;float:none;" ></td>
+													<?php } ?>
+													</tr>
+													
+													
+													
+												<?php 
+												$incrementObj2=$incrementObj2+1;
+												}; ?>
+												<tr><td id="IdCréerOPS<?=$objectif->_id?>"><input type="button" class="supprimerTheme" id="CréerOPS<?=$objectif->_id?>" onclick="CréerOPS(this,<?=$incrementObj2?>,<?=$objectif->_id?>, <?=$objectif->_fonction->_id?>,<?=$stage->_id?>)" class="supprimerTheme" value="Ajouter un OPG" style="align:center; float:none; margin-top: 0px; "/></td>
+												<td id="champtextarea<?=$objectif->_id?>"></td>
+												<td id="boutonvalider<?=$objectif->_id?>"></td>
+												<td id="boutonannulerOPS<?=$objectif->_id?>"></td>
+												</tr>
+												<?php $incrementObj=$incrementObj+1;
+												};
+												};
+												?>
+												
+												</table>
+												</br>
+												
+
+												<!--<input type="button" id="AnnulerOPS<?=$objectif->_id?>" onclick="AnnulerOPS(this)" class="supprimerTheme" value="Annuler l'ajout d'un OPS" style="margin-right: 10px;margin-bottom: 12px;margin-top: -8px;"/> -->
+												<div class="actions">
+												</div>
+												<br><br>
+												<?php 
+												
+												}?>
+												
+												<!-- Ajout de thème générique à un stage-->
+												
+												
+											</div>
+											<br/>
+										</div>
+									</fieldset>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+function suppressionObj(id){
+	var valeurActuelle = $("#obj" + id).html();
+	if (confirm("Etes-vous sûr de vouloir supprimer l'objectif  " + valeurActuelle.trim() + " et ses OPG associés ?")){
+	window.location='modifStage.php?id=<?php echo $_GET['id']; ?>&idSuppr='+id+'&type=obj';}
+	 
+}
+
+function modifierObj(id) {
+	var valeurActuelle = $("#obj" + id).html();
+	$("#obj" + id).html("<input id=\"inputObj"+id+"\" type=\"text\" style=\"width: 450px;\" value=\"" + valeurActuelle.trim() + "\">");
+	$("#modifierObjectif" + id).hide();
+	$("#supprimerObjectif" + id).hide();
+	$("#validerObjectif" + id).show();
+}
+
+function validerObj(id) {
+	var valueObj = $("#inputObj" + id).val();
+
+	$.ajax({
+		method: "POST",
+		url: "../post/setObjectif.php",
+		data: { id: id, nom: valueObj },
+		success: function(data){
+			$("#obj" + id).html(valueObj);
+			$("#modifierObjectif" + id).show();
+			$("#supprimerObjectif" + id).show();
+			$("#validerObjectif" + id).hide();
+		}
+	});
+}
+
+function CréerOPS(element,numops,objectif,fonction,stage){
+
+
+var titre=document.createElement("label");
+titre.setAttribute("for", "champ");
+titre.setAttribute("id", "titre_champ"+objectif);
+var titre_content = document.createTextNode("OPG n° " + numops + ":");
+titre.appendChild(titre_content);
+var champ=document.createElement("textarea");
+champ.type="text";
+champ.name="OPS";
+champ.id="champ"+objectif;
+champ.style="width: 450px;";
+var sup=document.createElement("input");
+sup.value="Valider l'OPG";
+sup.id="validOPS"+objectif;
+sup.type="button";
+sup.setAttribute("class", "supprimerTheme");
+sup.setAttribute("onclick","ajoutOPS("+ stage+"," + objectif +"," + fonction +")");
+var anul=document.createElement("input");
+anul.value="Annuler l'ajout d'OPG";
+anul.id="AnnulerOPS"+objectif;
+anul.type="button";
+anul.setAttribute("class", "supprimerTheme");
+anul.setAttribute("onclick","AnnulerOPS(this)");
+var parentDiv=element.parentNode;
+parentDiv.insertBefore(titre, element);
+var parentDiv2=document.getElementById("champtextarea"+objectif);
+parentDiv2.appendChild(champ);
+/*parentDiv2.insertBefore(champ, element);*/
+var parentDiv3=document.getElementById("boutonvalider"+objectif);
+parentDiv3.appendChild(sup);
+/*parentDiv.insertBefore(anul, element);*/
+var parentDiv4=document.getElementById("boutonannulerOPS"+objectif);
+parentDiv4.appendChild(anul);
+/*parentDiv4.insertBefore(sup, element);*/
+$("#CréerOPS" + objectif).hide();
+
+}
+
+function AnnulerOPS(element){
+var idobjectif=element.id.substring(10) ;
+
+var parentDiv=element.parentNode;
+document.getElementById("IdCréerOPS"+idobjectif).removeChild(document.getElementById("titre_champ"+idobjectif));
+document.getElementById("champtextarea"+idobjectif).removeChild(document.getElementById("champ"+idobjectif));
+document.getElementById("boutonvalider"+idobjectif).removeChild(document.getElementById("validOPS"+idobjectif));
+parentDiv.removeChild(document.getElementById("AnnulerOPS"+idobjectif));
+$("#CréerOPS" + idobjectif).show();
+}
+
+function modifierOps(id) {
+	var str = $("#nomOPS" + id).html();
+	valeurActuelle=str.replace(/<br>/g,"\n");
+	$("#nomOPS" + id).html("<textarea id=\"inputOPS"+id+"\"  style=\"width: 680px;\" value=\"" + valeurActuelle.trim() + "\">"+valeurActuelle.trim()+"</textarea>");
+	$("#modifierOPS" + id).hide();
+	$("#validerOPS" + id).show();
+}
+
+function validerOps(id) {
+	var valueOps = $("#inputOPS" + id).val();
+	
+	$.ajax({
+		method: "POST",
+		url: "../post/modifOPS.php",
+		data: { id: id, nom: valueOps },
+		success: function(data){
+		
+			$("#nomOPS" + id).html(valueOps.replace(/\n/g,"<br>"));
+			$("#modifierOPS" + id).show();
+			$("#validerOPS" + id).hide();
+			$("#CréerOPS" + id).show();
+		}
+	});
+}
+
+function ajoutOPS(stage,objectif,fonction){
+var valueOps = $("#champ"+objectif).val();
+var parentDiv=document.getElementById("champ"+objectif).parentNode;
+/*if('<?=$incrementObj2?>'!=1){
+var id= parseInt('<?=$ops->_id?>');} else {id=0};*/
+	$.ajax({
+		method: "POST",
+		url: "../post/ajoutOPS.php",
+		data: { stage: stage, objectif: objectif, fonction: fonction, ops: valueOps },
+		success: function(data){
+		window.location.reload(false);
+			
+		}
+	});
+}
+
+function suppressionOps(id){
+	var valeurActuelle = $("#nomOPS" + id).html();
+	if (confirm("Etes-vous sûr de vouloir supprimer l'OPG  " + valeurActuelle.trim() + " ?")){
+	
+	 $.ajax({
+		method: "POST",
+		url: "../post/supprOPS.php",
+		data: { id:id },
+		success: function(data){
+		window.location.reload(false);
+		}
+		});
+		}
+}
+
+</script>
+<script type="text/javascript">
+     
+	$(window).load(function(){
+	var config = {
+      '.chosen-select'           : {},
+      '.chosen-select-deselect'  : {allow_single_deselect:true},
+      '.chosen-select-no-single' : {disable_search_threshold:10},
+      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chosen-select-width'     : {width:"80%"}
+    }
+    for (var selector in config) {
+      $(selector).chosen(config[selector]);
+    }
+	});
+  </script>
+
+	</body>
+	
+
+
+
+	<!--<div class="content">
+						<form action="modifStage.php?id=<?=$_GET['id']?>" id="form" method="post">
+									<fieldset>
+										<div class="field-wrapper">
+												<h3>Gestion des objectifs pédagogiques</h3>
+												<?php $incrementObj=1;
+												foreach ($objectifs as $objectif) {?>
+
+												<label for="nom">Objectif pédagogique n°<?=$incrementObj?> - <?=$objectif->_fonction->_nom?> : </label><br>
+												<label for="nomTheme"><?=$objectif->_nom?>
+												</label><br>
+												
+													
+													
+													<input type="button" class="supprimerTheme" value="Supprimer l'objectif" onclick="suppressionObj(<?=$objectif->_id?>)"style="margin-top: -8px;"/>
+													<input type="button" class="supprimerTheme" value="Modifier l'objectif" onclick="" style="margin-right: 10px;margin-bottom: 12px;margin-top: -8px;"/>
+												<div class="actions">
+												</div><br><br>
+												<?php 
+												$incrementObj=$incrementObj+1;
+												}?>
+												
+												
+												<label for="nom">Objectif pédagogique n°<?php echo $incrementObj; ?>
+												 : </label>
+												<input type="text" placeholder="" class="filtre" name="objectif" value="" style="width: 98%;"/><br><br>
+												<select name="fonction" required="true" class="filtre" id="span1-country1">
+													<?php foreach ($fonctions as $fonction) { ?>
+														<option value="<?=$fonction->_id?>"><?=$fonction->_nom?></option>
+													<?php } ?>
+												</select>
+												<div class="actions" style="margin-top: 5px;">
+													<input type="submit" value="Ajouter l'objectif"/><br/><br/><br/>
+													<input type="hidden" placeholder="" class="filtre" name="idStageObj" value="<?=$stage->_id?>"/>
+												</div>
+										</div>
+									</fieldset>
+						</form>
+					</div>-->
+	<!-- Mise en place du footer -->
+	
+	<?php
+	include("../tpl/layout/footer.html");
+	?>
+</html>

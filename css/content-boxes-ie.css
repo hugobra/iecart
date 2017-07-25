@@ -1,0 +1,38 @@
+/**
+ * Internet Explorer corrections
+ * Support targeted at IE6 & 7
+ */
+
+
+/**
+ * @workaround		Easy clearing method
+ * @affected		6, 7
+ */
+.push-plain .box-content,
+.push-plain a { zoom:1; }
+
+
+/**
+ * @workaround		Content not correctly displayed
+ * @affected		6, 7
+ */
+.push-plain .content { zoom:1; }
+
+
+
+/**
+ * @workaround		Cursor pointer
+ * @affected		6, 7
+ */
+.push-plain a * { cursor:pointer; }
+
+/**
+ * @workaround		overflow on tab components
+ * @affected		6, 7
+ */
+.tab-5 li:first-child {
+	margin-left: -2px;
+}
+.push-shadow .tab-panel .half {
+	width: 44%;
+}

@@ -1,0 +1,35 @@
+<?php include_once '../classes/request.class.php'; ?>
+<?php $requestPending = Request::getAllPendingCount($_SESSION["site"]); ?>
+
+<!-- Elements du header -->
+		<div class="header">
+			<div class="header-content">
+				<div class="logo">
+		   			<a href="/route/stagiaires.php"><img src="../img/edf_header_logo.png" alt=""></a>
+				</div>
+				<div class="header-infos">
+		   			<span class="page-title">Gestion fiches d'aide à la progression</span>
+				    <a href="#"><?php echo $_SESSION["nom2"]; ?> (<?=$_SESSION["nomRang"]?>)</a>
+				    <?php if ($_SESSION['rang'] > Rangs::ADMINSITE){ ?>
+				    <a href="admin.php" class="disconnect">Panel admin (<?=$requestPending?>)</a>
+				    <?php } ?>
+				    <a href="connexion.php" class="disconnect">Deconnexion</a>
+				</div>
+			</div>
+		</div>
+		<!-- Gestion des onglets -->
+		<div class="nav">
+		   	<div class="main-nav">
+				<ul>
+					<li><a href="stagiaires.php">< Retour</a></li>
+					<li class="<?php echo ($_SERVER['PHP_SELF'] == '/route/admin.php') ? 'selected' : ''; ?>"><a href="admin.php">Gestion agents</a></li>
+					<li class="<?php echo ($_SERVER['PHP_SELF'] == '/route/admin_manager.php') ? 'selected' : ''; ?>"><a href="admin_manager.php">Gestion managers</a></li>
+					<li class="<?php echo ($_SERVER['PHP_SELF'] == '/route/admin_request.php') ? 'selected' : ''; ?>"><a href="admin_request.php">Gestion demandes (<?=$requestPending?>)</a></li>
+					<li class="<?php echo ($_SERVER['PHP_SELF'] == '/route/admin_config.php') ? 'selected' : ''; ?>"><a href="admin_config.php">Configuration site</a></li>
+					<?php if ($_SESSION['rang'] >= Rangs::SUPERADMIN){ ?>
+					<li class="<?php echo ($_SERVER['PHP_SELF'] == '/route/admin_site.php') ? 'selected' : ''; ?>"><a href="admin_site.php">Gestion sites</a></li>
+					<li class="<?php echo ($_SERVER['PHP_SELF'] == '/route/admin_bdd.php') ? 'selected' : ''; ?>"><a href="admin_bdd.php">Export BDD</a></li>
+					<?php } ?>
+				</ul>
+		    </div>
+		</div>

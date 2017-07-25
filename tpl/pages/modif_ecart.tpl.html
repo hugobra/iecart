@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Modification d'un écart</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<link rel="stylesheet" href="../css/chosen.min.css">
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="../js/box-0.7.0.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+		<script type="text/javascript" src="../js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="../js/chosen.jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/jquery-ui.css"/>
+	</head>
+	
+	<body >
+		<?php include 'menu_tpl.html'; ?>
+
+		<!-- Page de création de la FAP-->
+
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					
+					<div class="element">
+						<div class="push-shadow bright-blue">
+							<div class="box-content">
+								<h2 class="title4">Données à compléter</h2>
+								<div class="content">
+									
+									
+									<div class="box-form-content">
+									<!--action="ecarts.php"-->
+										<form  id="form" method="post" name="form" >
+											<fieldset>
+												<div class="field-wrapper">
+													<!-- Informations à compléter-->
+													
+												<div>
+													<?php if($ecart->_émetteur->_id==$_SESSION['idUser']->_id){ ?>
+														 
+														<div class="select">
+														<label for="span1-country1"><b>Type d'écart :</b></label>
+														<select required="true" name="missionselect" id="span1-country1">
+															<option  value="<?=$ecart->_mission->_id ?>" selected><?=$ecart->_mission->_titre ?></option>
+															<?php foreach ($missions as $mission) { 
+																if($mission->_id!=$ecart->_mission->_id){?>
+																
+																<option value="<?=$mission->_id?>"><?=$mission->_titre?></option>
+															<?php }  } ?>
+														</select>
+														</div>
+														<br/>
+														<div class="content"  style="font-size: 14px;">
+			
+														<!-- Récapitulatif des informations date création, formateur et fonction du stagiaire--> 
+														
+														<h3 style="font-size: 15px;" id="descripécart">  Titre de l'écart: 
+														
+														
+														</div>
+														<br style="clear: both;">
+														
+														<center>
+														<textarea cols="20" required="true" rows="1" style="width:90%; " align="center" name="titre" id="titre" > <?=$ecart->_titre?> </textarea>
+														
+														</center>
+
+														<br>
+														<div class="content"  style="font-size: 14px;">
+			
+														<!-- Récapitulatif des informations date création, formateur et fonction du stagiaire--> 
+														
+														<h3 style="font-size: 15px;" id="descripécart">  Description de l'écart: 
+														
+														
+														</div>
+														<br style="clear: both;">
+														
+														<center>
+														<textarea cols="20" required="true" rows="6" style="width:90%; " align="center" name="description" id="description" > <?=$ecart->_description?> </textarea>
+														
+														</center>
+
+														<br>
+														<div class="content"  style="font-size: 14px;">
+			
+														<!-- Récapitulatif des informations date création, formateur et fonction du stagiaire--> 
+														
+														<h3 style="font-size: 15px;" id="descripécart">  Proposition de traitement: 
+														
+														
+														</div>
+														<br style="clear: both;">
+														
+														<center>
+														<textarea cols="20" required="true" rows="6" style="width:90%; " align="center" name="propotraitement" id="propotraitement" > <?=$ecart->_propositiontraitement?> </textarea>
+														
+														</center>
+
+														<br>
+														<div class="content"  style="font-size: 14px;">
+			
+														<!-- Récapitulatif des informations date création, formateur et fonction du stagiaire--> 
+														
+														<h3 style="font-size: 15px;" id="descripécart"> Traitement effectif de l'écart: 
+														
+														
+														</div>
+														<br style="clear: both;">
+														
+														<center>
+														<textarea cols="20" disabled="True" rows="6" style="width:90%; " align="center" name="traitement" id="traitement" > <?=$ecart->_traitement?> </textarea>
+														
+														</center>
+
+														<br>
+													<?php } elseif($ecart->_récepteur->_id==$_SESSION['idUser']->_id){ ?>
+													<div class="select">
+														<label for="span1-country1"><b>Type d'écart :</b></label>
+														<select disabled="true" name="missionselect" id="span1-country1">
+															<option  value="<?=$ecart->_mission->_id ?>" selected><?=$ecart->_mission->_titre ?></option>
+															</select>
+														</div>
+														<br/>
+														<div class="content"  style="font-size: 14px;">
+			
+														<!-- Récapitulatif des informations date création, formateur et fonction du stagiaire--> 
+														
+														<h3 style="font-size: 15px;" id="descripécart">  Titre de l'écart: 
+														
+														
+														</div>
+														<br style="clear: both;">
+														
+														<center>
+														<textarea cols="20" disabled="True" required="true" rows="1" style="width:90%; " align="center" name="titre" id="titre" > <?=$ecart->_titre?> </textarea>
+														
+														</center>
+
+														<br>
+														<div class="content"  style="font-size: 14px;">
+			
+														<!-- Récapitulatif des informations date création, formateur et fonction du stagiaire--> 
+														
+														<h3 style="font-size: 15px;" id="descripécart">  Description de l'écart: 
+														
+														
+														</div>
+														<br style="clear: both;">
+														
+														<center>
+														<textarea cols="20" disabled="True" required="true" rows="6" style="width:90%; " align="center" name="description" id="description" > <?=$ecart->_description?> </textarea>
+														
+														</center>
+
+														<br>
+														<div class="content"  style="font-size: 14px;">
+			
+														<!-- Récapitulatif des informations date création, formateur et fonction du stagiaire--> 
+														
+														<h3 style="font-size: 15px;" id="propotraitécart">  Proposition de traitement: 
+														
+														
+														</div>
+														<br style="clear: both;">
+														
+														<center>
+														<textarea cols="20" disabled="True" required="true" rows="6" style="width:90%; " align="center" name="propotraitement" id="propotraitement" > <?=$ecart->_propositiontraitement?> </textarea>
+														
+														</center>
+
+														<br>
+														<div class="content"  style="font-size: 14px;">
+			
+														<!-- Récapitulatif des informations date création, formateur et fonction du stagiaire--> 
+														
+														<h3 style="font-size: 15px;" id="traitécart"> Traitement effectif de l'écart: 
+														
+														
+														</div>
+														<br style="clear: both;">
+														
+														<center>
+														<textarea cols="20" rows="6" style="width:90%; " align="center" name="traitement" id="traitement" > <?=$ecart->_traitement?> </textarea>
+														
+														</center>
+
+														<br>
+													<?php }  ?>
+												</div>
+												</div>
+											</fieldset>
+											<img src="/img/sauvegarder.png" id="exportFloat" width="100" height="100" style="position: fixed; bottom: 20px; right: 20px;">
+											
+											
+											<!-- Boutons-->	
+											<div class="form-buttons">
+												<div class="actions">
+													<!-- Hidden pour la vérification des champs-->
+													<input type="hidden" placeholder="" class="filtre" name="verification" id="verification"/>
+													
+													<!-- Bouton pour soumettre et envoyer le formulaire de FAP-->
+													<input type="button" id="ajouter" class="like-submit" value="Valider" style="width:250px" />
+												</div>
+											</div>
+											
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>			
+							
+		<!-- Fonctions javascript-->					
+		<script>
+			$("#ajouter").click(function(e){
+				//Si les champs des points forts/faibles sont vides lors de l'envoi, le texte est automatiquement enregistré comme "Pas de remarques particulières"		
+				
+
+				if ($('#span1-country1').val() == 0){
+					$( document ).scrollTop( 300 );
+					$("#formspan1-country1REP").css("background", "red");
+					alert("Vous n'avez pas catégorisé l'écart.");
+					$("#formspan1-country1REP").css("background", "transparent url('../img/btn/combobox-expand.png') no-repeat scroll 100% 0px");
+				} else if($("[name=titre]").val()=="") {
+				alert("Merci de remplir le titre");
+				$("[name=titre]").focus();
+				}
+				else if($("[name=description]").val()=="") {
+				alert("Merci de remplir la description");
+				$("[name=description]").focus();
+				}
+				else if($("[name=propotraitement]").val()=="") {
+				$("[name=propotraitement]").val("Pas de proposition de traitement");
+				
+				}
+				
+				else{
+				
+					$("#form").submit();
+				}
+				
+			});
+			
+			 $("#exportFloat").click( function(e){  
+			$("#type").attr("value", "0");
+				alert($('#span1-country1').val());
+				if ($('#span1-country1').val() == 0){
+					$( document ).scrollTop( 300 );
+					$("#formspan1-country1REP").css("background", "red");
+					alert("Vous n'avez pas catégorisé l'écart.");
+					$("#formspan1-country1REP").css("background", "transparent url('../img/btn/combobox-expand.png') no-repeat scroll 100% 0px");
+				} else if($("[name=titre]").val()=="") {
+				alert("Merci de remplir le titre");
+				$("[name=titre]").focus();
+				}
+				else if($("[name=description]").val()=="") {
+				alert("Merci de remplir la description");
+				$("[name=description]").focus();
+				}
+				else if($("[name=propotraitement]").val()=="") {
+				$("[name=propotraitement]").val("Pas de proposition de traitement");
+				
+				}
+				
+				else{
+				
+					$("#form").submit();
+				}
+   
+  });
+			
+			
+			
+		</script>
+		<!--<script type="text/javascript">
+     
+	$(window).load(function(){
+	var config = {
+      '.chosen-select'           : {},
+      '.chosen-select-deselect'  : {allow_single_deselect:true},
+      '.chosen-select-no-single' : {disable_search_threshold:10},
+      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chosen-select-width'     : {width:"95%"}
+    }
+    for (var selector in config) {
+      $(selector).chosen(config[selector]);
+    }
+	});
+  </script>-->
+</body>
+
+</html>
+
+
+

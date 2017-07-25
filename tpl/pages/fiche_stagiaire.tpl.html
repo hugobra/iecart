@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Fiche stagiaire</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="../css/global.css"/>
+<link rel="stylesheet" href="../css/forms.css"/>
+<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+<link rel="stylesheet" href="../css/content-boxes.css"/>
+<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="../js/box-0.7.0.js"></script>
+<script type="text/javascript" src="../js/l10n.js"></script>
+<script type="text/javascript" src="../js/global-forms.js"></script>
+<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+</head>
+<body>
+	<?php include 'menu_tpl.html'; ?>
+
+
+	<!-- Tableau récapitulatif reprenant les informations du stagiaire -->
+
+	<div class="two-columns forms">
+	    <div class="section">
+		<div class="span2">
+		    <div class="push-shadow light-orange">
+			<div class="box-content">
+			    <h2 class="title4">Informations stagiaire</h2>
+			    <div class="content">
+				<ul class="news third">
+				    
+				    <!-- Appels à la BD avec $donnee['attribut'] (provient de ficheStagiaire.php)-->
+				    
+				    <li><h3><b>Nom</b></h3><?=$stagiaire->_nom?></li>
+				    <li><h3><b>Prénom</b></h3><?=$stagiaire->_prenom?></li>
+				    <li><h3><b>NNI</b></h3><?=$stagiaire->_nni?></li>
+				    <li><h3><b>Fonction Actuelle</b></h3><?=$stagiaire->_fonction->_nom?></li>
+				</ul>
+				<ul class="news third">
+				    <li><h3><b>Service</b></h3><?=$stagiaire->_service->_nom?></li>
+				    <li><h3><b>Equipe</b></h3><?=$stagiaire->_equipe->_nom?></li>
+				    <li><h3><b>Tranche</b></h3><?=$stagiaire->_tranche->_nom?></li>
+				    <li><h3><b>Visible par</b></h3>
+				    <?php 
+				    if (!empty($sites)){
+						$nbrsites = count($sites);
+
+				    	foreach ($sites as $siteStagiaire) {
+					    	echo $siteStagiaire->_nom . "<br>";
+					    	if ($nbrsites > 1 && (($_SESSION['rang'] >= Rangs::ADMINSITE && $_SESSION['site'] == $siteStagiaire->_id) || $_SESSION['rang'] >= Rangs::SUPERADMIN)){
+					    		echo "<span style=\"float: right; margin-top: -19px\"><a title=\"Retirer la visibilité de ce profil par le site ". $siteStagiaire->_nom ."\" href=\"ficheStagiaire.php?id=".$_GET['id']."&siteSuppr=". $siteStagiaire->_id ."\">X</a></span>";
+					    	}
+					    }
+				    }else{
+				    	echo $site->_nom;
+				    }
+				    ?>
+				    <?php if ($_SESSION['rang'] >= Rangs::SUPERADMIN){ ?>
+				    		<form action="ficheStagiaire.php?id=<?=$_GET['id']?>" id="form" method="post">
+									<fieldset>
+										<div class="field-wrapper">
+											Ajouter un site : 
+											<select class="search-table" name="addSite">
+											
+											<?php foreach ($allSites as $siteAAjouter) {?>
+												<option value="<?=$siteAAjouter->_id?>"><?=$siteAAjouter->_nom?></option>
+											<?php } ?>
+											</select>
+											<input type="submit" value="OK">
+					    				</div>
+									<br/>
+								</fieldset>
+							</form>
+					<?php } ?>
+				    </li>
+				</ul>
+				<ul class="news third">
+				    <li><h3><b>Historique des fonctions</b></h3></li>
+				    
+				    <!-- Parcours de toutes les fonctions qu'a occupées un stagiaire -->
+					
+	      			<?php  if ($_SESSION['rang'] >= Rangs::CONDUITE){ 
+					foreach ($fonctions as $fonction) { 
+					if(count($fonctions)>1){
+					if($fonction->_nom != $stagiaire->_fonction->_id){?>
+	      				<li> <span id="fonction<?=$fonction->_idFonction?>"> <?=$fonction->_nomFonction?></span>
+						<img src="../img/btn/delete.png" height="25" width="25" value="X" style="margin-bottom: -5px;margin-right:5px;display:inline;float:none;" onclick="supprfonct(<?=$stagiaire->_id?>,<?=$fonction->_idFonction?>)"/>
+						</li>
+	      			<?php } else{ ?>
+					<li><span id="fonction<?=$fonction->_idFonction?>">  <?=$fonction->_nomFonction?> </span>
+					<img src="../img/btn/delete.png" height="25" width="25" value="X" style="margin-bottom: -5px;margin-right:5px;display:inline;float:none;"  onclick="supprfonctactuelle(<?=$stagiaire->_id?>,<?=$stagiaire->_fonction->_id?>,<?=$fonction->_idFonction?>,<?=$fonctionprec?>)"/> </li>
+					<?php } $fonctionprec=$fonction->_nom; } else { ?>
+					
+					<li> <span id="fonction<?=$fonction->_idFonction?>"> <?=$fonction->_nomFonction?></span>
+					<img src="../img/btn/delete.png" height="25" width="25" value="X" style="margin-bottom: -5px;margin-right:5px;display:inline;float:none;" onclick="alert('Merci de MODIFIER d\'abord la fonction du stagiaire avant de supprimer celle que vous souhaitez ');"/> </li>
+					<?php }} }else { 
+					foreach ($fonctions as $fonction) { 
+					if(count($fonctions)>1){
+					if($fonction->_nom != $stagiaire->_fonction->_id){?>
+	      				<li> <span id="fonction<?=$fonction->_idFonction?>"> <?=$fonction->_nomFonction?></span>
+						
+						</li>
+	      			<?php } else{ ?>
+					<li><span id="fonction<?=$fonction->_idFonction?>">  <?=$fonction->_nomFonction?> </span>
+					
+					<?php } $fonctionprec=$fonction->_nom; } else { ?>
+					
+					<li> <span id="fonction<?=$fonction->_idFonction?>"> <?=$fonction->_nomFonction?></span>
+					
+					<?php }} } ?>
+				</ul>
+			    </div>
+			    
+			    <!-- Redirection vers les fichiers modifStagiaire.php et ficheFAP.php, en prenant l'idStagiaire en attribut -->
+				<?php if ($_SESSION['rang'] >= Rangs::CONDUITE){ ?>
+			    <a href="../route/modifStagiaire.php?id=<?=$stagiaire->_id?>" class="modifierStagiaire">Modifier</a>
+			    
+			    <?php } ?>
+	  			<?php if ($_SESSION['rang'] >= Rangs::FORMATEUR){ ?>
+			    
+			    <a href="../route/ficheFAP.php?id=<?=$stagiaire->_id?>" class="creerFAP">Créer une FAP</a>
+			    <?php } ?>
+				
+			    <br/>
+			    <br/>
+			    <center>
+				
+				<!-- Ancienne Légende objectifs pédagogiques -->
+				
+			    <!--<h4> Objectifs pédagogiques</h4>
+
+			    <table border="1" cellspacing="0" width="80%">
+				<tr>
+				    <td BGCOLOR="#AAFFAA"> Connaître l'état de l'installation<br/>   </td>
+				    <td BGCOLOR="#FFAAAA"> Conduire l'installation <br/></td>
+				    <td BGCOLOR="#FFFFAA"> Travailler en équipe <br/></td>
+				    <td BGCOLOR="#AAAAFF"> Assurer la continuité du service <br/></td>
+				</tr>
+			    </table>-->
+			    </br>
+			    </center>
+			</div>
+		    </div>
+		</div>
+	    </div>
+	</div>
+	<br/>
+
+	<?php 
+	
+	//Le PHP va permettre de vérifier si, lors du parcours des différentes FAP, la date ou la fonction ont changé. 
+	//Initialisé avec la première année et la première fonction de la première FAP de la liste
+
+	$anneeOld=$premiereAnnee;
+	$fonctionOld=$fonctionPremiere;
+	$siteOld=$sitePremier;
+
+	?>
+ 
+	<div class="aside">
+	    <div class="element">
+		<div class="push-shadow bright-blue">
+		    <div class="box-content">
+			<h2 class="title4">Historique des stages</h2>
+			
+			<!-- Parcours des différentes FAP associées au stagiaire -->
+			
+			<?php foreach ($faps as $fap) {
+			if($fap->_statut==0  && $_SESSION['rang'] < Rangs::FORMATEUR){
+			
+			} else {
+			    //Récupération de la date et de la fonction associée à la FAP courante
+
+			    $date = $fap->_dateCreation;
+			    $date_explosee = explode("-", $date);
+			    $annee = $date_explosee[0];
+			    $mois = $date_explosee[1];
+			    $jour = $date_explosee[2];
+			    $fonction = $fap->_fonction->_id;
+			    $site = $fap->_idSite;
+				$siteObj = new Site($site);
+			
+			//Ajout du bandeau changement d'année s'il y a différence entre l'année courante ($annee) et 
+			//l'année de la FAP précédente ($anneeOld)
+			
+			if($annee!=$anneeOld){
+			?>
+	
+			<br/>
+			<div class="bandeauAnnee"> 
+			    <b>Changement d'année</b>
+			</div>
+			<br/>
+	
+			<?php
+			    }
+			    
+			    //Ajout du bandeau changement de fonction s'il y a différence entre la fonction courante ($fonction) et 
+			    //la fonction de la FAP précédente ($fonctionOld)
+			    
+			    if($fonction!=$fonctionOld){
+			?>
+			
+			<br/>
+			<div class="bandeauFonction"> 
+			    <b>Changement de fonction</b>
+			</div>
+			<br/>
+
+			<?php
+			    }
+
+			    if($site!=$siteOld){
+			?>
+			
+			<br/>
+			<div class="bandeauFonction"> 
+			    <b>Changement de site</b>
+			</div>
+			<br/>
+
+			<?php
+			    }
+			?>
+			
+			    <div class="content"  style="font-size: 14px;">
+			
+				<!-- Récapitulatif des informations date création, formateur et fonction du stagiaire--> 
+				
+				<h3 style="font-size: 15px;" id="titrestagefap<?=$fap->_id?>"> <span style="display:inline;text-transform:none;">  Intitulé du stage : </span><?=$fap->_stage->_titre?>
+				<span style="display:inline; float:right;text-transform:none;"> Stage du <?=$fap->_dateDebut?> au <?=$fap->_dateFin?></span></h3>
+				<div style="float: left; width: 45%;">
+					<ul>
+					    <li>Date de dernière modification de la FAP : <?php echo date_format(date_create($fap->_dateModif),"d/m/Y"); ?></li>
+					    <li>Formateur rédacteur de la FAP : <strong><?=$fap->_formateur?></strong></li>
+						<li>Nombre de demi-journée(s) d'absence (voir dans Editer FAP pour plus de détails): <?=$fap->_nbabsence?></li>
+					</ul>
+				</div>
+				<div style="float: right; width: 45%;">
+				 <ul>
+				  <li>Fonction du stagiaire : <?=$fap->_fonction->_nom?></li>
+					 <li>Site du stage : <?=$siteObj->_nom?></li>
+					 <!-- Mise en place de la fonction changement de statut FAP -->
+				  <form method="post" name="form2" id="form2">
+				  <input type="hidden" name="idFap" id="idFap" value="<?=$fap->_id?>">
+				  <li>Statut de la FAP: 			   
+				 
+				  <!-- seul le formateur rédacteur de la FAP ou >= adminsite peut changer le statut de la FAP -->
+				  <?php if($_SESSION['rang'] >= Rangs::ADMINSITE || $_SESSION['nom2']==$fap->_formateur ){ ?>
+				  <?php if($fap->_statut== False){ ?>
+				  <input name="s1" id="s1On<?=$fap->_id?>" value="False" hidden="" type="radio" onclick="changerstatutFAP(this,<?=$fap->_id?>)" checked>
+				<label for="s1On<?=$fap->_id?>" class="switch switch--on">En cours</label>
+				<input name="s1" id="s1Off<?=$fap->_id?>" value="True" hidden="" type="radio" onclick="changerstatutFAP(this,<?=$fap->_id?>)">
+				<label for="s1Off<?=$fap->_id?>" class="switch switch--off" >Terminée</label>
+				<?php } else if($fap->_statut== True){ ?>
+				<input name="s1" id="s1On<?=$fap->_id?>" value="False" hidden="" type="radio" onclick="changerstatutFAP(this,<?=$fap->_id?>)">
+				<label for="s1On<?=$fap->_id?>" class="switch switch--on">En cours</label>
+				<input name="s1" id="s1Off<?=$fap->_id?>" value="True" hidden="" type="radio" onclick="changerstatutFAP(this,<?=$fap->_id?>)" checked>
+				<label for="s1Off<?=$fap->_id?>" class="switch switch--off" >Terminée</label>
+				<?php } ?>
+				<?php } else {?> <!-- donne le statut de la FAP -->
+				<?php if($fap->_statut== False){ ?>
+				  <strong id="testfap<?=$fap->_id?>"> En cours</strong>
+				  <?php } else if($fap->_statut== True){ ?>
+				  <strong id="testfap<?=$fap->_id?>"> Terminée</strong> 
+				  <?php } ?>
+
+
+
+				  <!--<select  class="search-table" name="statut<?=$fap->_id?>" id="statut<?=$fap->_id?>" >
+				   <?php if($fap->_statut== False){ ?>
+				   
+				   <option value="False" selected>En cours</option>
+				   <option value="True">Terminé</option> 
+				   <?php } ?>
+				   <?php if($fap->_statut== True){ ?>
+				   
+				   <option value="False">En cours</option>
+				   <option value="True" selected >Terminé</option>
+				   <?php }?>
+				   </select> -->
+				    <!-- Hidden pour la vérification des champs-->
+				   <!-- <input type="hidden" placeholder="" class="filtre" name="verification2" id="verification2"/> -->
+				   <!--<input type="button" id="changerstatut" value="Changer le statut de la FAP" style="width:250px; cursor: pointer;" onclick="changerstat(statut<?=$fap->_id?>,<?=$fap->_id?>)"> -->
+				  <?php }?> 
+				  </li>
+				  </form>
+				  
+				 </ul>
+				</div>
+				<br style="clear: both;">
+ 
+				<center>
+				<table border="1" cellspacing="0" width="95%">		
+					<thead>
+					    <tr>		   
+							<td align="center"><b>Objectifs de formation</b></td>
+							<td align="center" width="35%"><b>Points forts</b></td>
+							<td align="center" width="35%"><b>Points à améliorer</b></td>
+					    </tr>
+					</thead>
+
+				    <?php foreach ($fap->_objectifs as $objectif) { ?>
+						<tr>
+							<td><?=$objectif->_nom?></td>
+
+							<?php //Les fonctions d'encodage et de decodage servent uniquement à corriger le bug de l'accent sur le à: les matrices suivantes règlent les autres bugs(retours à la ligne par exemple)
+							
+							
+							$àremplacer=array("\n","Ã ", "Ã¨","Ã©"," < "," > ");
+							$remplacant=array("<br/>","&agrave;","&egrave;","&eacute;"," &lt; "," &gt; ");
+							$pf = utf8_decode(str_replace($àremplacer,$remplacant,utf8_encode($objectif->_results['PF'])));
+							$pa = utf8_decode(str_replace($àremplacer,$remplacant,utf8_encode($objectif->_results['PA'])));
+							$pa=preg_replace("#(Ecart.{0,6}:)#","<b><u>$0</u></b>",$pa);
+							$pa=preg_replace("#(Exemple.{0,6}:)#","<b><u>$0</u></b>",$pa);
+							$pa=preg_replace("#(Conseil.{0,6}:)#","<b><u>$0</u></b>",$pa);
+							
+							?>
+							<td BGCOLOR="#AAFFAA"><?=$pf?></td>
+							<td BGCOLOR="#FFAAAA"><?=$pa?></td>
+							
+							
+							
+						</tr>
+				    <?php } ?>
+				</table>
+				</center>
+
+				<br>
+				<div style="width: 45%; float: left;">
+				<?php if ($_SESSION['rang'] >= Rangs::FORMATEUR && $fap->_statut!=True ){ ?>
+				<p><strong>Observations du stagiaire:</strong></p>
+				<form method="POST">
+					<input type="hidden" name="idFap" value="<?=$fap->_id?>">
+					<textarea id="comment<?=$fap->_id?>" name="comment" style="width: 100%;"><?=$fap->_commentaires?></textarea>
+
+							<!-- Hidden pour la vérification des champs-->
+							<input type="hidden" placeholder="" class="filtre" name="verification" id="verification"/>
+							<!-- Submit pour la validation et l'envoi du formulaire-->
+							<input type="button" class="modifierFAP" id="ajouter<?=$fap->_id?>" value="Valider" style="width:250px; cursor: pointer; visibility:visible;"  onclick="commenterstag(comment<?=$fap->_id?>,<?=$fap->_id?>)"/>
+				</form>
+				<?php }else{ ?>
+				<p><strong>Observations du stagiaire:</strong> 
+				<form method="POST">
+					<input type="hidden" name="idFap" value="<?=$fap->_id?>">
+					<textarea id="comment<?=$fap->_id?>" name="comment" style="width: 100%;" disabled="True"><?=$fap->_commentaires?></textarea>
+
+							<!-- Hidden pour la vérification des champs-->
+							<input type="hidden" placeholder="" class="filtre" name="verification" id="verification"/>
+							<!-- Submit pour la validation et l'envoi du formulaire-->
+							<input type="button" class="modifierFAP" id="ajouter<?=$fap->_id?>" value="Valider" style="width:250px; cursor: pointer;visibility:hidden;" onclick="commenterstag(comment<?=$fap->_id?>,<?=$fap->_id?>)"/>
+				</form>
+				<!--</br></br><?=$fap->_commentaires?></p>-->
+				<?php } ?>
+				</div>
+
+				<!--<div style="width: 45%; float: right;">
+
+				<?php if ($_SESSION['rang'] >= Rangs::MANAGER1 && $_SESSION['rang'] != Rangs::ADMINSITE){ ?>
+				<p><strong>Commentaires de la hiérarchie:</strong></p>
+				<form action="#" method="POST">
+					<input type="hidden" name="idFap" value="<?=$fap->_id?>">
+					<textarea name="commentHierar" style="width: 100%;"><?=$fap->_commentairesHierar?></textarea> -->
+
+							<!-- Hidden pour la vérification des champs-->
+							<!-- <input type="hidden" placeholder="" class="filtre" name="verification" id="verification"/> -->
+							<!-- Submit pour la validation et l'envoi du formulaire-->
+							<!-- <input type="submit" class="modifierFAP" id="ajouter" value="Valider" style="width:250px; cursor: pointer;"/>
+				<!--</form>
+				<?php }else{ ?>
+				<p><strong>Commentaires de la hiérarchie:</strong> <?=$fap->_commentairesHierar?></p>
+				<?php } ?>
+				</div>-->
+				<br style="clear: both;">
+				
+				<a href="../librairie/html2pdf_v4.03/fap/exportPDF.php?idFaps[]=<?=$fap->_id?>" target="_blank" class="modifierFAP" id="imprimerFAP<?=$fap->_id?>">Imprimer FAP</a>
+				<?php if (($fap->_statut==False && $_SESSION['rang'] >= Rangs::FORMATEUR) ||($fap->_statut==False && $_SESSION['nom2']==$fap->_formateur) ){ ?>
+				
+				<a href="../route/modifFAP.php?id=<?=$fap->_id?>" class="modifierFAP" id="modifierFAP<?=$fap->_id?>" style="visibility:visible;">Editer FAP</a>
+				<a href="../route/ficheStagiaire.php?id=<?php echo $_GET['id']; ?>&idSuppr=<?=$fap->_id?>" style="visibility:visible;" class="modifierFAP" id="supprimerFAP<?=$fap->_id?>">Supprimer FAP</a>
+				<?php } else if (($fap->_statut==True && $_SESSION['rang'] >= Rangs::ADMINSITE) || ($fap->_statut==True && $_SESSION['nom2']==$fap->_formateur)) { ?>
+				<a href="../route/modifFAP.php?id=<?=$fap->_id?>" class="modifierFAP" id="modifierFAP<?=$fap->_id?>" style="visibility:hidden;" >Editer FAP</a>
+				<a href="../route/ficheStagiaire.php?id=<?php echo $_GET['id']; ?>&idSuppr=<?=$fap->_id?>" style="visibility:hidden;" class="modifierFAP" id="supprimerFAP<?=$fap->_id?>">Supprimer FAP</a>
+
+				<?php } ?>
+				<br/>
+				<br/>
+				
+				<?php
+				
+				    // On fait passer l'année courante en ancienne année, idem pour la fonction, avant de relancer une boucle pour le prochain stage
+				
+				    $anneeOld = $annee;
+				    $fonctionOld = $fonction;
+				    $siteOld = $site;
+				?>
+
+				</div>
+				<?php 
+				    } 
+					}
+				?>
+			    
+		    </div>
+		</div>
+		    
+		     <!-- Mise en place du footer-->
+		    
+		    <div class="footer-wrapper">
+			<div class="footer-nav">
+			    <ul>
+				<li><a href="mailto:fabien.leray@edf.fr; hugo.branly@edf.fr">Contact</a></li>
+				<li><a href="">Navigateur</a></li>
+				<li><a href="">Mentions légales</a></li>
+				<li><a href="">Conditions générales d'utilisation</a></li>
+				<li><a href="">Aide</a></li>
+			    </ul>
+			</div>
+		    </div>
+	    </div>
+	</div>
+	<script>
+	
+	//fonction javascript qui permet de changer le statut de la FAP sans recharger la page complète
+	
+	function changerstat(statut,idFap) {
+              
+              
+              $.ajax({
+               method: "POST",
+               url: "../post/ChangerstatutFAP.php",
+              data: { statut: statut.value , idFap: idFap },
+              success: function(data){
+                if(document.getElementById("statut"+idFap).options[document.getElementById("statut"+idFap).selectedIndex].value=="False"){
+				
+				document.getElementById("statut"+idFap).options["0"].selected=true;
+				document.getElementById("testfap"+idFap).innerHTML="En cours" ;
+				document.getElementById("comment"+idFap).disabled=false;
+				document.getElementById("ajouter"+idFap).style.visibility="visible";
+				document.getElementById("modifierFAP"+idFap).style.visibility="visible";
+				document.getElementById("supprimerFAP"+idFap).style.visibility="visible";
+				
+				}
+				if(document.getElementById("statut"+idFap).options[document.getElementById("statut"+idFap).selectedIndex].value=="True"){
+				
+				document.getElementById("statut"+idFap).options["1"].selected=true;
+				document.getElementById("testfap"+idFap).innerHTML="Terminée" ;
+				document.getElementById("comment"+idFap).disabled=true;
+				document.getElementById("ajouter"+idFap).style.visibility="hidden";
+				document.getElementById("modifierFAP"+idFap).style.visibility="hidden";
+				document.getElementById("supprimerFAP"+idFap).style.visibility="hidden";
+                }
+                
+
+                },
+			  error : function(resultat, statut, erreur){}				
+               
+              });
+             }				
+
+function changerstatutFAP(statut,idFap) {
+              
+              
+              $.ajax({
+               method: "POST",
+               url: "../post/ChangerstatutFAP.php",
+              data: { statut: statut.value , idFap: idFap },
+              success: function(data){
+                if(statut.value=="False"){
+				
+				
+				//document.getElementById("testfap"+idFap).innerHTML="En cours" ;
+				document.getElementById("comment"+idFap).disabled=false;
+				document.getElementById("ajouter"+idFap).style.visibility="visible";
+				document.getElementById("modifierFAP"+idFap).style.visibility="visible";
+				document.getElementById("supprimerFAP"+idFap).style.visibility="visible";
+				
+				}
+				if(statut.value=="True"){
+				
+				
+				//document.getElementById("testfap"+idFap).innerHTML="Terminé" ;
+				document.getElementById("comment"+idFap).disabled=true;
+				document.getElementById("ajouter"+idFap).style.visibility="hidden";
+				document.getElementById("modifierFAP"+idFap).style.visibility="hidden";
+				document.getElementById("supprimerFAP"+idFap).style.visibility="hidden";
+                }
+                
+
+                },
+			  error : function(resultat, statut, erreur){}				
+               
+              });
+             }				
+			 
+function commenterstag(comment,idFap) {
+                           
+              $.ajax({
+               method: "POST",
+               url: "../post/commentairestagiaire.php",
+              data: { comment: comment.value , idFap: idFap },
+              success: function(data){
+                alert(" Vos commentaires ont été rajoutés à la FAP ! ");
+                
+
+                },
+			  error : function(resultat, statut, erreur){}				
+               
+              });
+             }	
+
+function supprfonct(idstagiaire,idfonction){
+	var valeurActuelle = $("#fonction" + idfonction).html();
+	if (confirm("Etes-vous sûr de vouloir supprimer la fonction  " + valeurActuelle.trim().toUpperCase() + " de l'historique des fonctions du stagiaire ?")){
+	
+	$.ajax({
+		method: "POST",
+		url: "../post/supprfonctionstagiaire.php",
+		data: { idstagiaire:idstagiaire, idfonction:idfonction },
+		success: function(data){
+		window.location.reload(false);
+		
+		}
+		});
+		}
+}			
+
+function supprfonctactuelle(stagiaire,fonction,fonctionhisto,nouvellefonctionactuelle){
+	var valeurActuelle = $("#fonction" + fonctionhisto).html();
+	if (confirm("Etes-vous sûr de vouloir supprimer la fonction  " + valeurActuelle.trim().toUpperCase() + " de l'historique des fonctions du stagiaire ?")){
+	$.ajax({
+		method: "POST",
+		url: "../post/supprfonctionstagiaire.php",
+		data: { stagiaire:stagiaire, fonction:fonction , fonctionhisto: fonctionhisto, nouvellefonctionactuelle:nouvellefonctionactuelle },
+		success: function(data){
+		window.location.reload(false);
+		
+		}
+		});
+		}
+}		 
+	</script>
+	
+    </body>
+</html>
+

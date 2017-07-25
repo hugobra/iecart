@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Création d'un stage</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" href="../css/global.css"/>
+		<link rel="stylesheet" href="../css/forms.css"/>
+		<link rel="stylesheet" href="../css/projetGestionFAP.css"/>
+		<link rel="stylesheet" href="../css/content-boxes.css"/>
+		<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+		<script type="text/javascript" src="../js/box-0.7.0.js"></script>
+		<script type="text/javascript" src="../js/l10n.js"></script>
+		<script type="text/javascript" src="../js/global-forms.js"></script>
+		<script type="text/javascript" src="../js/global-content-boxes.js"></script>
+	</head>
+	<body>
+		<?php include 'menu_tpl.html'; ?>
+
+		 <!-- Page de création stagiaire -->
+
+		<div class="two-columns forms">
+			<div class="element">
+				<div class="form-standard">
+					<div class="push-shadow bright-blue">
+						<div class="box-content">
+							<h2 class="title4"> Copie du stage intitulé: <?=$stage->_titre?></h2>
+							
+							
+							<div class="element">
+								<div class="form-standard">
+									<div class="box-form-content">
+										
+										 <!-- Champs à compléter -->
+										
+										<form action="copierStage.php?id=<?=($_GET['id'])?>" id="form" method="post">
+											<fieldset>
+												<div class="field-wrapper">
+													<div class="text">
+														<label for="nom">Intitulé : </label>
+														<input required="true" type="text" placeholder="" class="filtre" name="titre"/><br/><br/>
+														<label for="nom">Code Action : </label>
+														<input type="text" placeholder="" class="filtre" name="codeAction"/><br/><br/>
+														<label for="nom">Durée (en jours) : </label>
+														<input required="true" type="text" placeholder="" class="filtre" name="duree"/><br/><br/>
+													</div>
+													<br/>
+													Date : <?php echo date_format(date_create($date),"d/m/Y"); ?>
+													<br/>
+												</div>
+												<br/>
+												
+												 <!-- Boutons -->
+												
+												<div class="form-buttons">
+													<div class="actions">
+														<!-- Hidden pour la vérification des champs-->
+														<input type="hidden" placeholder="" class="filtre" name="verification" id="verification"/>
+														<!-- Submit pour la validation et l'envoi du formulaire-->
+														<input type="submit" id="ajouter" value="Valider" style="width:250px"/>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Fonctions javascript -->
+		<script>
+			//Fonction de vérification des champs
+			$("#ajouter").click(function(e){
+				$("#verification").attr("value", "ok");
+				$("#form").formValidation();
+			});
+		</script>
+	</body>
+</html>
+
+
+
