@@ -5,8 +5,8 @@ include_once '../classes/missions.class.php';
 include_once '../classes/site.class.php';
 include_once '../classes/user.class.php';
 include_once '../classes/ecart.class.php';
-include_once '../classes/class.phpmailer.php';
-include_once '../classes/class.smtp.php';
+include_once '../../smtpclass/class.phpmailer.php';
+include_once '../../smtpclass/class.smtp.php';
 
 /*
 Démarrage de session, récupération de la date du jour
@@ -51,8 +51,7 @@ if(isset($_GET['id'])){
 		//Ask for HTML-friendly debug output
 
 		$mail->Debugoutput = 'html';
-		//Set the hostname of the mail server
-		$mail->Host = 'mailhost.der.edf.fr';
+		
 		// use
 		//$mail->Host = gethostbyname('smtp.gmail.com');
 		// if your network does not support SMTP over IPv6
@@ -62,10 +61,7 @@ if(isset($_GET['id'])){
 		//$mail->SMTPSecure = 'ssl';
 		//Whether to use SMTP authentication
 		//$mail->SMTPAuth = true;
-		//Username to use for SMTP authentication - use full email address for gmail
-		//$mail->Username = "hugo.branly@edf.fr";
-		//Password to use for SMTP authentication
-		//$mail->Password = "6XD2fpdp+";
+	
 		//Set who the message is to be sent from
 		$mail->setFrom($user->_mail, 'Fiche écart');
 		//Set an alternative reply-to address
