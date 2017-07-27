@@ -15,14 +15,7 @@ if ($production == false){
 	
 }
 
-// Config de production
-// define('DB_HOST', "10.122.1.39:3308");
-// define('DB_NAME', "test");
-// define('DB_USER', "root");
-// define('DB_PASSWORD', "sUcyfSHWD#?a");
 
-// define('LDAP_HOST', "ldaps://dmztest-annuaire-gardiansesame.edf.fr:636");
-// define('LDAP_RACINE', "ou=people,dc=gardiansesame");
-// define('LDAP_ROOTDN', "uid=9TIFP001,ou=Applis,dc=gardiansesame");
-// define('LDAP_PASSWORD', "Mmdp-3325");
+
+
 ?>
