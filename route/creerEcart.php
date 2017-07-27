@@ -61,7 +61,7 @@ if(isset($_GET['id'])){
 		//$mail->SMTPSecure = 'ssl';
 		//Whether to use SMTP authentication
 		//$mail->SMTPAuth = true;
-	
+
 		//Set who the message is to be sent from
 		$mail->setFrom($user->_mail, 'Fiche écart');
 		//Set an alternative reply-to address
